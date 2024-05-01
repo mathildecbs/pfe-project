@@ -3,8 +3,4 @@ import { CreateUserDto } from './create-user.dto';
 import { IsArray } from 'class-validator';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
-
-  @IsArray()
-  following : Array<number>
-
 }

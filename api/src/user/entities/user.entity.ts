@@ -15,7 +15,10 @@ export class User extends BaseEntity {
   @Column({nullable:true})
   description: string
 
-  @ManyToMany(() => User)
+  @ManyToMany(() => User, (user) => user.followers)
   @JoinTable()
-  following: User[]
+  following: User[];
+
+  @ManyToMany(() => User, (user) => user.following)
+  followers: User[];
 }

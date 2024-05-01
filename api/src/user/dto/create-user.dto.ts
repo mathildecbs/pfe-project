@@ -15,6 +15,6 @@ export class CreateUserDto {
   name: string
 
   @IsString()
-  description: string
+  description?: string
 
 }
