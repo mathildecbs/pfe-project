@@ -29,3 +29,10 @@ export class BaseQP {
   offset: number
 
 }
+
+export enum IncluEnum {
+  PHOTOCARD = "photocard",
+  POSTER = "poster",
+  POSTCARD = "postcard",
+  OTHER = "other"
+}
