@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { BaseEntity } from '../../utils/base_entity/base_entity.service';
 import { User } from '../../user/entities/user.entity';
 import { Tag } from '../../tag/entities/tag.entity';
@@ -13,11 +13,13 @@ export class Post extends BaseEntity{
   user: User
 
   @ManyToMany(()=>User, (user)=> user.likes)
+  @JoinTable()
   likes: User[]
 
   @ManyToMany(()=>User, (user)=> user.reposts)
+  @JoinTable()
   reposts: User[]
 
-  @ManyToOne(()=> Tag)
+  @ManyToMany(()=> Tag, (tag)=> tag.posts)
   tags: Tag[]
 }
