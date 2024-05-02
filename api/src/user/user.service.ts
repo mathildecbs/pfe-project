@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { MoreThanOrEqual, Repository } from 'typeorm';
+import { ArrayContains, Like, MoreThanOrEqual, Repository } from 'typeorm';
 import { UtilsServiceService } from '../utils/utils_service/utils_service.service';
 import { UserQP } from './dto/query-params.dto';
 
@@ -31,9 +31,11 @@ export class UserService {
   async findAll(query: UserQP) {
     const options = {
     }
-    if (query.create_date) options['where'] = { create_date: MoreThanOrEqual(query.create_date)}
+    if (query.create_date || query.search) options['where'] = {}
+    if (query.create_date) options['where']['create_date'] = MoreThanOrEqual(query.create_date)
     if (query.limit) options['take'] = query.limit
     if (query.limit&& query.offset) options['skip'] = query.offset
+    if (query.search) options['where']['username'] = Like(`${query.search}%`)
 
     const users = await this.usersRepository.find({
    ...options
