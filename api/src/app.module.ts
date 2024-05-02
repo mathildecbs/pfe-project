@@ -18,6 +18,10 @@ import { Album } from './album/entities/album.entity';
 import { Inclusion } from './inclusion/entities/inclusion.entity';
 import { OwnedAlbum } from './album/entities/owned-album.entity';
 import { OwnedInclusion } from './inclusion/entities/owned-inclusion.entity';
+import { PostModule } from './post/post.module';
+import { TagModule } from './tag/tag.module';
+import { Tag } from './tag/entities/tag.entity';
+import { Post } from './post/entities/post.entity';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -35,7 +39,9 @@ import { OwnedInclusion } from './inclusion/entities/owned-inclusion.entity';
         Album,
         OwnedAlbum,
         Inclusion,
-        OwnedInclusion
+        OwnedInclusion,
+        Tag,
+        Post
       ],
       synchronize: true,
     }),
@@ -44,6 +50,8 @@ import { OwnedInclusion } from './inclusion/entities/owned-inclusion.entity';
     GroupModule,
     AlbumModule,
     InclusionModule,
+    PostModule,
+    TagModule,
   ],
   controllers: [
     AppController

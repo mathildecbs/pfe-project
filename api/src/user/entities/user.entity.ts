@@ -2,6 +2,7 @@ import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../utils/base_entity/base_entity.service';
 import { OwnedInclusion } from '../../inclusion/entities/owned-inclusion.entity';
 import { OwnedAlbum } from '../../album/entities/owned-album.entity';
+import { Post } from '../../post/entities/post.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -29,4 +30,14 @@ export class User extends BaseEntity {
 
   @OneToMany(()=> OwnedAlbum, (album)=> album.user)
   albums: OwnedAlbum[]
+
+  @OneToMany(()=> Post, (post)=> post.user)
+  posts: Post[]
+
+  @ManyToMany(()=> Post, (post)=> post.likes)
+  likes: Post[]
+
+  @ManyToMany(()=> Post, (post)=> post.reposts)
+  reposts: Post[]
+
 }
