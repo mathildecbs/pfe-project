@@ -19,7 +19,7 @@ export class TagService {
     const res = await this.tagRepository.save(createTagDto)
 
     if(!res) {
-      throw new HttpException(`Creation failed `, HttpStatus.NOT_FOUND);
+      throw new HttpException(`Creation failed `, HttpStatus.BAD_REQUEST);
 
     }
 
@@ -48,6 +48,19 @@ export class TagService {
       throw new HttpException(`tag ${name} not found`, HttpStatus.NOT_FOUND);
     }
     return res[0].posts;
+  }
+  async findOneTag(name: string) {
+    const res = await this.tagRepository.find({
+      where : {name},
+      relations: {
+        posts: true
+      }
+    })
+
+    if(res.length===0 ) {
+      throw new HttpException(`tag ${name} not found`, HttpStatus.NOT_FOUND);
+    }
+    return res[0];
   }
   async check_unity(name: string) {
     try {
