@@ -22,6 +22,8 @@ import { PostModule } from './post/post.module';
 import { TagModule } from './tag/tag.module';
 import { Tag } from './tag/entities/tag.entity';
 import { Post } from './post/entities/post.entity';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { UserGuard } from './user/user.guard';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -56,6 +58,14 @@ import { Post } from './post/entities/post.entity';
   controllers: [
     AppController
   ],
-  providers: [AppService, BaseEntityService, UtilsServiceService],
+  providers: [
+    AppService, 
+    BaseEntityService, 
+    UtilsServiceService,
+    {
+      provide: APP_GUARD,
+      useClass: UserGuard,
+    }
+  ],
 })
 export class AppModule {}

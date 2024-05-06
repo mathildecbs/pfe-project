@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserQP } from './dto/query-params.dto';
+import { UserGuard } from './user.guard';
 
 @Controller('user')
+@UseGuards(UserGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
