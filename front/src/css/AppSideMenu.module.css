@@ -1,0 +1,35 @@
+.SideMenu {
+  height: 100%;
+  width: 200px;
+  transition: width 0.2s ease;
+  background-color: #B3CEE5;
+  display: flex;
+  flex-direction: column;
+}
+
+.Expanded {
+  width: 250px;
+}
+
+.Collapsed {
+  width: 55px;
+}
+
+.MenuContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.ChevronButtonContainer {
+  display: flex;
+  flex-direction:row-reverse;
+  margin: 8px;
+}
+
+.MenuItem{
+  border-radius: 40px;
+}
+
+.MenuItem:hover{
+  background-color: #D0E4F5;
+}
