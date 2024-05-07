@@ -37,10 +37,13 @@ export class PostService {
       children: [],
       likes: [],
       reposts: [],
+      comment: false
     }
     if(createPostDto.parent) {
       post.parent = await this.findOne(createPostDto.parent)
+      post['comment'] = true
     }
+
     const res = await this.postRepository.save(post)
     if( !res ) {
       throw new HttpException(`Creation failed `, HttpStatus.BAD_REQUEST);
@@ -64,7 +67,7 @@ export class PostService {
       post['nb_comments'] = await this.get_nb_comments(post)
     }
 
-    return tree
+    return this.utilsService.sort_posts(tree)
   }
 
   async findOne(id: string) {
@@ -85,16 +88,47 @@ export class PostService {
       throw new HttpException(`post not found : ${tree}`, HttpStatus.NOT_FOUND);
     }
 
-    const children = await this.postTreeRepository.findDescendants(tree, {depth:1, relations : ['user', 'reposts', 'likes']})
-    for (let child of children) {
-      child = this.utilsService.format_post(child)
-      child['nb_comments'] = await this.get_nb_comments(child)
+    const tree2 = await this.postTreeRepository.findDescendantsTree(tree, {depth:2, relations: ['user', 'reposts', 'likes', 'tags']})
+    tree2['nb_comments'] = tree2.children.length
+    tree2.children.forEach((com)=> {
+      com['nb_comments'] = com.children
+      com = this.utilsService.format_post(com)
+    })
+    tree2.children = this.utilsService.sort_posts(tree2.children)
+    tree2.likes = this.utilsService.user_to_username(tree2.likes)
+    tree2.reposts = this.utilsService.user_to_username(tree2.reposts)
+
+    return this.utilsService.format_post(tree2)
+
+  }
+
+  async findByUser(username: string) {
+    const user = await this.userService.findOne(username)
+    delete user['feed']
+    const posts = await this.postTreeRepository.find({
+      where : {
+        comment: false,
+        user: {
+          username : username
+        }
+      },
+      relations: {
+        likes:true,
+        reposts:true,
+        user: true,
+        tags: true,
+      },
+      order: {
+        create_date: 'desc'
+      }
+    })
+
+    for (let post of posts) {
+      post = this.utilsService.format_post(post)
+      post['nb_comments'] = await this.get_nb_comments(post)
     }
-    tree['nb_comments'] = await this.get_nb_comments(tree)
-    tree['children'] = children
 
-    return this.utilsService.format_post(tree)
-
+    return posts
   }
 
   async remove(id: string) {
@@ -115,4 +149,77 @@ export class PostService {
     return await this.postTreeRepository.countDescendants(post)
 
   }
+
+  async like(username:string, post_id:string) {
+    const post = await this.findOne(post_id)
+    const user = await this.userService.findOne(username)
+
+    post.likes.push(user)
+
+    const res = await this.postTreeRepository.save(post)
+
+    if(!res) {
+      throw new HttpException(`Failed to like post ${post_id}`, HttpStatus.BAD_REQUEST);
+    }
+
+    return await this.findOne(post_id)
+  }
+  async unlike(username:string, post_id:string) {
+    const post = await this.findOne(post_id)
+    const user = await this.userService.findOne(username)
+
+    post.likes.forEach( (item, index) => {
+      if(item.id === user.id) post.likes.splice(index,1);
+    });
+
+    const res = await this.postTreeRepository.save(post)
+
+    if(!res) {
+      throw new HttpException(`Failed to like post ${post_id}`, HttpStatus.BAD_REQUEST);
+    }
+
+    return await this.findOne(post_id)
+  }
+
+  async repost(username:string, post_id:string) {
+    const post = await this.findOne(post_id)
+    const user = await this.userService.findOne(username)
+
+    post.reposts.push(user)
+
+    const res = await this.postTreeRepository.save(post)
+
+    if(!res) {
+      throw new HttpException(`Failed to repost post ${post_id}`, HttpStatus.BAD_REQUEST);
+    }
+    return await this.findOne(post_id)
+  }
+  async unrepost(username:string, post_id:string) {
+    const post = await this.findOne(post_id)
+    const user = await this.userService.findOne(username)
+
+    post.reposts.forEach( (item, index) => {
+      if(item.id === user.id) post.reposts.splice(index,1);
+    });
+
+    const res = await this.postTreeRepository.save(post)
+
+    if(!res) {
+      throw new HttpException(`Failed to unrepost post ${post_id}`, HttpStatus.BAD_REQUEST);
+    }
+    return await this.findOne(post_id)
+  }
+
+  async following_feed(username:string) {
+    const user = await this.userService.findOne(username)
+    let following:Post[] = []
+    for (const follow of user.following) {
+      const posts = await this.findByUser(follow.username)
+      following = following.concat(posts)
+    }
+
+    return this.utilsService.sort_posts(following)
+  }
+
+
 }

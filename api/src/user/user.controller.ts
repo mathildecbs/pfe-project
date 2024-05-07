@@ -32,6 +32,10 @@ export class UserController {
   async follow(@Param('username') username: string, @Param('username2') username2: string) {
     return await this.userService.follow(username, username2);
   }
+  @Patch(':username/unfollow/:username2')
+  async unfollow(@Param('username') username: string, @Param('username2') username2: string) {
+    return await this.userService.unfollow(username, username2);
+  }
 
   @Delete(':username')
   async remove(@Param('username') username: string) {
