@@ -1,3 +1,8 @@
+.CenterContent {
+  display: flex;
+  height: 100vw;
+}
+
 .MainContent {
   margin: 2em 5em 2em 5em;
 }
