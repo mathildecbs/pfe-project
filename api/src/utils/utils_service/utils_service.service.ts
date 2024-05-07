@@ -28,13 +28,33 @@ export class UtilsServiceService {
     return post
   }
 
-  user_to_username(users: User[]): string[] {
-    const usernames: string[] = []
+  user_to_username(users: User[]): User[] {
 
     users.forEach((user) => {
-      usernames.push(user.username)
+      delete user.description
+      delete user.maj_date
+      delete user.password
+      delete user.create_date
+
     })
 
-    return usernames
+    return users
+  }
+
+  create_feed(posts: Post[], reposts: Post[]):Post[] {
+    let feed: Post[] = []
+    const posts_without_com = posts.filter((post)=>
+      !post.comment
+    )
+    posts = this.sort_posts(posts)
+    feed = posts_without_com
+    feed.concat(reposts)
+    feed = this.sort_posts(feed)
+
+    return feed
+  }
+
+  sort_posts(post:Post[]) {
+    return post.sort((a, b)=> (a.create_date> b.create_date? -1: 1))
   }
 }
