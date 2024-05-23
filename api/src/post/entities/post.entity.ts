@@ -13,6 +13,9 @@ export class Post extends BaseEntity{
   @ManyToOne(()=> User, (user)=> user.posts)
   user: User
 
+  @Column({type:"boolean"})
+  comment: boolean
+
   @TreeParent()
   parent: Post
 

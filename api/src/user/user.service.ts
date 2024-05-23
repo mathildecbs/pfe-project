@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { ArrayContains, Like, MoreThanOrEqual, Repository } from 'typeorm';
+import {  Like, MoreThanOrEqual, Repository } from 'typeorm';
 import { UtilsServiceService } from '../utils/utils_service/utils_service.service';
 import { UserQP } from './dto/query-params.dto';
 
@@ -55,7 +55,9 @@ export class UserService {
         where : {username},
         relations: {
           following: true,
-          followers: true
+          followers: true,
+          posts: true,
+          reposts: true
         }
     }))[0]
 
@@ -69,6 +71,7 @@ export class UserService {
     }
     user.followers = this.utilsService.user_to_username(res.followers)
     user.following = this.utilsService.user_to_username(res.following)
+    user['feed'] = this.utilsService.create_feed(res.posts, res.reposts)
 
     return this.utilsService.format_user(user);
   }
@@ -122,6 +125,23 @@ export class UserService {
     }
     return await this.findOne(follower)
   }
+  async unfollow(follower: string, following: string) {
+    const user_follower = await this.findOne(follower)
+    const user_following = await this.findOne(following)
+
+    user_follower.following.forEach( (item, index) => {
+      if(item.id === user_following.id) user_follower.following.splice(index,1);
+    });
+
+    const res = await this.usersRepository.save(user_follower)
+
+    if (!res ){
+      throw new HttpException(`Failed to follow user ${following}`, HttpStatus.BAD_REQUEST);
+    }
+    return await this.findOne(follower)
+  }
+
+
 
   async check_unity(username: string) {
     try {
