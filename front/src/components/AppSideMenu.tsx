@@ -10,7 +10,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import LibraryMusicIcon from "@mui/icons-material/LibraryMusic";
 import CollectionsIcon from "@mui/icons-material/Collections";
 import PersonIcon from "@mui/icons-material/Person";
-import ImageSearchIcon from "@mui/icons-material/ImageSearch";
+import GroupsIcon from '@mui/icons-material/Groups';
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import AlbumIcon from "@mui/icons-material/Album";
 import styles from "../css/AppSideMenu.module.css";
@@ -55,16 +55,28 @@ function AppSideMenu() {
           {isExpanded && <ListItemText primary="Explorer" />}
         </ListItem>
         {isExpanded && (
-          <ListItem
-            className={styles.SubMenuItem}
-            component={Link}
-            to="/exploAlbums"
-          >
-            <ListItemIcon>
-              <AutoStoriesIcon />
-            </ListItemIcon>
-            {isExpanded && <ListItemText primary="Albums" />}
-          </ListItem>
+          <>
+            <ListItem
+              className={styles.SubMenuItem}
+              component={Link}
+              to="/exploArtists"
+            >
+              <ListItemIcon>
+                <GroupsIcon />
+              </ListItemIcon>
+              {isExpanded && <ListItemText primary="Artists" />}
+            </ListItem>
+            <ListItem
+              className={styles.SubMenuItem}
+              component={Link}
+              to="/exploArtists"
+            >
+              <ListItemIcon>
+                <AutoStoriesIcon />
+              </ListItemIcon>
+              {isExpanded && <ListItemText primary="Albums" />}
+            </ListItem>
+          </>
         )}
         <ListItem
           className={styles.MenuItem}

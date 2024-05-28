@@ -8,6 +8,7 @@ import AppMyPage from "./AppMyPage";
 import AppExploAlbums from "./AppExploAlbums";
 import AppCollectionAlbums from "./AppCollectionAlbums";
 import AppCollectionPhotocards from "./AppCollectionPhotocards";
+import AppExploArtists from "./AppExploArtists";
 
 function AppRouter() {
   return (
@@ -15,6 +16,7 @@ function AppRouter() {
       <Route path="/" element={<AppHome />} />
       <Route path="/community" element={<AppCommunity />} />
       <Route path="/explorer" element={<AppExplorer />} />
+      <Route path="/exploArtists" element={<AppExploArtists />} />
       <Route path="/exploAlbums" element={<AppExploAlbums />} />
       <Route path="/myCollection" element={<AppMyCollection />} />
       <Route path="/collectionAlbums" element={<AppCollectionAlbums />} />

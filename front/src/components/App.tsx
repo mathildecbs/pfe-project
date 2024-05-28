@@ -3,6 +3,7 @@ import AppSideMenu from "./AppSideMenu";
 import AppRouter from "./AppRouter";
 import styles from "../css/App.module.css";
 import AppTopMenu from "./AppTopMenu";
+import AppPostIconButton from "./AppPostIconButton";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <AppRouter />
         </div>
       </div>
+    <AppPostIconButton />
     </BrowserRouter>
   );
 }
