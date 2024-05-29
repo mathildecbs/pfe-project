@@ -164,14 +164,57 @@ export class UserService {
     throw new HttpException(`username ${username} already taken`, HttpStatus.BAD_REQUEST)
   }
 
-  async connection(username: string, password: string) {
-    const user = await this.findOne(username)
+  async findOnePassword(username: string) {
+
+    const res = (await this.usersRepository.find(
+      {
+        where : {username: username},
+        relations: {
+          following: true,
+          followers: true,
+          posts: true,
+          reposts: true
+        }
+    }))[0]
+
+    if (!res) {
+      throw new HttpException(`User not found for username : ${username}`, HttpStatus.NOT_FOUND);
+    }
+    const user = {
+      ...res,
+      followers: [],
+      following: []
+    }
+    user.followers = this.utilsService.user_to_username(res.followers)
+    user.following = this.utilsService.user_to_username(res.following)
+    user['feed'] = this.utilsService.create_feed(res.posts, res.reposts)
+
+console.log("findone : ", user)
+
+    return user;
+  }
+
+  async connection(response: Object) {
+
+    const username = response['username']
+    const password = response['password']
+
+    const user = await this.findOnePassword(username)
+
+    console.log("user conneciton ", user)
+    console.log('username de la bdd :', user.username)
+    console.log('password de la bdd :', user['password'])
+
     if (!user) {
       throw new HttpException(`authentication failed`, HttpStatus.BAD_REQUEST)
     }
 
+    console.log('name de la bdd :', user.name)
+    console.log('password testé :', password)
+
     const password_match = await bcrypt.compare(password, user.password);
 
+    console.log(password_match)
     if (!password_match) {
       throw new HttpException(`authentication failed`, HttpStatus.BAD_REQUEST)
     }

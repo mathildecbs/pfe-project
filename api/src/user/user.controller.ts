@@ -19,10 +19,15 @@ export class UserController {
   async findAll(@Query() query: UserQP) {
     return await this.userService.findAll(query);
   }
-
+  
   @Get(':username')
   async findOne(@Param('username') username: string) {
     return await this.userService.findOne(username);
+  }
+
+  @Post('login')
+  async connection(@Body() user: Object) {
+    return await this.userService.connection(user);
   }
 
   @Patch(':username')
