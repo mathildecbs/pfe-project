@@ -8,18 +8,18 @@ export class InclusionController {
   constructor(private readonly inclusionService: InclusionService) {}
 
   @Post()
-  create(@Body() createInclusionDto: CreateInclusionDto) {
-    return this.inclusionService.create(createInclusionDto);
+  async create(@Body() createInclusionDto: CreateInclusionDto) {
+    return await this.inclusionService.create(createInclusionDto);
   }
 
   @Get()
-  findAll() {
-    return this.inclusionService.findAll();
+  async findAll() {
+    return await this.inclusionService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.inclusionService.findOne(+id);
+  async findOne(@Param('id') id: string) {
+    return await this.inclusionService.findOne(id);
   }
 
   @Patch(':id')

@@ -12,7 +12,7 @@ export class Inclusion extends BaseEntity{
   @ManyToOne(()=> Album, (album)=> album.inclusions, {nullable:false})
   album: Album
 
-  @ManyToOne(()=> Artist, (artist)=> artist.inclusions, {nullable: true})
+  @ManyToOne(()=> Artist, (artist)=> artist.inclusions, {nullable: true, eager: true})
   member: Artist
 
   @Column({type:'enum', enum: IncluEnum, default: IncluEnum.PHOTOCARD})
