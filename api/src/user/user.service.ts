@@ -170,7 +170,7 @@ export class UserService {
       throw new HttpException(`authentication failed`, HttpStatus.BAD_REQUEST)
     }
 
-    const password_match = user.password === password;
+    const password_match = await bcrypt.compare(password, user.password);
 
     if (!password_match) {
       throw new HttpException(`authentication failed`, HttpStatus.BAD_REQUEST)
