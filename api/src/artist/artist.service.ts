@@ -56,8 +56,20 @@ export class ArtistService {
 
   }
 
-  update(id: number, updateArtistDto: UpdateArtistDto) {
-    return `This action updates a #${id} artist`;
+  async update(id: string, updateArtistDto: UpdateArtistDto) {
+    const artist = await this.findOne(id)
+
+    for (const group of updateArtistDto.groups) {
+      const added_group = await this.groupService.findOne(group)
+      artist.groups.push(added_group)
+    }
+
+    const res = await this.artistRepository.save(artist)
+
+    if( !res ) {
+      throw new HttpException(`Update failed for group ${id}`, HttpStatus.BAD_REQUEST);
+    }
+    return await this.findOne(res.id);
   }
 
   remove(id: number) {

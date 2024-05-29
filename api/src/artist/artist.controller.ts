@@ -23,8 +23,8 @@ export class ArtistController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
-    return this.artistService.update(+id, updateArtistDto);
+  async update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
+    return await this.artistService.update(id, updateArtistDto);
   }
 
   @Delete(':id')
