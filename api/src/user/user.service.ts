@@ -8,6 +8,7 @@ import { UtilsServiceService } from '../utils/utils_service/utils_service.servic
 import { UserQP } from './dto/query-params.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -23,9 +24,15 @@ export class UserService {
   }
   async create(createUserDto: CreateUserDto) {
     //check if username is unique
-    const unique = await this.check_unity(createUserDto.username)
+    const unique = await this.check_unity(createUserDto.username);
 
-    const new_user = await this.usersRepository.save(createUserDto)
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(createUserDto.password, saltRounds);
+
+    const new_user = await this.usersRepository.save({
+      ...createUserDto,
+      password: hashedPassword
+    })
 
     if (!new_user ){
       throw new HttpException('User creation failed', HttpStatus.BAD_REQUEST);
