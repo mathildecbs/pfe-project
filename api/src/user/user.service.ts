@@ -6,6 +6,8 @@ import { User } from './entities/user.entity';
 import {  Like, MoreThanOrEqual, Repository } from 'typeorm';
 import { UtilsServiceService } from '../utils/utils_service/utils_service.service';
 import { UserQP } from './dto/query-params.dto';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserService {
@@ -13,7 +15,10 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private utilsService: UtilsServiceService
+    private utilsService: UtilsServiceService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
+
   ) {
   }
   async create(createUserDto: CreateUserDto) {
@@ -153,4 +158,26 @@ export class UserService {
   }
 
 
+  async connection(username: string, password: string) {
+    const user = await this.findOne(username)
+    if (!user) {
+      throw new HttpException(`authentication failed`, HttpStatus.BAD_REQUEST)
+    }
+
+    const password_match = user.password === password;
+
+    if (!password_match) {
+      throw new HttpException(`authentication failed`, HttpStatus.BAD_REQUEST)
+    }
+
+    const payload = { username: user.username, sub: user.id };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('JWT_SECRET'),
+      expiresIn: '12h',
+    });
+
+    return { access_token: token };
+    
+
+  }
 }
