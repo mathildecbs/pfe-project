@@ -1,0 +1,43 @@
+.SideMenu {
+  height: 100%;
+  width: 200px;
+  transition: width 0.2s ease;
+  background-color: #B3CEE5;
+  display: flex;
+  flex-direction: column;
+  padding: 0em 0.5em 0em 0.5em;
+  color: #585858;
+}
+
+.Expanded {
+  width: 250px;
+}
+
+.Collapsed {
+  width: 3.5em;
+}
+
+.MenuContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.ChevronButtonContainer {
+  display: flex;
+  flex-direction:row-reverse;
+  margin: 8px;
+}
+
+.MenuItem{
+  border-radius: 40px;
+}
+
+.MenuItem:hover, .SubMenuItem:hover{
+  background-color: #D0E4F5;
+}
+
+.SubMenuItem{
+  margin-left: 2em;
+  border-radius: 40px;
+  max-width: 80%;
+}
