@@ -157,7 +157,6 @@ export class UserService {
     throw new HttpException(`username ${username} already taken`, HttpStatus.BAD_REQUEST)
   }
 
-
   async connection(username: string, password: string) {
     const user = await this.findOne(username)
     if (!user) {
@@ -177,7 +176,5 @@ export class UserService {
     });
 
     return { access_token: token };
-    
-
   }
 }
