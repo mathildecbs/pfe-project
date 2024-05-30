@@ -64,7 +64,14 @@ export class AlbumService {
     return `This action updates a #${id} album`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} album`;
+  async remove(id: string) {
+    const album = await this.findOne(id)
+    try {
+      const res = await this.albumRepository.delete(album.id)
+      return true;
+    } catch (e: any) {
+      throw new HttpException(`Fail on delete album ${id} : ${e}`, HttpStatus.BAD_REQUEST)
+
+    }
   }
 }

@@ -9,12 +9,12 @@ export class Artist extends BaseEntity{
   @Column()
   name: string
 
-  @ManyToMany(()=> Group, (group)=> group.members)
+  @ManyToMany(()=> Group, (group)=> group.members, {onDelete: "CASCADE"})
   groups: Group[]
 
-  @OneToMany(()=> Album, (album)=> album.artist)
+  @OneToMany(()=> Album, (album)=> album.artist, {onDelete: "CASCADE"})
   albums: Album[]
 
-  @OneToMany(()=> Inclusion, (inclusion)=> inclusion.member)
+  @OneToMany(()=> Inclusion, (inclusion)=> inclusion.member, {onDelete: "CASCADE"})
   inclusions: Inclusion[]
 }

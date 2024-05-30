@@ -57,7 +57,14 @@ export class GroupService {
     return `This action updates a #${id} group`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} group`;
+  async remove(id: string) {
+    const group = await this.findOne(id)
+    try {
+      const res = await this.groupTreeRepository.delete(group.id)
+      return true;
+    } catch (e: any) {
+      throw new HttpException(`Fail on delete group ${id} : ${e}`, HttpStatus.BAD_REQUEST)
+
+    }
   }
 }

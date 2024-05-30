@@ -60,7 +60,14 @@ export class InclusionService {
     return `This action updates a #${id} inclusion`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} inclusion`;
+  async remove(id: string) {
+    const inclusion = await this.findOne(id)
+    try {
+      const res = await this.inclusionRepository.delete(inclusion.id)
+      return true;
+    } catch (e: any) {
+      throw new HttpException(`Fail on delete inclusion ${id} : ${e}`, HttpStatus.BAD_REQUEST)
+
+    }
   }
 }

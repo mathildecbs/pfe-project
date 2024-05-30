@@ -72,7 +72,14 @@ export class ArtistService {
     return await this.findOne(res.id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} artist`;
+  async remove(id: string) {
+    const artist = await this.findOne(id)
+    try {
+      const res = await this.artistRepository.delete(artist.id)
+      return true;
+    } catch (e: any) {
+      throw new HttpException(`Fail on delete artist ${id} : ${e}`, HttpStatus.BAD_REQUEST)
+
+    }
   }
 }

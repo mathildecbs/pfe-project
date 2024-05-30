@@ -28,7 +28,7 @@ export class InclusionController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.inclusionService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.inclusionService.remove(id);
   }
 }

@@ -28,7 +28,7 @@ export class ArtistController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.artistService.remove(+id);
+  async remove(@Param('id') id: string) {
+    return await this.artistService.remove(id);
   }
 }
