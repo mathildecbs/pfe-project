@@ -14,7 +14,6 @@ export default function AppCommunity() {
     try {
       const response = await ApiUtils.getApiInstanceJson().get('/post');
       const postsList = response.data;
-      console.log(postsList);
       setPosts(postsList);
     } catch (error) {
       console.log('Erreur lors de la récupération des posts');
@@ -23,18 +22,9 @@ export default function AppCommunity() {
 
   return (
     <>
-      <AppPost />
-      <AppPost />
-      <AppPost />
-      <AppPost />
-      <AppPost />
-      <AppPost />
-      <AppPost />
-      <AppPost />
-      <AppPost />
-      <AppPost />
-      <AppPost />
-      <AppPost />
+    {posts.map((postReceived) => (
+      <AppPost key={postReceived.id} post={postReceived}/>
+    ))}
     </>
   );
 }

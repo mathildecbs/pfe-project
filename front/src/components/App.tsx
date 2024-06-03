@@ -4,24 +4,24 @@ import AppRouter from "./AppRouter";
 import styles from "../css/App.module.css";
 import AppTopMenu from "./AppTopMenu";
 import AppPostIconButton from "./AppPostIconButton";
-import { AuthProvider } from "../auth/AuthProvider";
+import { AuthProvider, useAuth } from "../auth/AuthProvider";
 
 function App() {
+  const { user } = useAuth();
+
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <AppTopMenu />
-        <div className={styles.CenterContent}>
-          <AppSideMenu />
-          <div className={styles.Content}>
-            <div className={styles.MainContent}>
-              <AppRouter />
-            </div>
+    <BrowserRouter>
+      <AppTopMenu />
+      <div className={styles.CenterContent}>
+        {user && <AppSideMenu />}
+        <div className={styles.Content}>
+          <div className={styles.MainContent}>
+            <AppRouter />
           </div>
         </div>
-        <AppPostIconButton />
-      </BrowserRouter>
-    </AuthProvider>
+      </div>
+      {user && <AppPostIconButton />}
+    </BrowserRouter>
   );
 }
 
