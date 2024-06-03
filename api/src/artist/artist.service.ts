@@ -88,7 +88,7 @@ export class ArtistService {
     const res = await this.artistRepository.save(artist)
 
     if( !res ) {
-      throw new HttpException(`Update failed for group ${id}`, HttpStatus.BAD_REQUEST);
+      throw new HttpException(`Update failed for artist ${id}`, HttpStatus.BAD_REQUEST);
     }
     return await this.findOne(res.id);
   }

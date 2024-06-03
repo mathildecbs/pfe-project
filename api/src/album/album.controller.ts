@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { AlbumService } from './album.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import { BaseQP } from '../utils/base_entity/base_entity.service';
 
 @Controller('album')
 export class AlbumController {
@@ -13,8 +14,8 @@ export class AlbumController {
   }
 
   @Get()
-  async findAll() {
-    return await this.albumService.findAll();
+  async findAll(@Query() query: BaseQP) {
+    return await this.albumService.findAll(query);
   }
 
   @Get(':id')
@@ -23,8 +24,8 @@ export class AlbumController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
-    return this.albumService.update(+id, updateAlbumDto);
+  async update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
+    return await this.albumService.update(id, updateAlbumDto);
   }
 
   @Delete(':id')
