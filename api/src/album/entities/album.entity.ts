@@ -15,10 +15,10 @@ export class Album extends BaseEntity{
   @Column({type:'boolean', default: false})
   solo: boolean
 
-  @ManyToOne(()=> Artist, (artist)=> artist.albums, {onDelete: "CASCADE"})
+  @ManyToOne(()=> Artist, (artist)=> artist.albums, {onDelete: "CASCADE", eager: true})
   artist: Artist
 
-  @ManyToOne(()=> Group, (group)=> group.albums, {onDelete: "CASCADE"})
+  @ManyToOne(()=> Group, (group)=> group.albums, {onDelete: "CASCADE", eager: true})
   group: Group
 
   @Column('json', { nullable:true })

@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ArtistService } from './artist.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
+import { BaseQP } from '../utils/base_entity/base_entity.service';
 
 @Controller('artist')
 export class ArtistController {
@@ -13,8 +14,8 @@ export class ArtistController {
   }
 
   @Get()
-  async findAll() {
-    return await this.artistService.findAll();
+  async findAll(@Query() query: BaseQP) {
+    return await this.artistService.findAll(query);
   }
 
   @Get(':id')

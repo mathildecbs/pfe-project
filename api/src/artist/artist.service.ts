@@ -3,8 +3,9 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Artist } from './entities/artist.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { GroupService } from '../group/group.service';
+import { BaseQP } from '../utils/base_entity/base_entity.service';
 
 @Injectable()
 export class ArtistService {
@@ -17,8 +18,11 @@ export class ArtistService {
   async create(createArtistDto: CreateArtistDto) {
     const new_artist = {
       ...createArtistDto,
-      groups: []
+      groups: [],
+      main_group: null
     }
+
+    new_artist.main_group = await this.groupService.findOne(createArtistDto.main_group)
 
     if (createArtistDto.groups) {
       for (const group of createArtistDto.groups) {
@@ -34,8 +38,25 @@ export class ArtistService {
     return await this.findOne(res.id);
   }
 
-  async findAll() {
-    return await this.artistRepository.find();
+  async findAll(query: BaseQP) {
+    const options = {
+    }
+    if (query.limit) options['take'] = query.limit
+    if (query.limit&& query.offset) options['skip'] = query.offset
+    if (query.search) {
+      options['where'] = {}
+      options['where']['name'] = Like(`${query.search}%`)
+    }
+
+    return await this.artistRepository.find({
+      ...options,
+      order: {
+        main_group:  {
+          name: "asc"
+        },
+        birthday: "asc"
+      }
+    });
   }
 
   async findOne(id: string) {

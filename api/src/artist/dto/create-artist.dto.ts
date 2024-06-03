@@ -1,10 +1,14 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateArtistDto {
 
   @IsNotEmpty()
   @IsString()
   name: string
+
+  @IsUUID()
+  @IsNotEmpty()
+  main_group: string
 
   @IsArray()
   groups: Array<string>
