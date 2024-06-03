@@ -1,0 +1,47 @@
+.PostContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0.75em;
+  margin-bottom: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 0.5em;
+}
+
+.Header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5em;
+  gap: 0.5em;
+}
+
+.Name {
+  font-weight: bold;
+}
+
+.Username {
+  color: gray;
+}
+
+.Time {
+  color: gray;
+}
+
+.Message {
+  margin-bottom: 0.5em;
+}
+
+.Tags {
+  color: rgb(27, 172, 217);
+  margin-bottom: 0.5em;
+}
+
+.Actions {
+  display: flex;
+  justify-content: space-around;
+}
+
+.ActionButton {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}

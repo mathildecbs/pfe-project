@@ -1,4 +1,5 @@
 .SideMenu {
+  position: sticky;
   height: 100%;
   width: 200px;
   transition: width 0.2s ease;

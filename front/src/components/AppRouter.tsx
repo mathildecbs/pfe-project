@@ -9,11 +9,15 @@ import AppExploAlbums from "./AppExploAlbums";
 import AppCollectionAlbums from "./AppCollectionAlbums";
 import AppCollectionPhotocards from "./AppCollectionPhotocards";
 import AppExploArtists from "./AppExploArtists";
+import AppRegister from "./AppRegister";
+import AppLogin from "./AppLogin";
 
 function AppRouter() {
   return (
     <Routes>
       <Route path="/" element={<AppHome />} />
+      <Route path="/register" element={<AppRegister />} />
+      <Route path="/login" element={<AppLogin />} />
       <Route path="/community" element={<AppCommunity />} />
       <Route path="/explorer" element={<AppExplorer />} />
       <Route path="/exploArtists" element={<AppExploArtists />} />
