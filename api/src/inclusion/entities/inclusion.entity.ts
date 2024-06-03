@@ -9,7 +9,7 @@ export class Inclusion extends BaseEntity{
   @Column()
   name: string
 
-  @ManyToOne(()=> Album, (album)=> album.inclusions, {nullable:false, onDelete:"CASCADE"})
+  @ManyToOne(()=> Album, (album)=> album.inclusions, {nullable:false, onDelete:"CASCADE", eager:true})
   album: Album
 
   @ManyToOne(()=> Artist, (artist)=> artist.inclusions, {nullable: true, eager: true, onDelete:"CASCADE"})

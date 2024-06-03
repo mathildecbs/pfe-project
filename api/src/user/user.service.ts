@@ -6,6 +6,12 @@ import { User } from './entities/user.entity';
 import {  Like, MoreThanOrEqual, Repository } from 'typeorm';
 import { UtilsServiceService } from '../utils/utils_service/utils_service.service';
 import { UserQP } from './dto/query-params.dto';
+import { CreateOwnedAlbumDto } from '../album/dto/create-owned-album.dto';
+import { OwnedAlbum } from '../album/entities/owned-album.entity';
+import { OwnedInclusion } from '../inclusion/entities/owned-inclusion.entity';
+import { AlbumService } from '../album/album.service';
+import { InclusionService } from '../inclusion/inclusion.service';
+import { CreateOwnedInclusionDto } from '../inclusion/dto/create-owned-inclusion.dto';
 
 @Injectable()
 export class UserService {
@@ -13,7 +19,13 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    private utilsService: UtilsServiceService
+    @InjectRepository(OwnedAlbum)
+    private albumRepository: Repository<OwnedAlbum>,
+    @InjectRepository(OwnedInclusion)
+    private inclusionRepository: Repository<OwnedInclusion>,
+    private utilsService: UtilsServiceService,
+    private albumService: AlbumService,
+    private inclusionService: InclusionService,
   ) {
   }
   async create(createUserDto: CreateUserDto) {
@@ -153,4 +165,133 @@ export class UserService {
   }
 
 
+  async add_album(username: string, body: CreateOwnedAlbumDto) {
+    const new_owned_album = {
+      ...body,
+      album: null,
+      user: null
+    }
+    new_owned_album.user = await this.findOne(username)
+    new_owned_album.album = await this.albumService.findOne(body.album)
+
+    if(new_owned_album.version && !new_owned_album.album.versions.includes(new_owned_album.version)) {
+      throw new HttpException(`version ${body.version} not in album versions ${new_owned_album.album.versions}`, HttpStatus.BAD_REQUEST)
+    }
+    if(new_owned_album.quantity<0) {
+      throw new HttpException(`quantity has to be greater than 0 `, HttpStatus.BAD_REQUEST)
+    }
+
+    const res = await this.albumRepository.save(new_owned_album)
+    if( !res ) {
+      throw new HttpException(`Creation failed `, HttpStatus.BAD_REQUEST);
+    }
+
+    return this.get_collection(username);
+  }
+
+  async add_inclusion(username: string, body: CreateOwnedInclusionDto) {
+    const new_owned_inclusion = {
+      ...body,
+      inclusion: null,
+      user: null
+    }
+    new_owned_inclusion.user = await this.findOne(username)
+    new_owned_inclusion.inclusion = await this.inclusionService.findOne(body.inclusion)
+
+
+    if(new_owned_inclusion.quantity<=0) {
+      throw new HttpException(`quantity has to be greater than 0 `, HttpStatus.BAD_REQUEST)
+    }
+
+    try {
+      await this.get_one_owned_album(username, new_owned_inclusion.inclusion.album.id)
+
+    } catch (e) {
+      await this.add_album(username, {quantity:0, album: new_owned_inclusion.inclusion.album.id})
+    }
+
+    const res = await this.inclusionRepository.save(new_owned_inclusion)
+    if( !res ) {
+      throw new HttpException(`Creation failed `, HttpStatus.BAD_REQUEST);
+    }
+
+    return this.get_collection(username);
+  }
+
+  async get_collection(username:string){
+    const user = await this.findOne(username)
+    delete user['feed']
+
+    const albums  = await this.albumRepository.find({
+      where:{user: {id: user.id}},
+      relations: {
+        album: true
+      }
+    })
+
+    const inclusions = await this.inclusionRepository.find({
+      where:{user: {id: user.id}},
+      relations: {
+        inclusion: true
+      }
+    })
+
+    return {albums, inclusions}
+  }
+
+  async get_one_owned_album(username: string, albumId: string) {
+    const user = await this.findOne(username)
+    const album = await this.albumService.findOne(albumId)
+
+    const owned = await this.albumRepository.find({
+      where: {
+        user: {
+          id: user.id
+        },
+        album: {
+          id: albumId
+        }
+      }
+    })
+
+    if(owned.length===0){
+      throw new HttpException(`album ${albumId} owned by ${username}`, HttpStatus.NOT_FOUND);
+    }
+
+    const inclusions = await this.inclusionRepository.find({
+      where: {
+        user : {
+          id: user.id
+        },
+        inclusion: {
+          album : {
+            id: albumId
+          }
+        }
+      }
+    })
+
+    return {...owned, inclusions}
+  }
+
+  async get_all_albums(username: string) {
+    const user = await this.findOne(username)
+
+    return await this.albumRepository.find({where: {user: {id: user.id}}, order: {
+      album : {
+        release_date: "ASC"
+      }
+    }})
+
+  }
+
+  async get_all_inclusions(username: string) {
+    const user = await this.findOne(username)
+
+    return await this.inclusionRepository.find({where: {user: {id: user.id}}, order: {
+        inclusion : {
+          name: "ASC"
+        }
+      }})
+  }
 }

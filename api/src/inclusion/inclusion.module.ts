@@ -11,5 +11,6 @@ import { AlbumModule } from '../album/album.module';
   imports: [TypeOrmModule.forFeature([Inclusion, OwnedInclusion]), ArtistModule, AlbumModule],
   controllers: [InclusionController],
   providers: [InclusionService],
+  exports: [InclusionService]
 })
 export class InclusionModule {}
