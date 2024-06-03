@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { BaseQP } from '../utils/base_entity/base_entity.service';
 
 @Controller('group')
 export class GroupController {
@@ -13,8 +14,8 @@ export class GroupController {
   }
 
   @Get()
-  async findAll() {
-    return await this.groupService.findAll();
+  async findAll(@Query() query: BaseQP) {
+    return await this.groupService.findAll(query);
   }
 
   @Get(':id')
@@ -22,10 +23,6 @@ export class GroupController {
     return await this.groupService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGroupDto: UpdateGroupDto) {
-    return this.groupService.update(+id, updateGroupDto);
-  }
 
   @Delete(':id')
   async remove(@Param('id') id: string) {

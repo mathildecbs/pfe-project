@@ -3,7 +3,8 @@ import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Group } from './entities/group.entity';
-import { Repository, TreeRepository } from 'typeorm';
+import { Like, Repository, TreeRepository } from 'typeorm';
+import { BaseQP } from '../utils/base_entity/base_entity.service';
 
 @Injectable()
 export class GroupService {
@@ -32,8 +33,22 @@ export class GroupService {
     return await this.findOne(new_group.id);
   }
 
-  async findAll() {
-    return await this.groupTreeRepository.find();
+  async findAll(query: BaseQP) {
+    const options = {
+    }
+    if (query.limit) options['take'] = query.limit
+    if (query.limit&& query.offset) options['skip'] = query.offset
+    if (query.search) {
+      options['where'] = {}
+      options['where']['name'] = Like(`${query.search}%`)
+    }
+
+    return await this.groupTreeRepository.find({
+      ...options,
+      order: {
+        name: "asc"
+      }
+    });
   }
 
   async findOne(id: string) {
@@ -51,10 +66,6 @@ export class GroupService {
       throw new HttpException(`group not found : ${tree}`, HttpStatus.NOT_FOUND);
     }
     return tree;
-  }
-
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return `This action updates a #${id} group`;
   }
 
   async remove(id: string) {
