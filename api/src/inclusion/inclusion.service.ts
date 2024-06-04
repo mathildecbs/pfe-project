@@ -3,9 +3,10 @@ import { CreateInclusionDto } from './dto/create-inclusion.dto';
 import { UpdateInclusionDto } from './dto/update-inclusion.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Inclusion } from './entities/inclusion.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 import { AlbumService } from '../album/album.service';
 import { ArtistService } from '../artist/artist.service';
+import { BaseQP } from '../utils/base_entity/base_entity.service';
 
 @Injectable()
 export class InclusionService {
@@ -38,8 +39,32 @@ export class InclusionService {
     return await this.findOne(res.id);
   }
 
-  async findAll() {
-    return await this.inclusionRepository.find();
+  async findAll(query: BaseQP) {
+    const options = {
+    }
+    if (query.limit) options['take'] = query.limit
+    if (query.limit&& query.offset) options['skip'] = query.offset
+    if (query.search) {
+      options['where'] = {}
+      options['where']['name'] = Like(`${query.search}%`)
+    }
+    return await this.inclusionRepository.find( {
+      ...options,
+      order : {
+        album : {
+          group: {
+            name: "asc"
+          },
+          artist: {
+            name: "asc"
+          },
+          release_date:"desc"
+        },
+        member : {
+          birthday: "asc"
+        }
+      }
+    });
   }
 
   async findOne(id: string) {
@@ -56,8 +81,23 @@ export class InclusionService {
     return res[0];
   }
 
-  update(id: number, updateInclusionDto: UpdateInclusionDto) {
-    return `This action updates a #${id} inclusion`;
+  async update(id: string, updateInclusionDto: UpdateInclusionDto) {
+    const inclusion = await this.findOne(id)
+    const update = {
+      ...inclusion,
+      ...updateInclusionDto,
+      member : inclusion.member,
+      album : inclusion.album,
+    }
+
+    if(updateInclusionDto.member) update.member = await this.artistService.findOne(updateInclusionDto.member)
+    if(updateInclusionDto.album) update.album = await this.albumService.findOne(updateInclusionDto.album)
+
+    const res = await this.inclusionRepository.save(update)
+    if( !res ) {
+      throw new HttpException(`Update failed for inclusion ${id}`, HttpStatus.BAD_REQUEST);
+    }
+    return await this.findOne(res.id);
   }
 
   async remove(id: string) {

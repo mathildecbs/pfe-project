@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { InclusionService } from './inclusion.service';
 import { CreateInclusionDto } from './dto/create-inclusion.dto';
 import { UpdateInclusionDto } from './dto/update-inclusion.dto';
+import { BaseQP } from '../utils/base_entity/base_entity.service';
 
 @Controller('inclusion')
 export class InclusionController {
@@ -13,8 +14,8 @@ export class InclusionController {
   }
 
   @Get()
-  async findAll() {
-    return await this.inclusionService.findAll();
+  async findAll(@Query() query: BaseQP) {
+    return await this.inclusionService.findAll(query);
   }
 
   @Get(':id')
@@ -23,8 +24,8 @@ export class InclusionController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateInclusionDto: UpdateInclusionDto) {
-    return this.inclusionService.update(+id, updateInclusionDto);
+  async update(@Param('id') id: string, @Body() updateInclusionDto: UpdateInclusionDto) {
+    return await this.inclusionService.update(id, updateInclusionDto);
   }
 
   @Delete(':id')
