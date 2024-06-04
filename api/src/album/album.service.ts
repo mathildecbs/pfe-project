@@ -26,6 +26,9 @@ export class AlbumService {
       group: null,
       artist: null
     }
+    if(createAlbumDto.solo && createAlbumDto.group || !createAlbumDto.solo && createAlbumDto.artist) {
+      throw new HttpException(`Error referencing album's artist for groups or solo`, HttpStatus.BAD_REQUEST);
+    }
 
     if (createAlbumDto.solo) {
       new_album.artist = await this.artistService.findOne(createAlbumDto.artist)
@@ -83,6 +86,10 @@ export class AlbumService {
       artist: album.artist,
       group: album.group,
       solo: album.solo
+    }
+
+    if(updateAlbumDto.solo && updateAlbumDto.group || !updateAlbumDto.solo&& updateAlbumDto.artist) {
+      throw new HttpException(`Error referencing album for groups or solo`, HttpStatus.BAD_REQUEST);
     }
 
     if(updateAlbumDto.solo && updateAlbumDto.artist) {
