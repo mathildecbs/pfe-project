@@ -13,6 +13,7 @@ import { AlbumService } from '../album/album.service';
 import { InclusionService } from '../inclusion/inclusion.service';
 import { CreateOwnedInclusionDto } from '../inclusion/dto/create-owned-inclusion.dto';
 import { UpdateOwnedInclusionDto } from '../inclusion/dto/update-owned-inclusion.dto';
+import { UpdateOwnedAlbumDto } from '../album/dto/update-owned-album.dto';
 
 @Injectable()
 export class UserService {
@@ -185,7 +186,7 @@ export class UserService {
       throw new HttpException(`Creation failed `, HttpStatus.BAD_REQUEST);
     }
 
-    return this.get_collection(username);
+    return this.get_one_owned_album(username, body.album);
   }
 
   async add_inclusion(username: string, body: CreateOwnedInclusionDto) {
@@ -283,6 +284,49 @@ export class UserService {
 
   }
 
+  async update_album(username: string, album_id: string, body: UpdateOwnedAlbumDto) {
+    const user = await this.findOne(username)
+    const album = await this.albumRepository.findOne({
+      where: {
+        album : {
+          id: album_id
+        },
+        version: body.version
+      }
+    })
+    album.quantity+= body.quantity
+
+    if(album.quantity<=0) {
+      throw new HttpException(`quantity has to be greater than 0 `, HttpStatus.BAD_REQUEST)
+    }
+
+    const res = await this.albumRepository.save(album)
+    if( !res ) {
+      throw new HttpException(`Update failed `, HttpStatus.BAD_REQUEST);
+    }
+
+    return this.get_one_owned_album(username, album_id);
+
+  }
+
+  async delete_album(username: string, album_id: string, body: UpdateOwnedAlbumDto) {
+    const album = await this.albumRepository.findOne({
+      where: {
+        album : {
+          id: album_id
+        },
+        version: body.version
+      }
+    })
+
+    const res = await this.albumRepository.delete(album.id)
+    if( !res ) {
+      throw new HttpException(`Delete failed `, HttpStatus.BAD_REQUEST);
+    }
+
+    return true;
+  }
+
   async get_all_inclusions(username: string) {
     const user = await this.findOne(username)
 
@@ -293,8 +337,43 @@ export class UserService {
       }})
   }
 
-  async update_inclusion(username: string, inclusion_id:string ,body: UpdateOwnedInclusionDto)  {
+  async update_inclusion(username: string, inclusion_id: string ,body: UpdateOwnedInclusionDto)  {
     const user = await this.findOne(username)
-    const inclusion = await this.inclusionRepository.find({})
+    const inclusion = await this.inclusionRepository.findOne({
+      where: {
+        inclusion : {
+          id: inclusion_id
+        }
+      }
+    })
+    inclusion.quantity+= body.quantity
+
+    if(inclusion.quantity<=0) {
+      throw new HttpException(`quantity has to be greater than 0 `, HttpStatus.BAD_REQUEST)
+    }
+
+    const res = await this.inclusionRepository.save(inclusion)
+    if( !res ) {
+      throw new HttpException(`Update failed `, HttpStatus.BAD_REQUEST);
+    }
+
+    return this.get_collection(username);
+  }
+
+  async delete_inclusion(username: string, inclusion_id: string){
+    const inclusion = await this.inclusionRepository.findOne({
+      where: {
+        inclusion : {
+          id: inclusion_id
+        }
+      }
+    })
+
+    const res = await this.inclusionRepository.delete(inclusion.id)
+    if( !res ) {
+      throw new HttpException(`Delete failed `, HttpStatus.BAD_REQUEST);
+    }
+
+    return true;
   }
 }
