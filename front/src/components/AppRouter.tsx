@@ -12,17 +12,20 @@ import AppExploArtists from "./AppExploArtists";
 import AppRegister from "./AppRegister";
 import AppLogin from "./AppLogin";
 import AppRoutesPrivate from "./AppRoutesPrivate";
+import AppRoutesNotConnected from "./AppRoutesNotConnected";
+import AppPostPage from "./AppPostPage";
 
 function AppRouter() {
   return (
     <Routes>
-      <Route element={<AppRoutesPrivate />}>
+      <Route element={<AppRoutesNotConnected />}>
         <Route path="/register" element={<AppRegister />} />
         <Route path="/login" element={<AppLogin />} />
       </Route>
       <Route element={<AppRoutesPrivate />}>
         <Route path="/" element={<AppHome />} />
         <Route path="/community" element={<AppCommunity />} />
+        <Route path="/post/:idPost" element={<AppPostPage />} />
         <Route path="/explorer" element={<AppExplorer />} />
         <Route path="/exploArtists" element={<AppExploArtists />} />
         <Route path="/exploAlbums" element={<AppExploAlbums />} />

@@ -1,5 +1,5 @@
 import { Inclusion } from "./InclusionType";
-import { User } from "./userType";
+import { User } from "./UserType";
 
 export interface OwnedInclusion {
   id: number;

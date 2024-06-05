@@ -3,14 +3,52 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import CommentIcon from "@mui/icons-material/Comment";
 import RepeatIcon from "@mui/icons-material/Repeat";
 import styles from "../css/AppPost.module.css";
-import { Post } from "../types/postType";
+import { Post } from "../types/PostType";
 import { DateUtils } from "../utils/DateUtils";
+import postService from "../services/PostService";
+import { useAuth } from "../auth/AuthProvider";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 interface AppPostProps {
   post: Post;
 }
 
 export default function AppPost({ post }: AppPostProps) {
+  const { user } = useAuth();
+  const [likes, setLikes] = useState(post.likes.length);
+  const [reposts, setReposts] = useState(post.reposts.length);
+  const [hasLiked, setHasLiked] = useState(
+    post.likes.some((like) => like.username === user?.username)
+  );
+  const [hasReposted, setHasReposted] = useState(
+    post.reposts.some((repost) => repost.username === user?.username)
+  );
+  const linkToPost = `/post/${post.id}`
+
+  async function actionPost(actionType: string) {
+    try {
+      const response = await postService.actionPost(
+        post.id,
+        user?.username,
+        actionType
+      );
+
+      if (response) {
+        if (actionType === "like" && !hasLiked) {
+          setLikes(likes + 1);
+          setHasLiked(true);
+        }
+        if (actionType === "repost" && !hasReposted) {
+          setReposts(reposts + 1);
+          setHasReposted(true);
+        }
+      }
+    } catch (error) {
+      console.log("Erreur lors de l'action sur le post", error);
+    }
+  }
+
   return (
     <Paper className={styles.PostContainer}>
       <div className={styles.Header}>
@@ -40,22 +78,32 @@ export default function AppPost({ post }: AppPostProps) {
         ))}
       </div>
       <div className={styles.Actions}>
-        <IconButton className={styles.ActionButton}>
+        <IconButton
+          className={styles.ActionButton}
+          component={Link}
+          to={linkToPost}
+        >
           <CommentIcon />
           <Typography variant="body2" className={styles.ActionCount}>
             {post.nb_comment ? post.nb_comment : "0"}
           </Typography>
         </IconButton>
-        <IconButton className={styles.ActionButton}>
+        <IconButton
+          className={styles.ActionButton}
+          onClick={() => actionPost("repost")}
+        >
           <RepeatIcon />
           <Typography variant="body2" className={styles.ActionCount}>
-            {/* {post.repost.length} */}
+            {reposts}
           </Typography>
         </IconButton>
-        <IconButton className={styles.ActionButton}>
+        <IconButton
+          className={styles.ActionButton}
+          onClick={() => actionPost("like")}
+        >
           <FavoriteBorderIcon />
           <Typography variant="body2" className={styles.ActionCount}>
-            {post.likes.length}
+            {likes}
           </Typography>
         </IconButton>
       </div>

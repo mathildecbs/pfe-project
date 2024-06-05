@@ -11,7 +11,7 @@ import ApiUtils from "../utils/ApiUtils";
 import { hashPassword } from "../utils/HashUtils";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthProvider";
-import { User } from "../types/userType";
+import { User } from "../types/UserType";
 
 export default function AppRegister() {
   const [formData, setFormData] = useState({

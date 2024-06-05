@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { Navigate } from "react-router-dom";
-import { User } from "../types/userType";
+import { User } from "../types/UserType";
 
 interface AuthContextType {
   //   authToken: string | null;

@@ -1,5 +1,5 @@
-import { Tag } from "./tagType";
-import { User } from "./userType";
+import { Tag } from "./TagType";
+import { User } from "./UserType";
 
 export interface Post {
   id: number;
@@ -7,7 +7,7 @@ export interface Post {
   maj_date: string;
   user: User;
   likes: User[];
-  repost: User[];
+  reposts: User[];
   image: string;
   parent: Post;
   comments: Post[];

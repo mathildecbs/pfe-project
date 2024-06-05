@@ -1,5 +1,5 @@
 import { Album } from "./AlbumType";
-import { User } from "./userType";
+import { User } from "./UserType";
 
 export interface OwnedAlbum {
   id: number;

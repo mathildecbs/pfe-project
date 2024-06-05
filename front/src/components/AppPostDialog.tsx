@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem } from '@mui/material';
 import styles from "../css/AppPostDialog.module.css";
-import { Tag } from '../types/tagType';
+import { Tag } from '../types/TagType';
 import ApiUtils from '../utils/ApiUtils';
 import { useAuth } from '../auth/AuthProvider';
 

@@ -1,5 +1,6 @@
-import { OwnedAlbum } from "./ownedAlbumType";
-import { OwnedInclusion } from "./ownedInclusionType";
+import { OwnedAlbum } from "./OwnedAlbumType";
+import { OwnedInclusion } from "./OwnedInclusionType";
+import { Post } from "./PostType";
 
 export interface User {
   id: number;
@@ -10,6 +11,7 @@ export interface User {
   description: string;
   following: User[];
   followers: User[];
+  feed: Post[];
   // albums: OwnedAlbum[];
   // inclusions: OwnedInclusion[];
 }
