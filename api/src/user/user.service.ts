@@ -12,6 +12,7 @@ import { OwnedInclusion } from '../inclusion/entities/owned-inclusion.entity';
 import { AlbumService } from '../album/album.service';
 import { InclusionService } from '../inclusion/inclusion.service';
 import { CreateOwnedInclusionDto } from '../inclusion/dto/create-owned-inclusion.dto';
+import { UpdateOwnedInclusionDto } from '../inclusion/dto/update-owned-inclusion.dto';
 
 @Injectable()
 export class UserService {
@@ -83,8 +84,6 @@ export class UserService {
     }
     user.followers = this.utilsService.user_to_username(res.followers)
     user.following = this.utilsService.user_to_username(res.following)
-    user['feed'] = this.utilsService.create_feed(res.posts, res.reposts)
-
     return this.utilsService.format_user(user);
   }
 
@@ -220,7 +219,6 @@ export class UserService {
 
   async get_collection(username:string){
     const user = await this.findOne(username)
-    delete user['feed']
 
     const albums  = await this.albumRepository.find({
       where:{user: {id: user.id}},
@@ -293,5 +291,10 @@ export class UserService {
           name: "ASC"
         }
       }})
+  }
+
+  async update_inclusion(username: string, inclusion_id:string ,body: UpdateOwnedInclusionDto)  {
+    const user = await this.findOne(username)
+    const inclusion = await this.inclusionRepository.find({})
   }
 }

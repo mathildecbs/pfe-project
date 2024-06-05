@@ -104,12 +104,41 @@ export class PostService {
 
   async findByUser(username: string) {
     const user = await this.userService.findOne(username)
-    delete user['feed']
     const posts = await this.postTreeRepository.find({
       where : {
         comment: false,
         user: {
           username : username
+        }
+      },
+      relations: {
+        likes:true,
+        reposts:true,
+        user: true,
+        tags: true,
+      },
+      order: {
+        create_date: 'desc'
+      }
+    })
+
+    for (let post of posts) {
+      post = this.utilsService.format_post(post)
+      post['nb_comments'] = await this.get_nb_comments(post)
+    }
+
+    return posts
+  }
+
+  async findByUserRepost(username: string) {
+    const user = await this.userService.findOne(username)
+    const posts = await this.postTreeRepository.find({
+      where : {
+        user: {
+          username : username
+        },
+        reposts: {
+          id: user.id
         }
       },
       relations: {
@@ -219,6 +248,15 @@ export class PostService {
     }
 
     return this.utilsService.sort_posts(following)
+  }
+
+  async create_feed(username: string){
+    const posts = await this.findByUser(username)
+    const reposts = await this.findByUserRepost(username)
+    const feed = posts
+    feed.concat(reposts)
+
+    return this.utilsService.sort_posts(feed)
   }
 
 
