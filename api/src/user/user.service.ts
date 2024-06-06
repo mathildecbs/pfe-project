@@ -270,7 +270,7 @@ export class UserService {
       }
     })
 
-    return {...owned, inclusions}
+    return {owned, inclusions}
   }
 
   async get_all_albums(username: string) {
@@ -310,21 +310,29 @@ export class UserService {
   }
 
   async delete_album(username: string, album_id: string, body: UpdateOwnedAlbumDto) {
-    const album = await this.albumRepository.findOne({
-      where: {
-        album : {
-          id: album_id
-        },
-        version: body.version
-      }
-    })
 
-    const res = await this.albumRepository.delete(album.id)
-    if( !res ) {
-      throw new HttpException(`Delete failed `, HttpStatus.BAD_REQUEST);
+    const albums = await this.get_one_owned_album(username, album_id)
+
+    if( albums.inclusions.length===0 || albums.owned.length>1) {
+      const album = albums.owned.find((album_owned)=> album_owned.version===body.version)
+      const res = await this.albumRepository.delete(album.id)
+      if( !res ) {
+        throw new HttpException(`Delete failed `, HttpStatus.BAD_REQUEST);
+      }
+
+      return true;
+    } else {
+      const album = albums.owned.find((album_owned)=> album_owned.version===body.version)
+      album.quantity=0
+      album.version=null
+      const res = await this.albumRepository.save(album)
+      if( !res ) {
+        throw new HttpException(`Delete failed `, HttpStatus.BAD_REQUEST);
+      }
+
+      return true;
     }
 
-    return true;
   }
 
   async get_all_inclusions(username: string) {
@@ -369,9 +377,15 @@ export class UserService {
       }
     })
 
+
     const res = await this.inclusionRepository.delete(inclusion.id)
     if( !res ) {
       throw new HttpException(`Delete failed `, HttpStatus.BAD_REQUEST);
+    }
+    const album = await this.get_one_owned_album(username, inclusion.inclusion.album.id)
+
+    if(album.owned.length===1 && album.owned[0].quantity===0) {
+      const del = await this.delete_album(username, album.owned[0].album.id, { quantity: 0, version: null });
     }
 
     return true;
