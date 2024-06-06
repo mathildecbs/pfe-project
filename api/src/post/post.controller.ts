@@ -23,6 +23,11 @@ export class PostController {
     return await this.postService.findOne(id);
   }
 
+  @Get('feed/:username')
+  async feed(@Param('username') username:string) {
+    return await this.postService.create_feed(username)
+  }
+
   @Get('following/:username')
   async following_feed(@Param('username') username:string) {
     return await this.postService.following_feed(username)
