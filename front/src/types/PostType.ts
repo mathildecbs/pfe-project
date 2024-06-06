@@ -10,8 +10,10 @@ export interface Post {
   reposts: User[];
   image: string;
   parent: Post;
-  comments: Post[];
+  children: Post[];
   nb_comment: number;
+  nb_reposts: number;
+  nb_likes: number;
   tags: Tag[];
   content: string;
 }

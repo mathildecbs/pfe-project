@@ -12,6 +12,7 @@ export interface User {
   following: User[];
   followers: User[];
   feed: Post[];
+  likes: Post[];
   // albums: OwnedAlbum[];
   // inclusions: OwnedInclusion[];
 }

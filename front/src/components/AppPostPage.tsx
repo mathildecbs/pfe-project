@@ -1,24 +1,17 @@
-import { Paper, Typography, IconButton } from "@mui/material";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import CommentIcon from "@mui/icons-material/Comment";
-import RepeatIcon from "@mui/icons-material/Repeat";
-import styles from "../css/AppPost.module.css";
 import { Post } from "../types/PostType";
-import { DateUtils } from "../utils/DateUtils";
 import postService from "../services/PostService";
-import { useAuth } from "../auth/AuthProvider";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AppPost from "./AppPost";
+import AppCommentWritingSection from "./AppCommentWritingSection";
 
 export default function AppPostPage() {
   const [selectedPost, setSelectedPost] = useState<Post>();
   const { idPost } = useParams();
-  const { user } = useAuth();
 
   useEffect(() => {
     fetchPost();
-  }, []);
+  }, [idPost]);
 
   async function fetchPost() {
     try {
@@ -31,9 +24,29 @@ export default function AppPostPage() {
     }
   }
 
+  function addNewComment(newComment: Post) {
+    if (selectedPost) {
+      setSelectedPost({
+        ...selectedPost,
+        children: [newComment, ...selectedPost.children],
+      });
+    }
+  }
+
   return (
     <>
-      {selectedPost && <AppPost key={selectedPost.id} post={selectedPost}></AppPost>}
+      {selectedPost && (
+        <>
+          <AppPost key={selectedPost.id} post={selectedPost}></AppPost>
+          <div>
+            <AppCommentWritingSection post={selectedPost} addNewComment={addNewComment} />
+            <h2>Commentaires</h2>
+          </div>
+          {selectedPost.children.map((postComment) => (
+            <AppPost key={postComment.id} post={postComment} />
+          ))}
+        </>
+      )}
     </>
   );
 }

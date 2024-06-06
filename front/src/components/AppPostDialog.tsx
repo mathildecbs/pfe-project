@@ -27,7 +27,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
       });
       onClose();
     } catch (error) {
-      throw new Error('Erreur lors de la sortie du groupe');
+      throw new Error('Erreur lors du post');
     }
   }
 

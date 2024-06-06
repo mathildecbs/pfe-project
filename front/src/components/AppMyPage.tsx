@@ -5,21 +5,21 @@ import { useAuth } from "../auth/AuthProvider";
 import AppPost from "./AppPost";
 import userService from "../services/UserService";
 import { User } from "../types/UserType";
+import postService from "../services/PostService";
 
 export default function AppMyPage() {
-  const [myPosts, setMyPosts] = useState<Post[]>([]);
+  const [myFeed, setMyFeed] = useState<Post[]>([]);
   const { user } = useAuth();
-  const [currentUser, setCurrentUSer] = useState<User>();
 
   useEffect(() => {
-    fetchUser();
+    fetchFeed();
   }, []);
 
-  async function fetchUser() {
+  async function fetchFeed() {
     try {
       if (user) {
-        const response = await userService.getOneUser(user.id);
-        setCurrentUSer(response);
+        const response = await postService.getFeed(user.username);
+        setMyFeed(response);
       }
     } catch (error) {
       console.log("Erreur lors de la récupération des posts");
@@ -28,9 +28,8 @@ export default function AppMyPage() {
 
   return (
     <>
-      {currentUser?.feed.map((myPost) => (
-        <AppPost key={myPost.id} post={myPost} />
-      ))}
+      {myFeed &&
+        myFeed.map((myPost) => <AppPost key={myPost.id} post={myPost} />)}
     </>
   );
 }

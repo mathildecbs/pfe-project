@@ -11,10 +11,10 @@ class UserService {
     }
   }
 
-  async getOneUser(idUser: number): Promise<User> {
+  async getOneUser(username: string): Promise<User> {
     try {
       const response = await ApiUtils.getApiInstanceJson().get(
-        `/user/${idUser}`
+        `/user/${username}`
       );
       return response.data;
     } catch (error) {
