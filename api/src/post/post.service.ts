@@ -244,8 +244,8 @@ export class PostService {
 
     if (posts.length===0)  return this.utilsService.sort_posts(reposts)
     if (reposts.length===0)  return this.utilsService.sort_posts(posts)
-    const feed =posts
-    feed.concat(reposts)
+    let feed =posts
+    feed = feed.concat(reposts)
 
     return this.utilsService.sort_posts(feed)
   }
