@@ -163,7 +163,7 @@ export class PostService {
   }
 
   async get_nb_comments(post:Post){
-    return await this.postTreeRepository.countDescendants(post)
+    return (await this.postTreeRepository.countDescendants(post))-1
 
   }
 
