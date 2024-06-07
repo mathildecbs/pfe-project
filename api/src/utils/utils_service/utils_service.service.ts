@@ -25,6 +25,18 @@ export class UtilsServiceService {
    post['nb_likes'] = post.likes.length
    post['nb_reposts'] = post.reposts.length
 
+    if (post.likes.length!==0) {
+      for (let like of post.likes) {
+        like = this.format_user_simplify(like)
+      }
+    }
+
+    if (post.reposts.length!==0) {
+      for (let repost of post.reposts) {
+        repost = this.format_user_simplify(repost)
+      }
+    }
+
     return post
   }
 
