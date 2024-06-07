@@ -91,7 +91,7 @@ export class PostService {
     const tree2 = await this.postTreeRepository.findDescendantsTree(tree, {depth:2, relations: ['user', 'reposts', 'likes', 'tags']})
     tree2['nb_comments'] = tree2.children.length
     tree2.children.forEach((com)=> {
-      com['nb_comments'] = com.children
+      com['nb_comments'] = com.children.length
       com = this.utilsService.format_post(com)
     })
     tree2.children = this.utilsService.sort_posts(tree2.children)
@@ -249,6 +249,7 @@ export class PostService {
 
     return this.utilsService.sort_posts(feed)
   }
+
 
 
 }
