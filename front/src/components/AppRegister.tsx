@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import ApiUtils from "../utils/ApiUtils";
 import { hashPassword } from "../utils/HashUtils";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/AuthProvider";
+import { useAuth } from "../contexts/AuthProvider";
 import { User } from "../types/UserType";
 
 export default function AppRegister() {

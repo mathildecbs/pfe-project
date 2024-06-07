@@ -59,7 +59,7 @@ function AppSideMenu() {
             <ListItem
               className={styles.SubMenuItem}
               component={Link}
-              to="/exploArtists"
+              to="/exploAlbums"
             >
               <ListItemIcon>
                 <GroupsIcon />

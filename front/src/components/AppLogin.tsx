@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button, Paper, Typography, TextField, Box } from "@mui/material";
 import { Link, Navigate } from "react-router-dom";
 import styles from "../css/AppLogin.module.css";
-import { useAuth } from "../auth/AuthProvider";
+import { useAuth } from "../contexts/AuthProvider";
 import ApiUtils from "../utils/ApiUtils";
 import { hashPassword } from "../utils/HashUtils";
 

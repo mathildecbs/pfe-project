@@ -8,10 +8,12 @@ import {
   Menu,
   MenuItem,
   Button,
+  Box,
 } from "@mui/material";
 import styles from "../css/AppTopMenu.module.css";
 import { Search } from "@mui/icons-material";
-import { useAuth } from "../auth/AuthProvider";
+import { useAuth } from "../contexts/AuthProvider";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Link } from "react-router-dom";
 
 export default function AppTopMenu() {
@@ -22,7 +24,7 @@ export default function AppTopMenu() {
     setAnchorEl(event.currentTarget);
   }
 
-  function hangleLogoutClick() {
+  function handleLogoutClick() {
     logout();
     handleMenuClose();
   }
@@ -52,14 +54,17 @@ export default function AppTopMenu() {
         </div>
         {user ? (
           <div>
-            <Typography
-              variant="body1"
-              className={styles.Username}
+            <Box
+              display="flex"
+              alignItems="center"
               onMouseEnter={handleMenuOpen}
               onClick={handleMenuOpen}
             >
-              {user?.username}
-            </Typography>
+              <Typography variant="body1" className={styles.Username}>
+                {user?.username}
+              </Typography>
+              <KeyboardArrowDownIcon />
+            </Box>
 
             <Menu
               anchorEl={anchorEl}
@@ -67,8 +72,10 @@ export default function AppTopMenu() {
               onClose={handleMenuClose}
               MenuListProps={{ onMouseLeave: handleMenuClose }}
             >
-              <MenuItem onClick={handleMenuClose} component={Link} to="/myPage">Profil</MenuItem>
-              <MenuItem onClick={hangleLogoutClick}>Déconnexion</MenuItem>
+              <MenuItem onClick={handleMenuClose} component={Link} to="/myPage">
+                Profil
+              </MenuItem>
+              <MenuItem onClick={handleLogoutClick}>Déconnexion</MenuItem>
             </Menu>
           </div>
         ) : (

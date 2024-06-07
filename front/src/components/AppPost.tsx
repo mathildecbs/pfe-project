@@ -7,7 +7,7 @@ import styles from "../css/AppPost.module.css";
 import { Post } from "../types/PostType";
 import { DateUtils } from "../utils/DateUtils";
 import postService from "../services/PostService";
-import { useAuth } from "../auth/AuthProvider";
+import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 

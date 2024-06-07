@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import ApiUtils from "../utils/ApiUtils";
 import AppPost from "./AppPost";
-import { Post } from "../types/PostType";
+import { usePosts } from "../contexts/PostsProvider";
 import postService from "../services/PostService";
 
 export default function AppCommunity() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const { posts, setPosts } = usePosts();
 
   useEffect(() => {
     fetchPosts();
@@ -22,9 +21,9 @@ export default function AppCommunity() {
 
   return (
     <>
-    {posts.map((postReceived) => (
-      <AppPost key={postReceived.id} post={postReceived}/>
-    ))}
+      {posts.map((postReceived) => (
+        <AppPost key={postReceived.id} post={postReceived} />
+      ))}
     </>
   );
 }

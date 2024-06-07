@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import ApiUtils from "../utils/ApiUtils";
 import { Post } from "../types/PostType";
-import { useAuth } from "../auth/AuthProvider";
+import { useAuth } from "../contexts/AuthProvider";
 import AppPost from "./AppPost";
 import userService from "../services/UserService";
 import { User } from "../types/UserType";
