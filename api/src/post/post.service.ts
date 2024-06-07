@@ -132,31 +132,19 @@ export class PostService {
 
   async findByUserRepost(username: string) {
     const user = await this.userService.findOne(username)
-    const posts = await this.postTreeRepository.find({
-      where : {
-        user: {
-          username : username
-        },
-        reposts: {
-          id: user.id
-        }
-      },
-      relations: {
-        likes:true,
-        reposts:true,
-        user: true,
-        tags: true,
-      },
-      order: {
-        create_date: 'desc'
-      }
-    })
+    const posts = await this.postRepository.createQueryBuilder('post')
+      .leftJoinAndSelect('post.reposts', 'repost')
+      .leftJoinAndSelect('post.likes', 'like')
+      .leftJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.tags', 'tag')
+      .where('repost.id=:id', {id: user.id})
+      .getMany()
+
 
     for (let post of posts) {
       post = this.utilsService.format_post(post)
       post['nb_comments'] = await this.get_nb_comments(post)
     }
-
     return posts
   }
 
@@ -253,7 +241,10 @@ export class PostService {
   async create_feed(username: string){
     const posts = await this.findByUser(username)
     const reposts = await this.findByUserRepost(username)
-    const feed = posts
+
+    if (posts.length===0)  return this.utilsService.sort_posts(reposts)
+    if (reposts.length===0)  return this.utilsService.sort_posts(posts)
+    const feed =posts
     feed.concat(reposts)
 
     return this.utilsService.sort_posts(feed)
