@@ -91,7 +91,7 @@ export class PostService {
     const tree2 = await this.postTreeRepository.findDescendantsTree(tree, {depth:2, relations: ['user', 'reposts', 'likes', 'tags']})
     tree2['nb_comments'] = tree2.children.length
     tree2.children.forEach((com)=> {
-      com['nb_comments'] = com.children
+      com['nb_comments'] = com.children.length
       com = this.utilsService.format_post(com)
     })
     tree2.children = this.utilsService.sort_posts(tree2.children)
@@ -104,7 +104,6 @@ export class PostService {
 
   async findByUser(username: string) {
     const user = await this.userService.findOne(username)
-    delete user['feed']
     const posts = await this.postTreeRepository.find({
       where : {
         comment: false,
@@ -131,6 +130,24 @@ export class PostService {
     return posts
   }
 
+  async findByUserRepost(username: string) {
+    const user = await this.userService.findOne(username)
+    const posts = await this.postRepository.createQueryBuilder('post')
+      .leftJoinAndSelect('post.reposts', 'repost')
+      .leftJoinAndSelect('post.likes', 'like')
+      .leftJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.tags', 'tag')
+      .where('repost.id=:id', {id: user.id})
+      .getMany()
+
+
+    for (let post of posts) {
+      post = this.utilsService.format_post(post)
+      post['nb_comments'] = await this.get_nb_comments(post)
+    }
+    return posts
+  }
+
   async remove(id: string) {
     const post = await this.findOne(id)
     try {
@@ -146,7 +163,7 @@ export class PostService {
   }
 
   async get_nb_comments(post:Post){
-    return await this.postTreeRepository.countDescendants(post)
+    return (await this.postTreeRepository.countDescendants(post))-1
 
   }
 
@@ -220,6 +237,19 @@ export class PostService {
 
     return this.utilsService.sort_posts(following)
   }
+
+  async create_feed(username: string){
+    const posts = await this.findByUser(username)
+    const reposts = await this.findByUserRepost(username)
+
+    if (posts.length===0)  return this.utilsService.sort_posts(reposts)
+    if (reposts.length===0)  return this.utilsService.sort_posts(posts)
+    let feed =posts
+    feed = feed.concat(reposts)
+
+    return this.utilsService.sort_posts(feed)
+  }
+
 
 
 }
