@@ -30,7 +30,8 @@ export class UserService {
     private inclusionRepository: Repository<OwnedInclusion>,
     private utilsService: UtilsServiceService,
     private albumService: AlbumService,
-    private inclusionService: InclusionService,,
+    private inclusionService: InclusionService,
+    
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
 
@@ -209,7 +210,7 @@ export class UserService {
 
     return { access_token: token };
   }
-  
+
   async add_album(username: string, body: CreateOwnedAlbumDto) {
     const new_owned_album = {
       ...body,
