@@ -53,3 +53,10 @@
   align-items: center;
   gap: 2px;
 }
+
+.Repost {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  color: grey;
+}

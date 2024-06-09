@@ -9,6 +9,7 @@ import postService from "../services/PostService";
 import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { Post } from "../types/PostType";
+import ToastUtils from "../utils/ToastUtils";
 
 interface AppCommentWritingSectionProps {
   post: Post;
@@ -30,7 +31,7 @@ export default function AppCommentWritingSection({
         setCommentContent("");
       }
     } catch (error) {
-      console.log("Erreur lors de l'ajout du commentaire");
+      ToastUtils.error(error, "Erreur lors de l'ajout du commentaire");
     }
   }
 

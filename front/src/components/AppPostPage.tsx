@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AppPost from "./AppPost";
 import AppCommentWritingSection from "./AppCommentWritingSection";
+import { useAuth } from "../contexts/AuthProvider";
+import ToastUtils from "../utils/ToastUtils";
 
 export default function AppPostPage() {
   const [selectedPost, setSelectedPost] = useState<Post>();
+  const { user } = useAuth();
   const { idPost } = useParams();
 
   useEffect(() => {
@@ -20,7 +23,7 @@ export default function AppPostPage() {
         setSelectedPost(response);
       }
     } catch (error) {
-      console.log("Erreur lors de la récupération du post");
+      ToastUtils.error(error, "Erreur lors de la récupération du post");
     }
   }
 
@@ -37,13 +40,13 @@ export default function AppPostPage() {
     <>
       {selectedPost && (
         <>
-          <AppPost key={selectedPost.id} post={selectedPost}></AppPost>
+          <AppPost key={selectedPost.id} post={selectedPost} repost={selectedPost.user.username !== user?.username}/>
           <div>
             <AppCommentWritingSection post={selectedPost} addNewComment={addNewComment} />
             <h2>Commentaires</h2>
           </div>
           {selectedPost.children.map((postComment) => (
-            <AppPost key={postComment.id} post={postComment} />
+            <AppPost key={postComment.id} post={postComment} repost={selectedPost.user.username !== user?.username}/>
           ))}
         </>
       )}

@@ -10,17 +10,18 @@ import postService from "../services/PostService";
 import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import ToastUtils from "../utils/ToastUtils";
 
 interface AppPostProps {
   post: Post;
+  repost: boolean;
 }
 
-export default function AppPost({ post }: AppPostProps) {
+export default function AppPost({ post, repost }: AppPostProps) {
   const { user } = useAuth();
-  const [likes, setLikes] = useState(post.likes ? post.nb_likes : 0);
-  const [reposts, setReposts] = useState(
-    post.reposts ? post.nb_reposts : 0
-  );
+  const [likes, setLikes] = useState(post.nb_likes ? post.nb_likes : 0);
+  const [reposts, setReposts] = useState(post.nb_reposts ? post.nb_reposts : 0);
+  const [comments, setComments] = useState(post.nb_comments ? post.nb_comments : 0);
   const [hasLiked, setHasLiked] = useState(
     post.likes
       ? post.likes.some((like) => like.username === user?.username)
@@ -40,7 +41,7 @@ export default function AppPost({ post }: AppPostProps) {
         user?.username,
         actionType
       );
-  
+
       if (response) {
         if (actionType === "like") {
           if (hasLiked) {
@@ -50,12 +51,12 @@ export default function AppPost({ post }: AppPostProps) {
           }
           setHasLiked(!hasLiked);
         }
-  
+
         if (actionType === "unlike") {
           setLikes(likes - 1);
           setHasLiked(false);
         }
-  
+
         if (actionType === "repost") {
           if (hasReposted) {
             setReposts(reposts - 1);
@@ -64,19 +65,25 @@ export default function AppPost({ post }: AppPostProps) {
           }
           setHasReposted(!hasReposted);
         }
-  
+
         if (actionType === "unrepost") {
           setReposts(reposts - 1);
           setHasReposted(false);
         }
       }
     } catch (error) {
-      console.log("Erreur lors de l'action sur le post", error);
+      ToastUtils.error(error, `Erreur lors du ${actionType} du post`);
     }
-  }  
+  }
 
   return (
     <Paper className={styles.PostContainer}>
+      {repost && (
+        <Typography variant="body2" className={styles.Repost}>
+          <RepeatIcon />
+          Vous avez reposté
+        </Typography>
+      )}
       <div className={styles.Header}>
         <div className={styles.UserInfo}>
           <Typography variant="h6" className={styles.Name}>
@@ -113,7 +120,7 @@ export default function AppPost({ post }: AppPostProps) {
         >
           <CommentIcon />
           <Typography variant="body2" className={styles.ActionCount}>
-            {post.nb_comment ? post.nb_comment : "0"}
+            {post.nb_comments ? post.nb_comments : "0"}
           </Typography>
         </IconButton>
         <IconButton
@@ -129,11 +136,7 @@ export default function AppPost({ post }: AppPostProps) {
           className={styles.ActionButton}
           onClick={() => actionPost(hasLiked ? "unlike" : "like")}
         >
-          {hasLiked ? (
-            <FavoriteIcon color="primary" />
-          ) : (
-            <FavoriteBorderIcon />
-          )}
+          {hasLiked ? <FavoriteIcon color="primary" /> : <FavoriteBorderIcon />}
           <Typography variant="body2" className={styles.ActionCount}>
             {likes}
           </Typography>

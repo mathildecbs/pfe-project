@@ -11,7 +11,7 @@ export interface Post {
   image: string;
   parent: Post;
   children: Post[];
-  nb_comment: number;
+  nb_comments: number;
   nb_reposts: number;
   nb_likes: number;
   tags: Tag[];

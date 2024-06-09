@@ -14,6 +14,7 @@ import { Tag } from "../types/TagType";
 import ApiUtils from "../utils/ApiUtils";
 import { useAuth } from "../contexts/AuthProvider";
 import { usePosts } from "../contexts/PostsProvider";
+import ToastUtils from "../utils/ToastUtils";
 
 interface AppPostDialogProps {
   isOpen: boolean;
@@ -52,9 +53,10 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
         content: postContent,
       });
       addPost(response.data);
+      ToastUtils.success("Publication créée avec succès !");
       onClose();
     } catch (error) {
-      console.error("Erreur lors du post", error);
+      ToastUtils.error(error, "Erreur lors de la publication du post");
     }
   }
 

@@ -10,8 +10,6 @@
 
 .PostIconContainer:hover {
     position: absolute;
-    right: 5%;
-    bottom: 5%;
     border-style: solid;
     border-radius: 100%;
     border-width: 1px;
