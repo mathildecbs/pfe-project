@@ -14,6 +14,7 @@ import AppLogin from "./AppLogin";
 import AppRoutesPrivate from "./AppRoutesPrivate";
 import AppRoutesNotConnected from "./AppRoutesNotConnected";
 import AppPostPage from "./AppPostPage";
+import AppCreateNew from "./AppCreateNew";
 
 function AppRouter() {
   return (
@@ -31,6 +32,7 @@ function AppRouter() {
         <Route path="/exploAlbums" element={<AppExploAlbums />} />
         <Route path="/myCollection" element={<AppMyCollection />} />
         <Route path="/collectionAlbums" element={<AppCollectionAlbums />} />
+        <Route path="/createNew" element={<AppCreateNew />} />
         <Route
           path="/collectionPhotocards"
           element={<AppCollectionPhotocards />}

@@ -13,6 +13,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import GroupsIcon from '@mui/icons-material/Groups';
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import AlbumIcon from "@mui/icons-material/Album";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import styles from "../css/AppSideMenu.module.css";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Link } from "react-router-dom";
@@ -117,6 +118,12 @@ function AppSideMenu() {
             <PersonIcon />
           </ListItemIcon>
           {isExpanded && <ListItemText primary="Ma page" />}
+        </ListItem>
+        <ListItem className={styles.MenuItem} component={Link} to="/createNew">
+          <ListItemIcon>
+            <AddBoxIcon />
+          </ListItemIcon>
+          {isExpanded && <ListItemText primary="Créer" />}
         </ListItem>
       </div>
     </div>
