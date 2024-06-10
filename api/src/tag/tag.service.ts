@@ -23,7 +23,7 @@ export class TagService {
 
     }
 
-    return await this.findOne(res.name)
+    return await this.findOneTag(res.name)
 
   }
 
