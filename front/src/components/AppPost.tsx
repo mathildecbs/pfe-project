@@ -11,6 +11,7 @@ import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ToastUtils from "../utils/ToastUtils";
+import { usePosts } from "../contexts/PostsProvider";
 
 interface AppPostProps {
   post: Post;
@@ -19,6 +20,7 @@ interface AppPostProps {
 
 export default function AppPost({ post, repost }: AppPostProps) {
   const { user } = useAuth();
+  const { addPost, setPosts } = usePosts();
   const [likes, setLikes] = useState(post.nb_likes ? post.nb_likes : 0);
   const [reposts, setReposts] = useState(post.nb_reposts ? post.nb_reposts : 0);
   const [comments, setComments] = useState(post.nb_comments ? post.nb_comments : 0);
@@ -71,8 +73,18 @@ export default function AppPost({ post, repost }: AppPostProps) {
           setHasReposted(false);
         }
       }
+      fetchPosts();
     } catch (error) {
       ToastUtils.error(error, `Erreur lors du ${actionType} du post`);
+    }
+  }
+
+  async function fetchPosts() {
+    try {
+      const response = await postService.getPosts();
+      setPosts(response);
+    } catch (error) {
+      ToastUtils.error(error, "Erreur lors de la récupération des posts");
     }
   }
 

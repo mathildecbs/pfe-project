@@ -44,7 +44,7 @@ export default function AppMyPage() {
       {myFeed &&
         myFeed.map((myPost, index) => (
           <AppPost
-            key={myPost.id}
+            key={`${myPost.id}${!!repostStatus.get(myPost.id) && index === myFeed.findIndex(post => post.id === myPost.id)}}`}
             post={myPost}
             repost={!!repostStatus.get(myPost.id) && index === myFeed.findIndex(post => post.id === myPost.id)}
           />

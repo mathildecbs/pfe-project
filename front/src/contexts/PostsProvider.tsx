@@ -20,9 +20,9 @@ export function usePosts() {
 export function PostsProvider({ children }: { children: ReactNode }) {
   const [posts, setPosts] = useState<Post[]>([]);
 
-  const addPost = (post: Post) => {
-    setPosts((prevPosts) => [post, ...prevPosts]);
-  };
+  function addPost(post: Post) {
+    setPosts([post, ...posts]);
+  }
 
   return (
     <PostsContext.Provider value={{ posts, setPosts, addPost }}>
