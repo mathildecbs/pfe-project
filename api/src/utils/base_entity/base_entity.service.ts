@@ -14,10 +14,10 @@ export class BaseEntity {
   id: string;
 
   @CreateDateColumn()
-  create_date: string;
+  create_date: Date;
 
   @UpdateDateColumn()
-  maj_date: string;
+  maj_date: Date;
 }
 
 export class BaseQP {

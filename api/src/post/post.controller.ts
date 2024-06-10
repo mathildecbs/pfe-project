@@ -17,6 +17,10 @@ export class PostController {
   async findAll(@Query() query: PostQP) {
     return await this.postService.findAll(query);
   }
+  @Get('trending')
+  async trending() {
+    return await this.postService.trending_post()
+  }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
