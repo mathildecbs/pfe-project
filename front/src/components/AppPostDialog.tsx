@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -6,9 +6,10 @@ import {
   DialogActions,
   Button,
   TextField,
-  MenuItem,
   Box,
+  Chip,
 } from "@mui/material";
+import Autocomplete from "@mui/material/Autocomplete";
 import styles from "../css/AppPostDialog.module.css";
 import { Tag } from "../types/TagType";
 import ApiUtils from "../utils/ApiUtils";
@@ -23,9 +24,8 @@ interface AppPostDialogProps {
 
 export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
   const [tags, setTags] = useState<Tag[]>([]);
-  const [selectedTag, setSelectedTag] = useState<Tag>();
-  const [tagsToDisplay, setTagsToDisplay] = useState<Tag[]>([]);
-  const [currentTags, setCurrentTags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [inputValue, setInputValue] = useState("");
   const [postContent, setPostContent] = useState("");
   const { user } = useAuth();
   const { addPost } = usePosts();
@@ -38,20 +38,44 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
     try {
       const response = await ApiUtils.getApiInstanceJson().get("/tag");
       setTags(response.data);
-      setTagsToDisplay(response.data);
     } catch (error) {
-      console.log("Erreur lors de la récupération des tags");
+      ToastUtils.error(error, "Erreur lors de la récupération des tags");
+    }
+  }
+
+  async function publishTag(tagName: string) {
+    try {
+      const response = await ApiUtils.getApiInstanceJson().post("/tag", {
+        name: tagName,
+      });
+      return response.data;
+    } catch (error) {
+      ToastUtils.error(error, "Erreur lors de la création du tag");
     }
   }
 
   async function publishPost(): Promise<void> {
     try {
+      if (!user) return;
+
+      const newTags = await Promise.all(
+        selectedTags.map(async (tag) => {
+          if (!tag.id) {
+            const newTag = await publishTag(tag.name);
+            return newTag;
+          }
+          return tag;
+        })
+      );
+
+      const tagsToSend = newTags.map((tag) => tag.name);
       const response = await ApiUtils.getApiInstanceJson().post("/post", {
-        user: user?.username,
+        user: user.username,
         parent: "",
-        tags: selectedTag ? [selectedTag] : [],
+        tags: tagsToSend,
         content: postContent,
       });
+
       addPost(response.data);
       ToastUtils.success("Publication créée avec succès !");
       onClose();
@@ -60,17 +84,19 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
     }
   }
 
-  function handleTagsSelect(event: React.ChangeEvent<HTMLInputElement>) {
-    const tagName = event.target.value;
-    const selectedTag = tags.find((tag) => tag.name === tagName);
-    if (selectedTag) {
-      setSelectedTag(selectedTag);
-    }
-  }
-
   function handleAddTag() {
-
+    const existingTag = tags.find((tag) => tag.name === inputValue);
+    if (existingTag) {
+      setSelectedTags([...selectedTags, existingTag]);
+    } else {
+      setSelectedTags([...selectedTags, { name: inputValue } as Tag]);
+    }
+    setInputValue("");
   }
+
+  const availableTags = tags.filter(
+    (tag) => !selectedTags.some((selectedTag) => selectedTag.name === tag.name)
+  );
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
@@ -89,22 +115,37 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
           value={postContent}
           onChange={(e) => setPostContent(e.target.value)}
         />
-        <Box display="flex" alignItems="center" gap="0.5em">
-          <TextField
-            className={styles.TagsSelect}
-            id="select-tags"
-            select
-            label="Tags"
-            value={selectedTag ? selectedTag.name : ""}
-            onChange={handleTagsSelect}
-          >
-            {tagsToDisplay.map((tag) => (
-              <MenuItem key={tag.id} value={tag.name}>
-                {tag.name}
-              </MenuItem>
-            ))}
-          </TextField>
+        <Box display="flex" alignItems="center" gap="0.5em" mt={2}>
+          <Autocomplete
+            className={styles.TagsInput}
+            freeSolo
+            options={availableTags.map((tag) => tag.name)}
+            value={inputValue}
+            onChange={(event, newValue) => {
+              setInputValue(newValue || "");
+            }}
+            onInputChange={(event, newInputValue) => {
+              setInputValue(newInputValue);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label="Tags" variant="outlined" />
+            )}
+          />
           <Button onClick={handleAddTag}>Ajouter</Button>
+        </Box>
+        <Box mt={1}>
+          {selectedTags.map((tag) => (
+            <Chip
+              key={tag.name}
+              label={tag.name}
+              onDelete={() => {
+                setSelectedTags(
+                  selectedTags.filter((t) => t.name !== tag.name)
+                );
+              }}
+              className={styles.TagChip}
+            />
+          ))}
         </Box>
       </DialogContent>
       <DialogActions>
