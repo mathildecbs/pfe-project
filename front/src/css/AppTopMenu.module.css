@@ -1,0 +1,11 @@
+.TopMenu {
+  background-color: #F7CAC9 !important;
+  color: #585858 !important;
+  position: sticky !important;
+}
+
+.SearchBar {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding: 0.25em 0.5em 0.25em 0.5em;
+  border-radius: 16px;
+}

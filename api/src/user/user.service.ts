@@ -6,6 +6,9 @@ import { User } from './entities/user.entity';
 import {  Like, MoreThanOrEqual, Repository } from 'typeorm';
 import { UtilsServiceService } from '../utils/utils_service/utils_service.service';
 import { UserQP } from './dto/query-params.dto';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
 import { CreateOwnedAlbumDto } from '../album/dto/create-owned-album.dto';
 import { OwnedAlbum } from '../album/entities/owned-album.entity';
 import { OwnedInclusion } from '../inclusion/entities/owned-inclusion.entity';
@@ -21,20 +24,32 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private utilsService: UtilsServiceService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
+
     @InjectRepository(OwnedAlbum)
     private albumRepository: Repository<OwnedAlbum>,
+  
     @InjectRepository(OwnedInclusion)
     private inclusionRepository: Repository<OwnedInclusion>,
     private utilsService: UtilsServiceService,
     private albumService: AlbumService,
     private inclusionService: InclusionService,
+  
   ) {
   }
   async create(createUserDto: CreateUserDto) {
     //check if username is unique
-    const unique = await this.check_unity(createUserDto.username)
+    const unique = await this.check_unity(createUserDto.username);
 
-    const new_user = await this.usersRepository.save(createUserDto)
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(createUserDto.password, saltRounds);
+
+    const new_user = await this.usersRepository.save({
+      ...createUserDto,
+      password: hashedPassword
+    })
 
     if (!new_user ){
       throw new HttpException('User creation failed', HttpStatus.BAD_REQUEST);
@@ -164,6 +179,39 @@ export class UserService {
     throw new HttpException(`username ${username} already taken`, HttpStatus.BAD_REQUEST)
   }
 
+  async connection(response: Object) {
+
+    const username = response['username']
+    const password = response['password']
+
+    const user = (await this.usersRepository.find({
+        select: {
+          id: true,
+          username: true,
+          password: true
+      },
+        where : {username: username}
+    }))[0]
+
+
+    if (!user) {
+      throw new HttpException(`authentication failed`, HttpStatus.BAD_REQUEST)
+    }
+
+    const password_match = await bcrypt.compare(password, user.password);
+
+    if (!password_match) {
+      throw new HttpException(`authentication failed`, HttpStatus.BAD_REQUEST)
+    }
+
+    const payload = { username: user.username, sub: user.id };
+    const token = this.jwtService.sign(payload, {
+      secret: this.configService.get<string>('JWT_SECRET'),
+      expiresIn: '12h',
+    });
+
+    return { access_token: token };
+  }
 
   async add_album(username: string, body: CreateOwnedAlbumDto) {
     const new_owned_album = {
