@@ -23,7 +23,7 @@ export class TagService {
 
     }
 
-    return await this.findOne(res.name)
+    return await this.findOneTag(res.name)
 
   }
 
@@ -34,6 +34,13 @@ export class TagService {
     if (query.search) options['where']['name'] = Like(`${query.search}%`)
 
     return await this.tagRepository.find(options);
+  }
+
+  async findAllAndCount() {
+    return await this.tagRepository.createQueryBuilder('tag')
+      .loadRelationCountAndMap('tag.nb_posts', 'tag.posts', 'post')
+      .getMany()
+
   }
 
   async findOne(name: string) {

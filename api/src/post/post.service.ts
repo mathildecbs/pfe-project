@@ -7,6 +7,7 @@ import { Repository, TreeRepository } from 'typeorm';
 import { UtilsServiceService } from '../utils/utils_service/utils_service.service';
 import { UserService } from '../user/user.service';
 import { TagService } from '../tag/tag.service';
+import { isString } from '@nestjs/common/utils/shared.utils';
 
 @Injectable()
 export class PostService {
@@ -248,6 +249,36 @@ export class PostService {
     feed = feed.concat(reposts)
 
     return this.utilsService.sort_posts(feed)
+  }
+
+  async trending() {
+    const trending = {
+      posts : [],
+      tags: []
+    }
+    let trending_post : {post: Post, score: number}[] = []
+    const tree = await this.postTreeRepository.findRoots({
+      relations: [
+        'likes',
+        'reposts',
+        'user',
+        'tags',
+        'children'
+      ],
+      depth: 2
+    })
+    const now = (new Date()).getTime()
+    for (let post of tree) {
+      let days = Math.floor(Math.floor(Math.floor((now - post.create_date.getTime()) / 1000)/60)/60/24)
+      if(days===0)  days=1
+      const score = (post.likes.length*10 + post.reposts.length*200+ post.children.length*300)/days
+      trending_post.push({post, score})
+    }
+    trending.posts = trending_post.sort((a, b)=> (a.score> b.score? -1: 1)).slice(0,10)
+
+    trending.tags = (await this.tagService.findAllAndCount()).sort((a, b) => (a['nb_posts']> b['nb_posts'] ? -1:1)).slice(0,10)
+
+    return trending
   }
 
 

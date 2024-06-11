@@ -10,7 +10,7 @@ export class Post extends BaseEntity{
   @Column({type: 'text', nullable: false})
   content: string
 
-  @ManyToOne(()=> User, (user)=> user.posts)
+  @ManyToOne(()=> User, (user)=> user.posts, {eager: true})
   user: User
 
   @Column({type:"boolean"})
