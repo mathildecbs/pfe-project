@@ -15,7 +15,6 @@ export class UtilsServiceService {
     delete user.description
     delete user.id
     delete user.create_date
-    delete user.maj_date
 
     return this.format_user(user)
   }
@@ -44,7 +43,6 @@ export class UtilsServiceService {
 
     users.forEach((user) => {
       delete user.description
-      delete user.maj_date
       delete user.password
       delete user.create_date
 

@@ -36,6 +36,13 @@ export class TagService {
     return await this.tagRepository.find(options);
   }
 
+  async findAllAndCount() {
+    return await this.tagRepository.createQueryBuilder('tag')
+      .loadRelationCountAndMap('tag.nb_posts', 'tag.posts', 'post')
+      .getMany()
+
+  }
+
   async findOne(name: string) {
     const res = await this.tagRepository.find({
       where : {name},

@@ -19,7 +19,7 @@ export class PostController {
   }
   @Get('trending')
   async trending() {
-    return await this.postService.trending_post()
+    return await this.postService.trending()
   }
 
   @Get(':id')

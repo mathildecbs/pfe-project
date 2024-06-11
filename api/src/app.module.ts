@@ -27,11 +27,11 @@ import { Post } from './post/entities/post.entity';
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
-      database: 'pfe_db',
+      database: process.env.DATABASE_NAME,
       entities: [
         User,
         Artist,
