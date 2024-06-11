@@ -1,8 +1,8 @@
-import { Group } from "../types/GroupType";
+import { Artist } from "../types/ArtistType";
 import ApiUtils from "../utils/ApiUtils";
 
 class ArtistService {
-  async getArtists(): Promise<Group[]> {
+  async getArtists(): Promise<Artist[]> {
     try {
       const response = await ApiUtils.getApiInstanceJson().get("/artist");
       return response.data;
@@ -11,7 +11,7 @@ class ArtistService {
     }
   }
 
-  async getOneArtist(idArtist: string): Promise<Group> {
+  async getOneArtist(idArtist: string): Promise<Artist> {
     try {
       const response = await ApiUtils.getApiInstanceJson().get(`/artist/${idArtist}`);
       return response.data;
@@ -20,7 +20,7 @@ class ArtistService {
     }
   }
 
-  async createArtist(artistName: string, mainGroup?: string, groups? : string[]): Promise<Group> {
+  async createArtist(artistName: string, mainGroup?: string, groups? : string[]): Promise<Artist> {
     try {
       const response = await ApiUtils.getApiInstanceJson().post('/artist', {
         name: artistName,
@@ -42,7 +42,7 @@ class ArtistService {
     }
   }
 
-  async modifyArtist(groups? : string[]): Promise<Group> {
+  async modifyArtist(groups : string[]): Promise<Artist> {
     try {
       const response = await ApiUtils.getApiInstanceJson().patch('/artist', {
         groups: groups

@@ -60,8 +60,6 @@ export default function AppRegister() {
       const newUSer = response.data as User;
 
       login(newUSer);
-      
-      return <Navigate to="/community" />;
     } catch (error) {
       setError("Pseudo déjà utilisé. Veuillez utiliser un autre pseudo.");
     }

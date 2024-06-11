@@ -13,23 +13,21 @@ function App() {
   const { user } = useAuth();
 
   return (
-    <AuthProvider>
-      <PostsProvider>
-        <BrowserRouter>
-          <AppTopMenu />
-          <div className={styles.CenterContent}>
-            {user && <AppSideMenu />}
-            <div className={styles.Content}>
-              <div className={styles.MainContent}>
-                <AppRouter />
-                <ToastContainer />
-              </div>
+    <PostsProvider>
+      <BrowserRouter>
+        <AppTopMenu />
+        <div className={styles.CenterContent}>
+          {user && <AppSideMenu />}
+          <div className={styles.Content}>
+            <div className={styles.MainContent}>
+              <AppRouter />
+              <ToastContainer />
             </div>
           </div>
-          {user && <AppPostIconButton />}
-        </BrowserRouter>
-      </PostsProvider>
-    </AuthProvider>
+        </div>
+        {user && <AppPostIconButton />}
+      </BrowserRouter>
+    </PostsProvider>
   );
 }
 

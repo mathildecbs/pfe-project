@@ -3,7 +3,7 @@ import { Group } from "./GroupType";
 import { Inclusion } from "./InclusionType";
 
 export interface Artist {
-  id: number;
+  id: string;
   create_date: string;
   maj_date: string;
   name: string;
@@ -11,6 +11,6 @@ export interface Artist {
   // image: string;
   albums: Album[];
   inclusions: Inclusion[];
-  mainGroup: Group;
+  main_group: Group;
   groups: Group[];
 }

@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthProvider";
 import AppPost from "./AppPost";
 import postService from "../services/PostService";
 import ToastUtils from "../utils/ToastUtils";
+import { Typography } from "@mui/material";
 
 export default function AppMyPage() {
   const [myFeed, setMyFeed] = useState<Post[]>([]);
@@ -28,10 +29,13 @@ export default function AppMyPage() {
     const occurrences = new Map<number, number>();
     const repostStatus = new Map<number, boolean>();
 
-    posts.forEach(post => {
+    posts.forEach((post) => {
       const count = (occurrences.get(post.id) || 0) + 1;
       occurrences.set(post.id, count);
-      repostStatus.set(post.id, count > 1 || post.user.username !== user?.username);
+      repostStatus.set(
+        post.id,
+        count > 1 || post.user.username !== user?.username
+      );
     });
 
     return repostStatus;
@@ -41,14 +45,25 @@ export default function AppMyPage() {
 
   return (
     <>
-      {myFeed &&
+      {myFeed.length ? (
         myFeed.map((myPost, index) => (
           <AppPost
-            key={`${myPost.id}${!!repostStatus.get(myPost.id) && index === myFeed.findIndex(post => post.id === myPost.id)}}`}
+            key={`${myPost.id}${
+              !!repostStatus.get(myPost.id) &&
+              index === myFeed.findIndex((post) => post.id === myPost.id)
+            }}`}
             post={myPost}
-            repost={!!repostStatus.get(myPost.id) && index === myFeed.findIndex(post => post.id === myPost.id)}
+            repost={
+              !!repostStatus.get(myPost.id) &&
+              index === myFeed.findIndex((post) => post.id === myPost.id)
+            }
           />
-        ))}
+        ))
+      ) : (
+        <Typography variant="h6">
+          Commencez à liker, reposter et écrire des posts !
+        </Typography>
+      )}
     </>
   );
 }

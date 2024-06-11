@@ -79,6 +79,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
       addPost(response.data);
       ToastUtils.success("Publication créée avec succès !");
       onClose();
+      resetForm();
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la publication du post");
     }
@@ -91,6 +92,12 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
     } else {
       setSelectedTags([...selectedTags, { name: inputValue } as Tag]);
     }
+    setInputValue("");
+  }
+
+  function resetForm() {
+    setPostContent("");
+    setSelectedTags([]);
     setInputValue("");
   }
 

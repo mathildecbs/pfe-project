@@ -17,6 +17,7 @@ export default function AppExplorer() {
       ToastUtils.error(error, "Erreur lors de la récupération des groupes");
     }
   }
+  
   return (
     <Paper>
       <Typography variant="h4">Albums</Typography>

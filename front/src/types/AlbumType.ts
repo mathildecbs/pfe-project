@@ -2,7 +2,7 @@ import { Artist } from "./ArtistType";
 import { Group } from "./GroupType";
 
 export interface Album {
-  id: number;
+  id: string;
   create_date: string;
   maj_date: string;
   name: string;
@@ -10,6 +10,6 @@ export interface Album {
   solo: boolean;
   artist: Artist;
   group: Group;
-  version: string;
+  versions: string[];
   image: string;
 }

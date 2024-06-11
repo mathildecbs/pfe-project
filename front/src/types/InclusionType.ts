@@ -10,5 +10,5 @@ export interface Inclusion {
   album: Album;
   member: Artist;
   type: InclusionEnum;
-  image: string;
+  // image: string;
 }
