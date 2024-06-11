@@ -19,12 +19,13 @@ import ApiUtils from "../utils/ApiUtils";
 import groupService from "../services/GroupService";
 import { Group } from "../types/GroupType";
 import { Add, Delete } from "@mui/icons-material";
+import { log } from "console";
 
 export default function AppCreateArtist() {
   const [formData, setFormData] = useState({
     name: "",
     birthday: "",
-    mainGroup: "",
+    mainGroup: null,
   });
   const [isFormValid, setIsFormValid] = useState(false);
   const [groups, setGroups] = useState<Group[]>([]);
@@ -88,25 +89,30 @@ export default function AppCreateArtist() {
 
   async function createArtist() {
     try {
+      
       const { name, birthday, mainGroup } = formData;
       const groupIds = selectedGroups.map((group) => group.id);
-      if (mainGroup !== "") {
+      if (mainGroup !== null && mainGroup !== "") {
         groupIds.push(mainGroup);
+        console.log(groupIds);
+        
       }
-      console.log(groupIds);
-      
+
       const response = await ApiUtils.getApiInstanceJson().post("/artist", {
         name: name,
         birthday: birthday,
         main_group: mainGroup === "" ? null : mainGroup,
         groups: groupIds,
       });
+
+      console.log(response.data);
+      
       if (response) {
         ToastUtils.success("Artiste créé avec succès !");
         setFormData({
           name: "",
           birthday: "",
-          mainGroup: "",
+          mainGroup: null,
         });
         setSelectedGroups([]);
         setSelectedGroup("");
@@ -164,7 +170,7 @@ export default function AppCreateArtist() {
           className={styles.InputText}
           id="mainGroup"
           name="mainGroup"
-          value={formData.mainGroup}
+          value={formData.mainGroup === null ? "" : formData.mainGroup}
           onChange={handleSelectChange}
           displayEmpty
           fullWidth

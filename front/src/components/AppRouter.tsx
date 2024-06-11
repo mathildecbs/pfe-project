@@ -15,6 +15,10 @@ import AppRoutesPrivate from "./AppRoutesPrivate";
 import AppRoutesNotConnected from "./AppRoutesNotConnected";
 import AppPostPage from "./AppPostPage";
 import AppCreateNew from "./AppCreateNew";
+import AppExploOneArtist from "./AppExploOneArtist";
+import AppExploOneAlbum from "./AppExploOneAlbum";
+import AppExploGroups from "./AppExploGroups";
+import AppExploOneGroup from "./AppExploOneGroup";
 
 function AppRouter() {
   return (
@@ -29,7 +33,11 @@ function AppRouter() {
         <Route path="/post/:idPost" element={<AppPostPage />} />
         <Route path="/explorer" element={<AppExplorer />} />
         <Route path="/exploArtists" element={<AppExploArtists />} />
+        <Route path="/exploOneArtist/:idArtist" element={<AppExploOneArtist />} />
+        <Route path="/exploGroups" element={<AppExploGroups />} />
+        <Route path="/exploOneGroup/:idGroup" element={<AppExploOneGroup />} />
         <Route path="/exploAlbums" element={<AppExploAlbums />} />
+        <Route path="/exploOneAlbum/:idAlbum" element={<AppExploOneAlbum />} />
         <Route path="/myCollection" element={<AppMyCollection />} />
         <Route path="/collectionAlbums" element={<AppCollectionAlbums />} />
         <Route path="/createNew" element={<AppCreateNew />} />
