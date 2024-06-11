@@ -14,7 +14,7 @@ export class OwnedAlbum extends BaseEntity{
   @ManyToOne(()=> User, (user)=> user.albums)
   user: User
 
-  @ManyToOne(()=> Album)
+  @ManyToOne(()=> Album, {eager: true})
   album: Album
 
 

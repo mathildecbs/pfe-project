@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { IsInt } from 'class-validator';
+import { IsInt, IsString } from 'class-validator';
 
 @Injectable()
 export class BaseEntityService {}
@@ -14,10 +14,10 @@ export class BaseEntity {
   id: string;
 
   @CreateDateColumn()
-  create_date: string;
+  create_date: Date;
 
   @UpdateDateColumn()
-  maj_date: string;
+  maj_date: Date;
 }
 
 export class BaseQP {
@@ -27,6 +27,9 @@ export class BaseQP {
 
   @IsInt()
   offset: number
+
+  @IsString()
+  search: string
 
 }
 

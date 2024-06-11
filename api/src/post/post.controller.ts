@@ -17,10 +17,19 @@ export class PostController {
   async findAll(@Query() query: PostQP) {
     return await this.postService.findAll(query);
   }
+  @Get('trending')
+  async trending() {
+    return await this.postService.trending()
+  }
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return await this.postService.findOne(id);
+  }
+
+  @Get('feed/:username')
+  async feed(@Param('username') username:string) {
+    return await this.postService.create_feed(username)
   }
 
   @Get('following/:username')

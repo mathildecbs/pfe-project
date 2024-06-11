@@ -12,7 +12,7 @@ export class OwnedInclusion extends BaseEntity{
   @ManyToOne(()=> User, (user)=> user.inclusions)
   user: User
 
-  @ManyToOne(()=> Inclusion)
+  @ManyToOne(()=> Inclusion, {eager: true})
   inclusion: Inclusion
 
 }

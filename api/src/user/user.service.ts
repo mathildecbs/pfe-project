@@ -9,6 +9,14 @@ import { UserQP } from './dto/query-params.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
+import { CreateOwnedAlbumDto } from '../album/dto/create-owned-album.dto';
+import { OwnedAlbum } from '../album/entities/owned-album.entity';
+import { OwnedInclusion } from '../inclusion/entities/owned-inclusion.entity';
+import { AlbumService } from '../album/album.service';
+import { InclusionService } from '../inclusion/inclusion.service';
+import { CreateOwnedInclusionDto } from '../inclusion/dto/create-owned-inclusion.dto';
+import { UpdateOwnedInclusionDto } from '../inclusion/dto/update-owned-inclusion.dto';
+import { UpdateOwnedAlbumDto } from '../album/dto/update-owned-album.dto';
 
 @Injectable()
 export class UserService {
@@ -20,6 +28,15 @@ export class UserService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService
 
+    @InjectRepository(OwnedAlbum)
+    private albumRepository: Repository<OwnedAlbum>,
+  
+    @InjectRepository(OwnedInclusion)
+    private inclusionRepository: Repository<OwnedInclusion>,
+    private utilsService: UtilsServiceService,
+    private albumService: AlbumService,
+    private inclusionService: InclusionService,
+  
   ) {
   }
   async create(createUserDto: CreateUserDto) {
@@ -83,8 +100,6 @@ export class UserService {
     }
     user.followers = this.utilsService.user_to_username(res.followers)
     user.following = this.utilsService.user_to_username(res.following)
-    user['feed'] = this.utilsService.create_feed(res.posts, res.reposts)
-
     return this.utilsService.format_user(user);
   }
 
@@ -196,5 +211,231 @@ export class UserService {
     });
 
     return { access_token: token };
+  }
+
+  async add_album(username: string, body: CreateOwnedAlbumDto) {
+    const new_owned_album = {
+      ...body,
+      album: null,
+      user: null
+    }
+    new_owned_album.user = await this.findOne(username)
+    new_owned_album.album = await this.albumService.findOne(body.album)
+
+    if(new_owned_album.version && !new_owned_album.album.versions.includes(new_owned_album.version)) {
+      throw new HttpException(`version ${body.version} not in album versions ${new_owned_album.album.versions}`, HttpStatus.BAD_REQUEST)
+    }
+    if(new_owned_album.quantity<0) {
+      throw new HttpException(`quantity has to be greater than 0 `, HttpStatus.BAD_REQUEST)
+    }
+
+    const res = await this.albumRepository.save(new_owned_album)
+    if( !res ) {
+      throw new HttpException(`Creation failed `, HttpStatus.BAD_REQUEST);
+    }
+
+    return this.get_one_owned_album(username, body.album);
+  }
+
+  async add_inclusion(username: string, body: CreateOwnedInclusionDto) {
+    const new_owned_inclusion = {
+      ...body,
+      inclusion: null,
+      user: null
+    }
+    new_owned_inclusion.user = await this.findOne(username)
+    new_owned_inclusion.inclusion = await this.inclusionService.findOne(body.inclusion)
+
+
+    if(new_owned_inclusion.quantity<=0) {
+      throw new HttpException(`quantity has to be greater than 0 `, HttpStatus.BAD_REQUEST)
+    }
+
+    try {
+      await this.get_one_owned_album(username, new_owned_inclusion.inclusion.album.id)
+
+    } catch (e) {
+      await this.add_album(username, {quantity:0, album: new_owned_inclusion.inclusion.album.id})
+    }
+
+    const res = await this.inclusionRepository.save(new_owned_inclusion)
+    if( !res ) {
+      throw new HttpException(`Creation failed `, HttpStatus.BAD_REQUEST);
+    }
+
+    return this.get_collection(username);
+  }
+
+  async get_collection(username:string){
+    const user = await this.findOne(username)
+
+    const albums  = await this.albumRepository.find({
+      where:{user: {id: user.id}},
+      relations: {
+        album: true
+      }
+    })
+
+    const inclusions = await this.inclusionRepository.find({
+      where:{user: {id: user.id}},
+      relations: {
+        inclusion: true
+      }
+    })
+
+    return {albums, inclusions}
+  }
+
+  async get_one_owned_album(username: string, albumId: string) {
+    const user = await this.findOne(username)
+    const album = await this.albumService.findOne(albumId)
+
+    const owned = await this.albumRepository.find({
+      where: {
+        user: {
+          id: user.id
+        },
+        album: {
+          id: albumId
+        }
+      }
+    })
+
+    if(owned.length===0){
+      throw new HttpException(`album ${albumId} owned by ${username}`, HttpStatus.NOT_FOUND);
+    }
+
+    const inclusions = await this.inclusionRepository.find({
+      where: {
+        user : {
+          id: user.id
+        },
+        inclusion: {
+          album : {
+            id: albumId
+          }
+        }
+      }
+    })
+
+    return {owned, inclusions}
+  }
+
+  async get_all_albums(username: string) {
+    const user = await this.findOne(username)
+
+    return await this.albumRepository.find({where: {user: {id: user.id}}, order: {
+      album : {
+        release_date: "ASC"
+      }
+    }})
+
+  }
+
+  async update_album(username: string, album_id: string, body: UpdateOwnedAlbumDto) {
+    const user = await this.findOne(username)
+    const album = await this.albumRepository.findOne({
+      where: {
+        album : {
+          id: album_id
+        },
+        version: body.version
+      }
+    })
+    album.quantity+= body.quantity
+
+    if(album.quantity<=0) {
+      throw new HttpException(`quantity has to be greater than 0 `, HttpStatus.BAD_REQUEST)
+    }
+
+    const res = await this.albumRepository.save(album)
+    if( !res ) {
+      throw new HttpException(`Update failed `, HttpStatus.BAD_REQUEST);
+    }
+
+    return this.get_one_owned_album(username, album_id);
+
+  }
+
+  async delete_album(username: string, album_id: string, body: UpdateOwnedAlbumDto) {
+
+    const albums = await this.get_one_owned_album(username, album_id)
+
+    if( albums.inclusions.length===0 || albums.owned.length>1) {
+      const album = albums.owned.find((album_owned)=> album_owned.version===body.version)
+      const res = await this.albumRepository.delete(album.id)
+      if( !res ) {
+        throw new HttpException(`Delete failed `, HttpStatus.BAD_REQUEST);
+      }
+
+      return true;
+    } else {
+      const album = albums.owned.find((album_owned)=> album_owned.version===body.version)
+      album.quantity=0
+      album.version=null
+      const res = await this.albumRepository.save(album)
+      if( !res ) {
+        throw new HttpException(`Delete failed `, HttpStatus.BAD_REQUEST);
+      }
+
+      return true;
+    }
+
+  }
+
+  async get_all_inclusions(username: string) {
+    const user = await this.findOne(username)
+
+    return await this.inclusionRepository.find({where: {user: {id: user.id}}, order: {
+        inclusion : {
+          name: "ASC"
+        }
+      }})
+  }
+
+  async update_inclusion(username: string, inclusion_id: string ,body: UpdateOwnedInclusionDto)  {
+    const user = await this.findOne(username)
+    const inclusion = await this.inclusionRepository.findOne({
+      where: {
+        inclusion : {
+          id: inclusion_id
+        }
+      }
+    })
+    inclusion.quantity+= body.quantity
+
+    if(inclusion.quantity<=0) {
+      throw new HttpException(`quantity has to be greater than 0 `, HttpStatus.BAD_REQUEST)
+    }
+
+    const res = await this.inclusionRepository.save(inclusion)
+    if( !res ) {
+      throw new HttpException(`Update failed `, HttpStatus.BAD_REQUEST);
+    }
+
+    return this.get_collection(username);
+  }
+
+  async delete_inclusion(username: string, inclusion_id: string){
+    const inclusion = await this.inclusionRepository.findOne({
+      where: {
+        inclusion : {
+          id: inclusion_id
+        }
+      }
+    })
+
+
+    const res = await this.inclusionRepository.delete(inclusion.id)
+    if( !res ) {
+      throw new HttpException(`Delete failed `, HttpStatus.BAD_REQUEST);
+    }
+    const album = await this.get_one_owned_album(username, inclusion.inclusion.album.id)
+
+    if(album.owned.length===1 && album.owned[0].quantity===0) {
+      const del = await this.delete_album(username, album.owned[0].album.id, { quantity: 0, version: null });
+    }
+
+    return true;
   }
 }
