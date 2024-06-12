@@ -26,14 +26,13 @@ export class UserService {
     private usersRepository: Repository<User>,
     private utilsService: UtilsServiceService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
 
     @InjectRepository(OwnedAlbum)
     private albumRepository: Repository<OwnedAlbum>,
   
     @InjectRepository(OwnedInclusion)
     private inclusionRepository: Repository<OwnedInclusion>,
-    private utilsService: UtilsServiceService,
     private albumService: AlbumService,
     private inclusionService: InclusionService,
   

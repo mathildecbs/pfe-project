@@ -22,7 +22,7 @@ export class ArtistService {
       main_group: null
     }
 
-    new_artist.main_group = await this.groupService.findOne(createArtistDto.main_group)
+    if(createArtistDto.main_group) new_artist.main_group = await this.groupService.findOne(createArtistDto.main_group)
 
     if (createArtistDto.groups) {
       for (const group of createArtistDto.groups) {
