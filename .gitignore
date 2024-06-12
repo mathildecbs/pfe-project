@@ -1,6 +1,7 @@
 node_modules
 **.idea
 .env
+.env**
 
 **dist
 api/.vercel**
