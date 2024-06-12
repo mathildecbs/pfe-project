@@ -209,7 +209,7 @@ export class UserService {
       expiresIn: '12h',
     });
 
-    return { access_token: token };
+    return { username: user.username, access_token: token };
   }
 
   async add_album(username: string, body: CreateOwnedAlbumDto) {
