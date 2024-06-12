@@ -60,7 +60,7 @@ export default function AppExplorer() {
     }
   }
 
-  const renderGroupAndSoloArtists = () => {
+  function renderGroupAndSoloArtists() {
     const combined = [...groups, ...soloArtists];
 
     return (
@@ -87,9 +87,9 @@ export default function AppExplorer() {
         </Button>
       </div>
     );
-  };
+  }
 
-  const renderArtists = () => {
+  function renderArtists() {
     return (
       <div className={styles.Container}>
         {artists.slice(0, 4).map((artist) => (
@@ -107,7 +107,7 @@ export default function AppExplorer() {
     );
   };
 
-  const renderAlbums = () => {
+  function renderAlbums() {
     return (
       <div className={styles.Container}>
         {albums.slice(0, 4).map((album) => (

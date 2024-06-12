@@ -8,7 +8,7 @@ export interface Artist {
   maj_date: string;
   name: string;
   birthday: string;
-  // image: string;
+  image: string;
   albums: Album[];
   inclusions: Inclusion[];
   main_group: Group;

@@ -14,8 +14,6 @@ class ArtistService {
   async getSoloArtists(): Promise<Artist[]> {
     try {
       const artists = await this.getArtists();
-      console.log(artists);
-      
       const soloArtists = artists.filter(artist => artist.main_group === null);
       return soloArtists;
     } catch (error) {

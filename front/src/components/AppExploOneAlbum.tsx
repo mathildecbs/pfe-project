@@ -10,6 +10,7 @@ import {
   InputLabel,
   IconButton,
   SelectChangeEvent,
+  CircularProgress,
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Add, Remove } from "@mui/icons-material";
@@ -156,7 +157,7 @@ export default function AppExploOneAlbum() {
   }
 
   if (!thisAlbum) {
-    return <div>Chargement...</div>;
+    return <CircularProgress />;
   }
 
   return (
@@ -180,7 +181,7 @@ export default function AppExploOneAlbum() {
           {thisAlbum.solo ? thisAlbum.artist.name : thisAlbum.group.name}
         </Typography>
 
-        <FormControl fullWidth className={styles.FormControl}>
+        {ownedVersionOfAlbum && <FormControl fullWidth className={styles.FormControl}>
           <InputLabel>Version</InputLabel>
           <Select value={selectedVersion} onChange={handleVersionChange}>
             {thisAlbum.versions.map((version) => (
@@ -189,7 +190,7 @@ export default function AppExploOneAlbum() {
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl>}
         {ownedVersionOfAlbum && (
           <div className={styles.VersionOwned}>
             <CheckCircleIcon /> Version possédée (

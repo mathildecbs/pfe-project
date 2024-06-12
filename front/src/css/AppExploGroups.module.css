@@ -1,0 +1,43 @@
+.Section {
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.Container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  overflow: hidden;
+}
+
+.ItemCard {
+  flex: 1 1 calc(25% - 16px);
+  min-width: 100px;
+  padding: 16px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #fae5e5;
+  border-radius: 5em;
+}
+
+.ItemCard:hover {
+  background-color: #f7cac9;
+  box-shadow: inset 1px -9px 3px -5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.MoreButton {
+  flex: 1 1 calc(25% - 16px);
+  min-width: 100px;
+  padding: 16px;
+  text-align: center;
+}
+
+.ItemText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
