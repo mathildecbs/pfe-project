@@ -18,7 +18,7 @@ export class User extends BaseEntity {
   @Column({nullable:true})
   description: string
 
-  @Column({nullable:false})
+  @Column({nullable:false, default: false})
   isAdmin: boolean
 
   @ManyToMany(() => User, (user) => user.followers)
