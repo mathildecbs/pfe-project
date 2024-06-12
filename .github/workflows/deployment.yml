@@ -1,0 +1,31 @@
+name: API CI
+
+on:
+    push:
+        branches: [main]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [20.9.x]
+
+        steps:
+            - uses: actions/checkout@v2
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v2
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+
+
+            - name: Move to API
+              run: cd api
+              
+            - name: Run CI command
+              run: npm ci
+
+            - name: Build
+              run: npm run build
