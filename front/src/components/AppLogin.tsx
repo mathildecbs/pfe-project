@@ -1,28 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Paper, Typography, TextField, Box } from "@mui/material";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import styles from "../css/AppLogin.module.css";
 import { useAuth } from "../contexts/AuthProvider";
 import ApiUtils from "../utils/ApiUtils";
 import { hashPassword } from "../utils/HashUtils";
+import { TokenUser } from "../types/TokenUserType";
 
 export default function AppLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
+  const { login, authToken } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (authToken !== null) {
+      navigate("/");
+    }
+  });
 
   async function handleLogin(event: React.FormEvent) {
     event.preventDefault();
 
     try {
       const hashedPassword = hashPassword(password);
-      const tokenAndUser = await ApiUtils.getApiInstanceJson().post("/user/login", {
+      const tokenAndUser: TokenUser = await ApiUtils.getApiInstanceJson().post("/user/login", {
         username: username,
         password: hashedPassword,
       });
 
       if (tokenAndUser) {
-        // login()
+        const token = tokenAndUser.token;
+        const user = tokenAndUser.user;
+        login(user, token);
         return <Navigate to="/community" />;
       }
     } catch (error) {
