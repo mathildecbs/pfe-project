@@ -12,6 +12,7 @@ import { hashPassword } from "../utils/HashUtils";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { User } from "../types/UserType";
+import ToastUtils from "../utils/ToastUtils";
 
 export default function AppRegister() {
   const [formData, setFormData] = useState({
@@ -61,7 +62,7 @@ export default function AppRegister() {
 
       login(newUSer);
     } catch (error) {
-      setError("Pseudo déjà utilisé. Veuillez utiliser un autre pseudo.");
+      ToastUtils.error("Inscription impossible. Veuillez utiliser un autre pseudo.");
     }
   }
 

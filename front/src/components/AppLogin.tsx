@@ -5,38 +5,39 @@ import styles from "../css/AppLogin.module.css";
 import { useAuth } from "../contexts/AuthProvider";
 import ApiUtils from "../utils/ApiUtils";
 import { hashPassword } from "../utils/HashUtils";
+import { User } from "../types/UserType";
 
 export default function AppLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const { user, login } = useAuth();
 
-  // async function handleLogin(event: React.FormEvent) {
-  //   event.preventDefault();
+  async function handleLogin(event: React.FormEvent) {
+    event.preventDefault();
 
-  //   try {
-  //     const hashedPassword = hashPassword(password);
-  //     const response = await ApiUtils.getApiInstanceJson().get("/user", {
-  //       username: username,
-  //       password: hashedPassword,
-  //     });
+    try {
+      const hashedPassword = hashPassword(password);
+      const response = await ApiUtils.getApiInstanceJson().post("/user/login", {
+        username: username,
+        password: hashedPassword,
+      });
 
-  //     const newUSer = response.data as User;
+      const newUSer = response.data as User;
 
-  //     login(newUSer);
+      login(newUSer);
       
-  //     return <Navigate to="/community" />;
-  //   } catch (error) {
-  //     console.log("Erreur lors de la connexion.");
-  //   }
-  // }
+      return <Navigate to="/community" />;
+    } catch (error) {
+      console.log("Erreur lors de la connexion.");
+    }
+  }
 
   return (
     <Paper className={styles.LoginContainer}>
       <Typography variant="h4" className={styles.Title}>
         Se connecter
       </Typography>
-      {/* <form onSubmit={handleLogin}> */}
+      <form onSubmit={handleLogin}>
         <Box className={styles.FormGroup}>
           <TextField
             label="Nom d'utilisateur"
@@ -68,7 +69,7 @@ export default function AppLogin() {
             Pas encore inscrit ? <Link to="/register">Créer un compte</Link>
           </Typography>
         </Box>
-      {/* </form> */}
+      </form>
     </Paper>
   );
 }
