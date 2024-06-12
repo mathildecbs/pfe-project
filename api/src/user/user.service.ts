@@ -53,7 +53,15 @@ export class UserService {
     if (!new_user ){
       throw new HttpException('User creation failed', HttpStatus.BAD_REQUEST);
     }
-    return await this.findOne(new_user.username);
+
+    const connection_user = {
+      username: createUserDto.username,
+      password: createUserDto.password
+    }
+
+    const connected_user = await this.connection(connection_user);
+
+    return (await this.findOne(new_user.username),connected_user );
   }
 
   async findAll(query: UserQP) {
@@ -209,7 +217,9 @@ export class UserService {
       expiresIn: '12h',
     });
 
-    return { user: user, access_token: token };
+    const connected_user = await this.findOne(user.username);
+
+    return { user: connected_user, access_token: token };
   }
 
   async add_album(username: string, body: CreateOwnedAlbumDto) {
