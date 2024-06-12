@@ -1,12 +1,10 @@
 import { Album } from "./AlbumType";
-import { User } from "./UserType";
 
 export interface OwnedAlbum {
-  id: number;
+  id: string;
   create_date: string;
   maj_date: string;
-  user: User;
   album: Album;
-  quantite: number;
+  quantity: number;
   version: string;
 }

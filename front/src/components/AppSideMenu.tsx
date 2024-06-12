@@ -14,6 +14,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
 import AlbumIcon from "@mui/icons-material/Album";
 import AddBoxIcon from '@mui/icons-material/AddBox';
+import Diversity3Icon from '@mui/icons-material/Diversity3';
 import styles from "../css/AppSideMenu.module.css";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Link } from "react-router-dom";
@@ -60,7 +61,7 @@ function AppSideMenu() {
             <ListItem
               className={styles.SubMenuItem}
               component={Link}
-              to="/exploAlbums"
+              to="/exploArtists"
             >
               <ListItemIcon>
                 <GroupsIcon />
@@ -70,7 +71,17 @@ function AppSideMenu() {
             <ListItem
               className={styles.SubMenuItem}
               component={Link}
-              to="/exploArtists"
+              to="/exploGroups"
+            >
+              <ListItemIcon>
+                <Diversity3Icon />
+              </ListItemIcon>
+              {isExpanded && <ListItemText primary="Groupes" />}
+            </ListItem>
+            <ListItem
+              className={styles.SubMenuItem}
+              component={Link}
+              to="/exploAlbums"
             >
               <ListItemIcon>
                 <AutoStoriesIcon />

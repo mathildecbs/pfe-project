@@ -23,7 +23,6 @@ export default function AppPost({ post, repost }: AppPostProps) {
   const { addPost, setPosts } = usePosts();
   const [likes, setLikes] = useState(post.nb_likes ? post.nb_likes : 0);
   const [reposts, setReposts] = useState(post.nb_reposts ? post.nb_reposts : 0);
-  const [comments, setComments] = useState(post.nb_comments ? post.nb_comments : 0);
   const [hasLiked, setHasLiked] = useState(
     post.likes
       ? post.likes.some((like) => like.username === user?.username)

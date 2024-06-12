@@ -2,10 +2,9 @@ import { Inclusion } from "./InclusionType";
 import { User } from "./UserType";
 
 export interface OwnedInclusion {
-  id: number;
+  id: string;
   create_date: string;
   maj_date: string;
-  user: User;
   inclusion: Inclusion;
-  quantite: number;
+  quantity: number;
 }

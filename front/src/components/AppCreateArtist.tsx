@@ -19,7 +19,6 @@ import ApiUtils from "../utils/ApiUtils";
 import groupService from "../services/GroupService";
 import { Group } from "../types/GroupType";
 import { Add, Delete } from "@mui/icons-material";
-import { log } from "console";
 
 export default function AppCreateArtist() {
   const [formData, setFormData] = useState({

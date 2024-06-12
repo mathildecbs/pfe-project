@@ -1,0 +1,54 @@
+.Container {
+  display: flex;
+  padding: 20px;
+  margin: 20px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ImageContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.AlbumImage {
+  max-width: 100%;
+  height: auto;
+}
+
+.InfoContainer {
+  flex: 2;
+  padding-left: 20px;
+}
+
+.AlbumTitle {
+  margin-bottom: 20px;
+}
+
+.ReleaseDate,
+.ArtistName,
+.Versions {
+  margin-bottom: 12px;
+}
+
+.FormControl {
+  margin-bottom: 20px;
+}
+
+.QuantityContainer {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.QuantityText {
+  margin: 0 10px;
+}
+
+.VersionOwned {
+  display: flex;
+  align-items: center;
+  color: green;
+}
