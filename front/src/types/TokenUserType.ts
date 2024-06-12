@@ -1,6 +1,6 @@
 import { User } from "./UserType";
 
 export interface TokenUser {
-  token: string, 
+  access_token: string, 
   user: User
 }

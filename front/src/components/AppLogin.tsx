@@ -24,16 +24,17 @@ export default function AppLogin() {
 
     try {
       const hashedPassword = hashPassword(password);
-      const tokenAndUser: TokenUser = await ApiUtils.getApiInstanceJson().post("/user/login", {
+      const response = await ApiUtils.getApiInstanceJson().post("/user/login", {
         username: username,
         password: hashedPassword,
       });
 
+      const tokenAndUser = response.data as TokenUser;
+
       if (tokenAndUser) {
-        const token = tokenAndUser.token;
-        const user = tokenAndUser.user;
+        const token = tokenAndUser.access_token;
+        const user = tokenAndUser.user;        
         login(user, token);
-        return <Navigate to="/community" />;
       }
     } catch (error) {
       console.log("Erreur lors de la connexion.");
