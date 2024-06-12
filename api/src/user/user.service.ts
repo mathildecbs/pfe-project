@@ -209,7 +209,9 @@ export class UserService {
       expiresIn: '12h',
     });
 
-    return { user: user, access_token: token };
+    const connected_user = await this.findOne(user.username);
+
+    return { user: connected_user, access_token: token };
   }
 
   async add_album(username: string, body: CreateOwnedAlbumDto) {
