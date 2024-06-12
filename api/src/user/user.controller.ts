@@ -3,11 +3,11 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserQP } from './dto/query-params.dto';
+import { UserGuard } from './user.guard';
 import { CreateOwnedAlbumDto } from '../album/dto/create-owned-album.dto';
 import { CreateOwnedInclusionDto } from '../inclusion/dto/create-owned-inclusion.dto';
 import { UpdateOwnedInclusionDto } from '../inclusion/dto/update-owned-inclusion.dto';
 import { UpdateOwnedAlbumDto } from '../album/dto/update-owned-album.dto';
-import { UserGuard } from './user.guard';
 
 @Controller('user')
 @UseGuards(UserGuard)

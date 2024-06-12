@@ -6,6 +6,9 @@ import { User } from './entities/user.entity';
 import {  Like, MoreThanOrEqual, Repository } from 'typeorm';
 import { UtilsServiceService } from '../utils/utils_service/utils_service.service';
 import { UserQP } from './dto/query-params.dto';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import * as bcrypt from 'bcrypt';
 import { CreateOwnedAlbumDto } from '../album/dto/create-owned-album.dto';
 import { OwnedAlbum } from '../album/entities/owned-album.entity';
 import { OwnedInclusion } from '../inclusion/entities/owned-inclusion.entity';
@@ -14,9 +17,6 @@ import { InclusionService } from '../inclusion/inclusion.service';
 import { CreateOwnedInclusionDto } from '../inclusion/dto/create-owned-inclusion.dto';
 import { UpdateOwnedInclusionDto } from '../inclusion/dto/update-owned-inclusion.dto';
 import { UpdateOwnedAlbumDto } from '../album/dto/update-owned-album.dto';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -24,17 +24,19 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
+    private utilsService: UtilsServiceService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService
+
     @InjectRepository(OwnedAlbum)
     private albumRepository: Repository<OwnedAlbum>,
+  
     @InjectRepository(OwnedInclusion)
     private inclusionRepository: Repository<OwnedInclusion>,
     private utilsService: UtilsServiceService,
     private albumService: AlbumService,
     private inclusionService: InclusionService,
-    
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService
-
+  
   ) {
   }
   async create(createUserDto: CreateUserDto) {
