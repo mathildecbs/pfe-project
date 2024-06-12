@@ -1,4 +1,4 @@
-name: API CI dev
+name: API CI PROD
 
 env:
   VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
