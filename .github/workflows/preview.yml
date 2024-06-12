@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
-          working-directory: ./api
+          cache-dependency-path: ./api
 
 
       - name: Run CI command
