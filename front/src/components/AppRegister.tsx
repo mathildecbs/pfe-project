@@ -22,7 +22,6 @@ export default function AppRegister() {
     description: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   const { user, login } = useAuth();
 
@@ -57,10 +56,16 @@ export default function AppRegister() {
         name: name,
         description: description,
       });
-
       const newUSer = response.data as User;
 
-      login(newUSer);
+      const tokenRes = await ApiUtils.getApiInstanceJson().post("/user/login", {
+        username: username,
+        password: hashedPassword,
+      });
+
+      const token = tokenRes.data;
+
+      login(newUSer, token);
     } catch (error) {
       ToastUtils.error("Inscription impossible. Veuillez utiliser un autre pseudo.");
     }
@@ -121,7 +126,6 @@ export default function AppRegister() {
           >
             S'inscrire
           </Button>
-          {error && <p className={styles.error}>{error}</p>}
         </FormControl>
       </div>
     </Paper>

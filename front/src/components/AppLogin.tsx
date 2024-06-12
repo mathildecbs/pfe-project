@@ -5,28 +5,26 @@ import styles from "../css/AppLogin.module.css";
 import { useAuth } from "../contexts/AuthProvider";
 import ApiUtils from "../utils/ApiUtils";
 import { hashPassword } from "../utils/HashUtils";
-import { User } from "../types/UserType";
 
 export default function AppLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { user, login } = useAuth();
+  const { login } = useAuth();
 
   async function handleLogin(event: React.FormEvent) {
     event.preventDefault();
 
     try {
       const hashedPassword = hashPassword(password);
-      const response = await ApiUtils.getApiInstanceJson().post("/user/login", {
+      const tokenAndUser = await ApiUtils.getApiInstanceJson().post("/user/login", {
         username: username,
         password: hashedPassword,
       });
 
-      const newUSer = response.data as User;
-
-      login(newUSer);
-      
-      return <Navigate to="/community" />;
+      if (tokenAndUser) {
+        // login()
+        return <Navigate to="/community" />;
+      }
     } catch (error) {
       console.log("Erreur lors de la connexion.");
     }

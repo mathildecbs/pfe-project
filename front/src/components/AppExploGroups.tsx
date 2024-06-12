@@ -46,7 +46,7 @@ export default function AppExploGroups() {
             key={item.id}
             className={styles.ItemCard}
             onClick={() => {
-              if ("main_group" in item && item.main_group) {
+              if ("main_group" in item) {
                 navigate(`/exploOneArtist/${item.id}`);
               } else {
                 navigate(`/exploOneGroup/${item.id}`);
@@ -58,12 +58,6 @@ export default function AppExploGroups() {
             </Typography>
           </div>
         ))}
-        <Button
-          className={styles.MoreButton}
-          onClick={() => navigate("/exploGroups")}
-        >
-          Plus...
-        </Button>
       </div>
     );
   }
