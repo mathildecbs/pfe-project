@@ -1,14 +1,16 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserQP } from './dto/query-params.dto';
+import { UserGuard } from './user.guard';
 import { CreateOwnedAlbumDto } from '../album/dto/create-owned-album.dto';
 import { CreateOwnedInclusionDto } from '../inclusion/dto/create-owned-inclusion.dto';
 import { UpdateOwnedInclusionDto } from '../inclusion/dto/update-owned-inclusion.dto';
 import { UpdateOwnedAlbumDto } from '../album/dto/update-owned-album.dto';
 
 @Controller('user')
+@UseGuards(UserGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -21,10 +23,15 @@ export class UserController {
   async findAll(@Query() query: UserQP) {
     return await this.userService.findAll(query);
   }
-
+  
   @Get(':username')
   async findOne(@Param('username') username: string) {
     return await this.userService.findOne(username);
+  }
+
+  @Post('login')
+  async connection(@Body() user: Object) {
+    return await this.userService.connection(user);
   }
 
   @Patch(':username')

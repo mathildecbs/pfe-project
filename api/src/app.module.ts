@@ -22,16 +22,18 @@ import { PostModule } from './post/post.module';
 import { TagModule } from './tag/tag.module';
 import { Tag } from './tag/entities/tag.entity';
 import { Post } from './post/entities/post.entity';
+import { APP_FILTER, APP_GUARD } from '@nestjs/core';
+import { UserGuard } from './user/user.guard';
 @Module({
   imports: [
     ConfigModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
-      port: 3306,
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
       username: process.env.DATABASE_USER,
       password: process.env.DATABASE_PASSWORD,
-      database: 'pfe_db',
+      database: process.env.DATABASE_NAME,
       entities: [
         User,
         Artist,
@@ -56,6 +58,14 @@ import { Post } from './post/entities/post.entity';
   controllers: [
     AppController
   ],
-  providers: [AppService, BaseEntityService, UtilsServiceService],
+  providers: [
+    AppService, 
+    BaseEntityService, 
+    UtilsServiceService,
+    {
+      provide: APP_GUARD,
+      useClass: UserGuard,
+    }
+  ],
 })
 export class AppModule {}
