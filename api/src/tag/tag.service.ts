@@ -23,7 +23,7 @@ export class TagService {
 
     }
 
-    return await this.findOneTag(res.name)
+    return await this.findOne(res.name)
 
   }
 
@@ -44,19 +44,6 @@ export class TagService {
   }
 
   async findOne(name: string) {
-    const res = await this.tagRepository.find({
-      where : {name},
-      relations: {
-        posts: true
-      }
-    })
-
-    if(res.length===0 ) {
-      throw new HttpException(`tag ${name} not found`, HttpStatus.NOT_FOUND);
-    }
-    return res[0].posts;
-  }
-  async findOneTag(name: string) {
     const res = await this.tagRepository.find({
       where : {name},
       relations: {
