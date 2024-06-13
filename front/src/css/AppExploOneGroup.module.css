@@ -1,54 +1,82 @@
 .Container {
   display: flex;
-  padding: 20px;
-  margin: 20px;
-  align-items: center;
-  justify-content: space-between;
+  padding: 16px;
+  gap: 16px;
 }
 
 .ImageContainer {
   flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
-.AlbumImage {
-  max-width: 100%;
+.GroupImage {
+  width: 100%;
   height: auto;
+  border-radius: 8px;
 }
 
 .InfoContainer {
   flex: 2;
-  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.AlbumTitle {
-  margin-bottom: 20px;
+.GroupTitle {
+  font-weight: bold;
 }
 
 .ReleaseDate,
-.ArtistName,
-.Versions {
-  margin-bottom: 12px;
+.ArtistName {
+  margin-bottom: 8px;
 }
 
-.FormControl {
-  margin-bottom: 20px;
+.Subtitle {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 
-.QuantityContainer {
+.MembersContainer {
   display: flex;
-  align-items: center;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.QuantityText {
-  margin: 0 10px;
+.MemberName {
+  background-color: #f0f0f0;
+  padding: 8px;
+  border-radius: 4px;
+  transition: 0.3s;
 }
 
-.VersionOwned {
+.MemberName:hover {
+  background-color: #fee4e4;
+  cursor: pointer;
+}
+
+.AlbumsContainer {
   display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.AlbumCard {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  color: green;
+  gap: 8px;
+}
+
+.AlbumImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+}
+
+.AlbumName {
+  text-align: center;
+}
+
+.NoItems {
+  font-style: italic;
 }

@@ -1,54 +1,67 @@
 .Container {
   display: flex;
-  padding: 20px;
-  margin: 20px;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
+  padding: 16px;
+  gap: 16px;
 }
 
 .ImageContainer {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  align-self: center;
 }
 
-.AlbumImage {
-  max-width: 100%;
-  height: auto;
+.ArtistImage {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .InfoContainer {
-  flex: 2;
-  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.AlbumTitle {
-  margin-bottom: 20px;
+.ArtistTitle {
+  font-weight: bold;
+  text-align: center;
 }
 
 .ReleaseDate,
-.ArtistName,
-.Versions {
-  margin-bottom: 12px;
+.ArtistName {
+  margin-bottom: 8px;
 }
 
-.FormControl {
-  margin-bottom: 20px;
+.Subtitle {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-weight: bold;
 }
 
-.QuantityContainer {
+.AlbumsContainer {
   display: flex;
-  align-items: center;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 16px;
 }
 
-.QuantityText {
-  margin: 0 10px;
-}
-
-.VersionOwned {
+.AlbumCard {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  color: green;
+  gap: 8px;
+}
+
+.AlbumImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+}
+
+.AlbumName {
+  text-align: center;
+}
+
+.NoItems {
+  font-style: italic;
+  text-align: center;
 }

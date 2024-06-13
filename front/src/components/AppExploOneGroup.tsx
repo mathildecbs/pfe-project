@@ -24,7 +24,7 @@ export default function AppExploOneGroup() {
         setThisGroup(response);
       }
     } catch (error) {
-      ToastUtils.error(error, "Erreur lors de la récupération du group");
+      ToastUtils.error(error, "Erreur lors de la récupération du groupe");
     }
   }
 
@@ -42,6 +42,10 @@ export default function AppExploOneGroup() {
     }
   }
 
+  function navigateTo(artistId: string) {
+    navigate(`/exploOneArtist/${artistId}`);
+  }
+
   if (!thisGroup) {
     return <CircularProgress />;
   }
@@ -50,7 +54,7 @@ export default function AppExploOneGroup() {
     <Paper className={styles.Container}>
       <div className={styles.ImageContainer}>
         <img
-          src={thisGroup.image}
+          src={thisGroup.image || "/path/to/default/image.jpg"}
           alt={thisGroup.name}
           className={styles.GroupImage}
         />
@@ -60,30 +64,61 @@ export default function AppExploOneGroup() {
           {thisGroup.name}
         </Typography>
         <Typography variant="body1" className={styles.ReleaseDate}>
-          Agence/Companie: {thisGroup.company}
+          Agence/Compagnie: {thisGroup.company}
         </Typography>
         {thisGroup.parent && (
           <Typography variant="body1" className={styles.ArtistName}>
             Groupe parent: {thisGroup.parent.name}
           </Typography>
         )}
-        <div className={styles.Members}>
-          <Typography variant="body1" component="span">
-            Membres:{" "}
+        <div>
+          <Typography variant="h5" className={styles.Subtitle}>
+            Membres
           </Typography>
-          {thisGroup.members.map((member, index) => (
-            <Typography
-              key={index}
-              variant="body1"
-              component="span"
-              className={styles.Member}
-            >
-              {member.name}
-              {index < thisGroup.members.length - 1 ? ", " : ""}
+          {thisGroup.members.length ? (
+            <div className={styles.MembersContainer}>
+              {thisGroup.members.map((member) => (
+                <Typography
+                  key={member.id}
+                  variant="body1"
+                  onClick={() => navigateTo(member.id)}
+                  className={styles.MemberName}
+                >
+                  {member.name}
+                </Typography>
+              ))}
+            </div>
+          ) : (
+            <Typography variant="body2" className={styles.NoItems}>
+              Aucun membre disponible
             </Typography>
-          ))}
+          )}
         </div>
-
+        <div>
+          <Typography variant="h5" className={styles.Subtitle}>
+            Albums
+          </Typography>
+          {thisGroup.albums.length ? (
+            <div className={styles.AlbumsContainer}>
+              {thisGroup.albums.map((album) => (
+                <div key={album.id} className={styles.AlbumCard}>
+                  <img
+                    src={album.image}
+                    alt={album.name}
+                    className={styles.AlbumImage}
+                  />
+                  <Typography variant="body2" className={styles.AlbumName}>
+                    {album.name}
+                  </Typography>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <Typography variant="body2" className={styles.NoItems}>
+              Aucun album disponible
+            </Typography>
+          )}
+        </div>
         <Button color="error" variant="contained" onClick={deleteOwnedGroup}>
           Supprimer le groupe
         </Button>
