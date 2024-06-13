@@ -3,6 +3,7 @@ import { BaseEntity } from '../../utils/base_entity/base_entity.service';
 import { OwnedInclusion } from '../../inclusion/entities/owned-inclusion.entity';
 import { OwnedAlbum } from '../../album/entities/owned-album.entity';
 import { Post } from '../../post/entities/post.entity';
+import { Repost } from "../../post/entities/repost.entity";
 
 @Entity()
 export class User extends BaseEntity {
@@ -40,7 +41,7 @@ export class User extends BaseEntity {
   @ManyToMany(()=> Post, (post)=> post.likes)
   likes: Post[]
 
-  @ManyToMany(()=> Post, (post)=> post.reposts)
+  @OneToMany(()=> Repost, (repost)=> repost.user)
   reposts: Post[]
 
 }

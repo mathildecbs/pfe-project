@@ -7,7 +7,7 @@ import { Repository, TreeRepository } from 'typeorm';
 import { UtilsServiceService } from '../utils/utils_service/utils_service.service';
 import { UserService } from '../user/user.service';
 import { TagService } from '../tag/tag.service';
-import { isString } from '@nestjs/common/utils/shared.utils';
+import { Repost } from "./entities/repost.entity";
 
 @Injectable()
 export class PostService {
@@ -17,6 +17,8 @@ export class PostService {
     private postRepository: Repository<Post>,
     @InjectRepository(Post)
     private postTreeRepository: TreeRepository<Post>,
+    @InjectRepository(Repost)
+    private repostRepository: Repository<Repost>,
     private utilsService: UtilsServiceService,
     private userService: UserService,
     private tagService: TagService
@@ -96,8 +98,6 @@ export class PostService {
       com = this.utilsService.format_post(com)
     })
     tree2.children = this.utilsService.sort_posts(tree2.children)
-    tree2.likes = this.utilsService.user_to_username(tree2.likes)
-    tree2.reposts = this.utilsService.user_to_username(tree2.reposts)
 
     return this.utilsService.format_post(tree2)
 
@@ -135,18 +135,19 @@ export class PostService {
     const user = await this.userService.findOne(username)
     const posts = await this.postRepository.createQueryBuilder('post')
       .leftJoinAndSelect('post.reposts', 'repost')
-      .leftJoinAndSelect('post.likes', 'like')
-      .leftJoinAndSelect('post.user', 'user')
-      .leftJoinAndSelect('post.tags', 'tag')
-      .where('repost.id=:id', {id: user.id})
+      .leftJoinAndSelect('repost.user', 'userR')
+      .where('userR.id=:id', {id: user.id})
       .getMany()
 
-
+    const reposts:Post[] = []
     for (let post of posts) {
-      post = this.utilsService.format_post(post)
+      post = await this.findOne(post.id)
+      post['repost_date'] = post.reposts.find(repost => repost.username===username)['repost_date']
       post['nb_comments'] = await this.get_nb_comments(post)
+      reposts.push(post)
     }
-    return posts
+
+    return reposts
   }
 
   async remove(id: string) {
@@ -203,9 +204,8 @@ export class PostService {
     const post = await this.findOne(post_id)
     const user = await this.userService.findOne(username)
 
-    post.reposts.push(user)
 
-    const res = await this.postTreeRepository.save(post)
+    const res = await this.repostRepository.save({post, user})
 
     if(!res) {
       throw new HttpException(`Failed to repost post ${post_id}`, HttpStatus.BAD_REQUEST);
@@ -216,11 +216,19 @@ export class PostService {
     const post = await this.findOne(post_id)
     const user = await this.userService.findOne(username)
 
-    post.reposts.forEach( (item, index) => {
-      if(item.id === user.id) post.reposts.splice(index,1);
-    });
+     const repost = await this.repostRepository.find({
+       where: {
+         post:{
+           id: post_id
+         },
+         user : {
+           id: user.id
+         }
+       }
+     })
 
-    const res = await this.postTreeRepository.save(post)
+    if (repost.length===0) throw new HttpException(`User ${username} didn't repost post ${post_id}`, HttpStatus.BAD_REQUEST);
+    const res = await this.repostRepository.delete(repost[0].id)
 
     if(!res) {
       throw new HttpException(`Failed to unrepost post ${post_id}`, HttpStatus.BAD_REQUEST);
@@ -242,13 +250,46 @@ export class PostService {
   async create_feed(username: string){
     const posts = await this.findByUser(username)
     const reposts = await this.findByUserRepost(username)
-
-    if (posts.length===0)  return this.utilsService.sort_posts(reposts)
     if (reposts.length===0)  return this.utilsService.sort_posts(posts)
+    if (posts.length===0)  return reposts.sort((a,b) =>(a['repost_date']> b['repost_date']? -1:1))
     let feed =posts
     feed = feed.concat(reposts)
 
-    return this.utilsService.sort_posts(feed)
+    return  feed.sort((a,b)=> {
+      if(!a['repost_date']&&!b['repost_date']&& a.create_date>b.create_date){
+        return -1
+      }
+
+      if(!a['repost_date']&&!b['repost_date']&& a.create_date<b.create_date){
+        return 1
+      }
+
+      if(!a['repost_date']&&b['repost_date']&& a.create_date>b['repost_date']){
+        return -1
+      }
+
+      if(!a['repost_date']&&b['repost_date']&& a.create_date<b['repost_date']){
+        return 1
+      }
+
+      if(a['repost_date']&&!b['repost_date']&& b.create_date>a['repost_date']){
+        return 1
+      }
+
+      if(a['repost_date']&&!b['repost_date']&& b.create_date<a['repost_date']){
+        return -1
+      }
+
+      if(a['repost_date']&&b['repost_date']&& a['repost_date']>b['repost_date']){
+        return -1
+      }
+
+      if(a['repost_date']&&b['repost_date']&& a['repost_date']<b['repost_date']){
+        return 1
+      }
+
+      return 1
+    })
   }
 
   async trending() {
@@ -272,7 +313,7 @@ export class PostService {
       let days = Math.floor(Math.floor(Math.floor((now - post.create_date.getTime()) / 1000)/60)/60/24)
       if(days===0)  days=1
       const score = (post.likes.length*10 + post.reposts.length*200+ post.children.length*300)/days
-      trending_post.push({post, score})
+      trending_post.push({post:this.utilsService.format_post(post), score})
     }
     trending.posts = trending_post.sort((a, b)=> (a.score> b.score? -1: 1)).slice(0,10)
 
