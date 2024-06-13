@@ -9,15 +9,15 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import styles from "../css/AppCreateNew.module.css";
+import styles from "../../css/AppCreateNew.module.css";
 import { useEffect, useState } from "react";
-import ToastUtils from "../utils/ToastUtils";
-import ApiUtils from "../utils/ApiUtils";
-import { Album } from "../types/AlbumType";
-import albumService from "../services/AlbumService";
-import { InclusionEnum } from "../enums/InclusionEnum";
-import { Group } from "../types/GroupType";
-import groupService from "../services/GroupService";
+import ToastUtils from "../../utils/ToastUtils";
+import ApiUtils from "../../utils/ApiUtils";
+import { Album } from "../../types/AlbumType";
+import albumService from "../../services/AlbumService";
+import { InclusionEnum } from "../../enums/InclusionEnum";
+import { Group } from "../../types/GroupType";
+import groupService from "../../services/GroupService";
 
 export default function AppCreateInclusion() {
   const [formData, setFormData] = useState({

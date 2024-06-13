@@ -5,6 +5,7 @@
   margin-bottom: 16px;
   border: 1px solid #e0e0e0;
   border-radius: 0.5em;
+  z-index: -1;
 }
 
 .Header {
@@ -19,6 +20,15 @@
   align-items: center;
   gap: 0.5em;
   flex-grow: 1;
+  transition: 0.3s;
+}
+
+.UserInfo:hover {
+  text-decoration: underline;
+
+  .Username {
+    color: rgb(85, 85, 85);
+  }
 }
 
 .Name {

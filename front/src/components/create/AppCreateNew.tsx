@@ -5,7 +5,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import styles from "../css/AppCreateNew.module.css";
+import styles from "../../css/AppCreateNew.module.css";
 import { useState } from "react";
 import AppCreateArtist from "./AppCreateArtist";
 import AppCreateGroup from "./AppCreateGroup";

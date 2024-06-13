@@ -5,6 +5,10 @@ interface PostsContextType {
   posts: Post[];
   setPosts: (posts: Post[]) => void;
   addPost: (post: Post) => void;
+  followingPosts: Post[];
+  setFollowingPosts: (posts: Post[]) => void;
+  trendingPosts: Post[];
+  setTrendingPosts: (posts: Post[]) => void;
 }
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
@@ -19,13 +23,17 @@ export function usePosts() {
 
 export function PostsProvider({ children }: { children: ReactNode }) {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [followingPosts, setFollowingPosts] = useState<Post[]>([]);
+  const [trendingPosts, setTrendingPosts] = useState<Post[]>([]);
 
   function addPost(post: Post) {
     setPosts([post, ...posts]);
   }
 
   return (
-    <PostsContext.Provider value={{ posts, setPosts, addPost }}>
+    <PostsContext.Provider
+      value={{ posts, setPosts, addPost, followingPosts, setFollowingPosts, trendingPosts, setTrendingPosts }}
+    >
       {children}
     </PostsContext.Provider>
   );

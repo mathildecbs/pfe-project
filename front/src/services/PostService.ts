@@ -1,4 +1,5 @@
 import { Post } from "../types/PostType";
+import { Trending } from "../types/TrendingType";
 import { User } from "../types/UserType";
 import ApiUtils from "../utils/ApiUtils";
 
@@ -18,6 +19,36 @@ class PostService {
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération du post");
+    }
+  }
+
+  async getTrendingPosts(): Promise<Post[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson().get("/post/trending");
+      const trendings = response.data as Trending;
+      const posts = trendings.posts.map((trendingPost) => trendingPost.post);
+      return posts;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des posts trending");
+    }
+  }  
+
+  async getFollowingPosts(username: string): Promise<Post[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson().get(`/post/following/${username}`);
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des posts feed");
+    }
+  }
+
+
+  async getFeed(username: string): Promise<Post[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson().get(`/post/feed/${username}`);
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des posts");
     }
   }
 
@@ -43,16 +74,6 @@ class PostService {
       throw new Error("Erreur lors de la récupération des posts");
     }
   }
-
-  async getFeed(username: string): Promise<Post[]> {
-    try {
-      const response = await ApiUtils.getApiInstanceJson().get(`/post/feed/${username}`);
-      return response.data;
-    } catch (error) {
-      throw new Error("Erreur lors de la récupération des posts");
-    }
-  }
-
 }
 
 const postService = new PostService();

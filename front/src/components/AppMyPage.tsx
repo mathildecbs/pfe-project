@@ -5,6 +5,7 @@ import AppPost from "./AppPost";
 import postService from "../services/PostService";
 import ToastUtils from "../utils/ToastUtils";
 import { Typography } from "@mui/material";
+import AppHeaderProfile from "./AppHeaderProfile";
 
 export default function AppMyPage() {
   const [myFeed, setMyFeed] = useState<Post[]>([]);
@@ -45,25 +46,32 @@ export default function AppMyPage() {
 
   return (
     <>
-      {myFeed.length ? (
-        myFeed.map((myPost, index) => (
-          <AppPost
-            key={`${myPost.id}${
-              !!repostStatus.get(myPost.id) &&
-              index === myFeed.findIndex((post) => post.id === myPost.id)
-            }}`}
-            post={myPost}
-            repost={
-              !!repostStatus.get(myPost.id) &&
-              index === myFeed.findIndex((post) => post.id === myPost.id)
-            }
-          />
-        ))
+      {user ? (
+        <>
+          <AppHeaderProfile userProfile={user} currentUser={user} />
+          {myFeed.length ? (
+            myFeed.map((myPost, index) => (
+              <AppPost
+                key={`${myPost.id}${
+                  !!repostStatus.get(myPost.id) &&
+                  index === myFeed.findIndex((post) => post.id === myPost.id)
+                }}`}
+                post={myPost}
+                repost={
+                  !!repostStatus.get(myPost.id) &&
+                  index === myFeed.findIndex((post) => post.id === myPost.id)
+                }
+              />
+            ))
+          ) : (
+            <Typography variant="h6">
+              Commencez à liker, reposter et écrire des posts !
+            </Typography>
+          )}
+        </>
       ) : (
-        <Typography variant="h6">
-          Commencez à liker, reposter et écrire des posts !
-        </Typography>
+        <Typography variant="h6">Chargement du profil...</Typography>
       )}
     </>
-  );
+  );  
 }

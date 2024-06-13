@@ -1,10 +1,10 @@
 import { Button, FormControl, Paper, TextField, Typography, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import styles from "../css/AppCreateNew.module.css";
+import styles from "../../css/AppCreateNew.module.css";
 import { useEffect, useState } from "react";
-import ToastUtils from "../utils/ToastUtils";
-import ApiUtils from "../utils/ApiUtils";
-import groupService from "../services/GroupService";
-import { Group } from "../types/GroupType";
+import ToastUtils from "../../utils/ToastUtils";
+import ApiUtils from "../../utils/ApiUtils";
+import groupService from "../../services/GroupService";
+import { Group } from "../../types/GroupType";
 
 export default function AppCreateGroup() {
   const [formData, setFormData] = useState({

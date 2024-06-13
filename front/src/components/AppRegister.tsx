@@ -9,10 +9,11 @@ import styles from "../css/AppRegister.module.css";
 import { useEffect, useState } from "react";
 import ApiUtils from "../utils/ApiUtils";
 import { hashPassword } from "../utils/HashUtils";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { User } from "../types/UserType";
 import ToastUtils from "../utils/ToastUtils";
+import { TokenUser } from "../types/TokenUserType";
 
 export default function AppRegister() {
   const [formData, setFormData] = useState({
@@ -29,12 +30,11 @@ export default function AppRegister() {
     if (user !== null) {
       navigate("/");
     }
-  });
+  }, [user, navigate]);
 
   useEffect(() => {
-    const isAllFieldsFilled = Object.values(formData).every(
-      (val) => val !== ""
-    );
+    const { username, name, password } = formData;
+    const isAllFieldsFilled = username !== "" && name !== "" && password !== "";
     setIsFormValid(isAllFieldsFilled);
   }, [formData]);
 
@@ -54,20 +54,18 @@ export default function AppRegister() {
         username: username,
         password: hashedPassword,
         name: name,
-        description: description,
+        description: description || null,
       });
-      const newUSer = response.data as User;
+      const tokenAndUser = response.data as TokenUser;
 
-      const tokenRes = await ApiUtils.getApiInstanceJson().post("/user/login", {
-        username: username,
-        password: hashedPassword,
-      });
+      const newUser = tokenAndUser.user;
+      const token = tokenAndUser.access_token;
 
-      const token = tokenRes.data;
-
-      login(newUSer, token);
+      login(newUser, token);
     } catch (error) {
-      ToastUtils.error("Inscription impossible. Veuillez utiliser un autre pseudo.");
+      ToastUtils.error(
+        "Inscription impossible. Veuillez utiliser un autre pseudo."
+      );
     }
   }
 

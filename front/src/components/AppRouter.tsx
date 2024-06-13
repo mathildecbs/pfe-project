@@ -6,19 +6,20 @@ import AppExplorer from "./AppExplorer";
 import AppMyCollection from "./AppMyCollection";
 import AppMyPage from "./AppMyPage";
 import AppExploAlbums from "./AppExploAlbums";
-import AppCollectionAlbums from "./AppCollectionAlbums";
-import AppCollectionPhotocards from "./AppCollectionPhotocards";
+import AppCollectionAlbums from "./collection/AppCollectionAlbums";
+import AppCollectionPhotocards from "./collection/AppCollectionPhotocards";
 import AppExploArtists from "./AppExploArtists";
 import AppRegister from "./AppRegister";
 import AppLogin from "./AppLogin";
 import AppRoutesPrivate from "./AppRoutesPrivate";
 import AppRoutesNotConnected from "./AppRoutesNotConnected";
 import AppPostPage from "./AppPostPage";
-import AppCreateNew from "./AppCreateNew";
 import AppExploOneArtist from "./AppExploOneArtist";
 import AppExploOneAlbum from "./AppExploOneAlbum";
 import AppExploGroups from "./AppExploGroups";
 import AppExploOneGroup from "./AppExploOneGroup";
+import AppUserPage from "./AppUserPage";
+import AppCreateNew from "./create/AppCreateNew";
 
 function AppRouter() {
   return (
@@ -46,6 +47,7 @@ function AppRouter() {
           element={<AppCollectionPhotocards />}
         />
         <Route path="/myPage" element={<AppMyPage />} />
+        <Route path="/user/:username" element={<AppUserPage />} />
       </Route>
       <Route path="*" element={<AppError404 />} />
     </Routes>

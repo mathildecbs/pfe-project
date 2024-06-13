@@ -1,43 +1,39 @@
-.Section {
-  padding: 16px;
-  margin-bottom: 16px;
-}
-
 .Container {
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 16px;
-  overflow: hidden;
 }
 
 .ItemCard {
-  flex: 1 1 calc(25% - 16px);
-  min-width: 100px;
-  padding: 16px;
-  text-align: center;
+  flex: 1 1 calc(15% - 16px);
   display: flex;
-  align-items: center;
   justify-content: center;
-  background-color: #fae5e5;
-  border-radius: 5em;
+  align-items: center;
+  background-color: #d0e4f5;
+  padding: 16px;
+  margin: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
 
 .ItemCard:hover {
-  background-color: #f7cac9;
-  box-shadow: inset 1px -9px 3px -5px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-}
-
-.MoreButton {
-  flex: 1 1 calc(25% - 16px);
-  min-width: 100px;
-  padding: 16px;
-  text-align: center;
+  transform: scale(1.05);
 }
 
 .ItemText {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  text-align: center;
+}
+
+.Section {
+  padding: 16px;
+  margin: 16px;
+}
+
+.MoreButton {
+  margin-top: 16px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }

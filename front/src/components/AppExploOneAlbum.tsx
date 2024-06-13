@@ -54,7 +54,10 @@ export default function AppExploOneAlbum() {
     }
   }
 
-  async function fetchOwnedAlbumVersionsInclusions(actualVersion: string, thisCurrentAlbum?: Album) {
+  async function fetchOwnedAlbumVersionsInclusions(
+    actualVersion: string,
+    thisCurrentAlbum?: Album
+  ) {
     try {
       if (user?.username && idAlbum) {
         const response = await ownedAlbumService.getOneOwnedAlbumInlusion(
@@ -64,7 +67,7 @@ export default function AppExploOneAlbum() {
         if (response) {
           setOwnedInclusionAlbum(response);
 
-          if (actualVersion === undefined && thisCurrentAlbum) {            
+          if (actualVersion === undefined && thisCurrentAlbum) {
             const ownedVersion = response?.owned.find(
               (owned) => owned.album.id === thisCurrentAlbum.id
             );
@@ -181,16 +184,20 @@ export default function AppExploOneAlbum() {
           {thisAlbum.solo ? thisAlbum.artist.name : thisAlbum.group.name}
         </Typography>
 
-        {ownedVersionOfAlbum && <FormControl fullWidth className={styles.FormControl}>
-          <InputLabel>Version</InputLabel>
-          <Select value={selectedVersion} onChange={handleVersionChange}>
-            {thisAlbum.versions.map((version) => (
-              <MenuItem key={version} value={version}>
-                {version}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>}
+        {thisAlbum.versions.length ? (
+          <FormControl fullWidth className={styles.FormControl}>
+            <InputLabel>Version</InputLabel>
+            <Select value={selectedVersion} onChange={handleVersionChange}>
+              {thisAlbum.versions.map((version) => (
+                <MenuItem key={version} value={version}>
+                  {version}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        ) : (
+          ""
+        )}
         {ownedVersionOfAlbum && (
           <div className={styles.VersionOwned}>
             <CheckCircleIcon /> Version possédée (

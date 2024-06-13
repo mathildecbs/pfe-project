@@ -12,12 +12,12 @@ import {
   IconButton,
   Grid,
 } from "@mui/material";
-import styles from "../css/AppCreateNew.module.css";
+import styles from "../../css/AppCreateNew.module.css";
 import { useEffect, useState } from "react";
-import ToastUtils from "../utils/ToastUtils";
-import ApiUtils from "../utils/ApiUtils";
-import groupService from "../services/GroupService";
-import { Group } from "../types/GroupType";
+import ToastUtils from "../../utils/ToastUtils";
+import ApiUtils from "../../utils/ApiUtils";
+import groupService from "../../services/GroupService";
+import { Group } from "../../types/GroupType";
 import { Add, Delete } from "@mui/icons-material";
 
 export default function AppCreateArtist() {

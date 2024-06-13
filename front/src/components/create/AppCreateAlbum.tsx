@@ -17,14 +17,14 @@ import {
   ListItemSecondaryAction,
 } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
-import styles from "../css/AppCreateNew.module.css";
+import styles from "../../css/AppCreateNew.module.css";
 import { useEffect, useState } from "react";
-import ToastUtils from "../utils/ToastUtils";
-import ApiUtils from "../utils/ApiUtils";
-import artistService from "../services/ArtistService";
-import groupService from "../services/GroupService";
-import { Group } from "../types/GroupType";
-import { Artist } from "../types/ArtistType";
+import ToastUtils from "../../utils/ToastUtils";
+import ApiUtils from "../../utils/ApiUtils";
+import artistService from "../../services/ArtistService";
+import groupService from "../../services/GroupService";
+import { Group } from "../../types/GroupType";
+import { Artist } from "../../types/ArtistType";
 
 export default function AppCreateAlbum() {
   const [formData, setFormData] = useState({

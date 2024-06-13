@@ -1,0 +1,10 @@
+.Posts {
+  margin: 1em 3em;
+}
+
+.Tabs {
+  position: sticky !important;
+  top: 0;
+  background-color: white !important;
+  z-index: 999;
+}
