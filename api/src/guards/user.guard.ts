@@ -2,24 +2,43 @@ import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from
 import { Observable } from "rxjs";
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from "@nestjs/config";
-import { UserService } from "./user.service";
+import { UserService } from "../user/user.service";
+import { Reflector } from "@nestjs/core";
 
 @Injectable()
 export class UserGuard implements CanActivate {
     constructor(
         private readonly jwtService: JwtService,
         private readonly configService: ConfigService,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private readonly reflector: Reflector
     ) {}
 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-        const request = context.switchToHttp().getRequest();
-        
-        return this.validateRequest(request);
+        const isPublic = this.reflector.get<boolean>(
+            'isPublic',
+            context.getHandler()
+        );
+        const isRouteAdmin = this.reflector.get<boolean>(
+            'isRouteAdmin',
+            context.getHandler()
+        );
+
+        if (isPublic) {
+            return true;
+        } else if (!isRouteAdmin) {
+            const request = context.switchToHttp().getRequest();
+            return this.validateRequest(request);
+        } else {
+            return true;
+        }
     }
 
     private validateRequest(request: Request): boolean {
-        const header = request.headers['Authorization'];
+        console.log(request.headers);
+        const header = request.headers['authorization'];
+
+        console.log(header);
         
         if (!header) {
             return false;

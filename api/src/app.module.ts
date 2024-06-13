@@ -23,11 +23,11 @@ import { TagModule } from './tag/tag.module';
 import { Tag } from './tag/entities/tag.entity';
 import { Post } from './post/entities/post.entity';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { UserGuard } from './user/user.guard';
-import { AdminGuard } from './user/admin.guard';
+import { UserGuard } from './guards/user.guard';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from "@nestjs/config";
 import { UserService } from "./user/user.service";
+import { AdminGuard } from './guards/admin.guard';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -57,7 +57,7 @@ import { UserService } from "./user/user.service";
     AlbumModule,
     InclusionModule,
     PostModule,
-    TagModule,
+    TagModule
   ],
   controllers: [
     AppController
@@ -70,7 +70,7 @@ import { UserService } from "./user/user.service";
     ConfigService,
     {
       provide: APP_GUARD,
-      useClass: UserGuard
+      useClass: UserGuard,
     },
     {
       provide: APP_GUARD,

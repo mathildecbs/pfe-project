@@ -447,4 +447,9 @@ export class UserService {
 
     return true;
   }
+
+  async is_user_admin(username: string) {
+    const user = await this.findOne(username);
+    return (user.isAdmin);
+  }
 }
