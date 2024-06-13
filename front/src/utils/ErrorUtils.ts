@@ -1,6 +1,5 @@
-import { Axios, AxiosError } from "axios";
+import { AxiosError } from "axios";
 import { isRouteErrorResponse } from "react-router-dom";
-import { toast } from "react-toastify";
 
 export default abstract class ErrorUtils {
   private constructor() {}

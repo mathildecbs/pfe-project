@@ -17,10 +17,12 @@ import Diversity3Icon from '@mui/icons-material/Diversity3';
 import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import styles from "../../css/AppSideMenu.module.css";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function AppSideMenu() {
   const [isExpanded, setIsExpanded] = useState(true);
+  const location = useLocation();
+  const isActive = (path: string) => location.pathname === path;
 
   const toggleMenu = () => {
     setIsExpanded(!isExpanded);
@@ -38,19 +40,31 @@ function AppSideMenu() {
             {isExpanded ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>
         </div>
-        <ListItem className={styles.MenuItem} component={Link} to="/">
+        <ListItem
+          className={`${styles.MenuItem} ${isActive("/") ? styles.ActiveMenuItem : ""}`}
+          component={Link}
+          to="/"
+        >
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
           {isExpanded && <ListItemText primary="Accueil" />}
         </ListItem>
-        <ListItem className={styles.MenuItem} component={Link} to="/community">
+        <ListItem
+          className={`${styles.MenuItem} ${isActive("/community") ? styles.ActiveMenuItem : ""}`}
+          component={Link}
+          to="/community"
+        >
           <ListItemIcon>
             <PeopleIcon />
           </ListItemIcon>
           {isExpanded && <ListItemText primary="Communauté" />}
         </ListItem>
-        <ListItem className={styles.MenuItem} component={Link} to="/explorer">
+        <ListItem
+          className={`${styles.MenuItem} ${isActive("/explorer") ? styles.ActiveMenuItem : ""}`}
+          component={Link}
+          to="/explorer"
+        >
           <ListItemIcon>
             <TravelExploreIcon />
           </ListItemIcon>
@@ -59,7 +73,7 @@ function AppSideMenu() {
         {isExpanded && (
           <>
             <ListItem
-              className={styles.SubMenuItem}
+              className={`${styles.SubMenuItem} ${isActive("/exploArtists") ? styles.ActiveMenuItem : ""}`}
               component={Link}
               to="/exploArtists"
             >
@@ -69,7 +83,7 @@ function AppSideMenu() {
               {isExpanded && <ListItemText primary="Artists" />}
             </ListItem>
             <ListItem
-              className={styles.SubMenuItem}
+              className={`${styles.SubMenuItem} ${isActive("/exploGroups") ? styles.ActiveMenuItem : ""}`}
               component={Link}
               to="/exploGroups"
             >
@@ -79,7 +93,7 @@ function AppSideMenu() {
               {isExpanded && <ListItemText primary="Groupes" />}
             </ListItem>
             <ListItem
-              className={styles.SubMenuItem}
+              className={`${styles.SubMenuItem} ${isActive("/exploAlbums") ? styles.ActiveMenuItem : ""}`}
               component={Link}
               to="/exploAlbums"
             >
@@ -91,7 +105,7 @@ function AppSideMenu() {
           </>
         )}
         <ListItem
-          className={styles.MenuItem}
+          className={`${styles.MenuItem} ${isActive("/myCollection") ? styles.ActiveMenuItem : ""}`}
           component={Link}
           to="/myCollection"
         >
@@ -102,7 +116,7 @@ function AppSideMenu() {
         </ListItem>
         {isExpanded && (
           <ListItem
-            className={styles.SubMenuItem}
+            className={`${styles.SubMenuItem} ${isActive("/collectionAlbums") ? styles.ActiveMenuItem : ""}`}
             component={Link}
             to="/collectionAlbums"
           >
@@ -114,7 +128,7 @@ function AppSideMenu() {
         )}
         {isExpanded && (
           <ListItem
-            className={styles.SubMenuItem}
+            className={`${styles.SubMenuItem} ${isActive("/collectionInclusions") ? styles.ActiveMenuItem : ""}`}
             component={Link}
             to="/collectionInclusions"
           >
@@ -124,13 +138,21 @@ function AppSideMenu() {
             {isExpanded && <ListItemText primary="Inclusions" />}
           </ListItem>
         )}
-        <ListItem className={styles.MenuItem} component={Link} to="/myPage">
+        <ListItem
+          className={`${styles.MenuItem} ${isActive("/myPage") ? styles.ActiveMenuItem : ""}`}
+          component={Link}
+          to="/myPage"
+        >
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
           {isExpanded && <ListItemText primary="Ma page" />}
         </ListItem>
-        <ListItem className={styles.MenuItem} component={Link} to="/createNew">
+        <ListItem
+          className={`${styles.MenuItem} ${isActive("/createNew") ? styles.ActiveMenuItem : ""}`}
+          component={Link}
+          to="/createNew"
+        >
           <ListItemIcon>
             <AddBoxIcon />
           </ListItemIcon>
