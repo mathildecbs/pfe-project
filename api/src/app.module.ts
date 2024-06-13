@@ -24,6 +24,10 @@ import { Tag } from './tag/entities/tag.entity';
 import { Post } from './post/entities/post.entity';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { UserGuard } from './user/user.guard';
+import { AdminGuard } from './user/admin.guard';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from "@nestjs/config";
+import { UserService } from "./user/user.service";
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -62,9 +66,15 @@ import { UserGuard } from './user/user.guard';
     AppService, 
     BaseEntityService, 
     UtilsServiceService,
+    JwtService,
+    ConfigService,
     {
       provide: APP_GUARD,
-      useClass: UserGuard,
+      useClass: UserGuard
+    },
+    {
+      provide: APP_GUARD,
+      useClass: AdminGuard,
     }
   ],
 })
