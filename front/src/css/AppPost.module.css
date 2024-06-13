@@ -70,3 +70,8 @@
   gap: 0.5em;
   color: grey;
 }
+
+.Tag:hover {
+  font-weight: bold;
+  cursor: pointer;
+}

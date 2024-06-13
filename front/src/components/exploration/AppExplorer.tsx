@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Paper, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import groupService from "../services/GroupService";
-import artistService from "../services/ArtistService";
-import albumService from "../services/AlbumService";
-import ToastUtils from "../utils/ToastUtils";
-import { Artist } from "../types/ArtistType";
-import { Group } from "../types/GroupType";
-import { Album } from "../types/AlbumType";
-import styles from "../css/AppExplorer.module.css"; // Importez le fichier de styles correct
+import groupService from "../../services/GroupService";
+import artistService from "../../services/ArtistService";
+import albumService from "../../services/AlbumService";
+import ToastUtils from "../../utils/ToastUtils";
+import { Artist } from "../../types/ArtistType";
+import { Group } from "../../types/GroupType";
+import { Album } from "../../types/AlbumType";
+import styles from "../../css/AppExplorer.module.css";
 
 export default function AppExplorer() {
   const [groups, setGroups] = useState<Group[]>([]);

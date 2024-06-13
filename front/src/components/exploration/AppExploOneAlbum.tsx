@@ -14,14 +14,14 @@ import {
 } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { Add, Remove } from "@mui/icons-material";
-import albumService from "../services/AlbumService";
-import ownedAlbumService from "../services/OwnedAlbumService";
-import { Album } from "../types/AlbumType";
-import ToastUtils from "../utils/ToastUtils";
-import { useAuth } from "../contexts/AuthProvider";
-import styles from "../css/AppExploOneAlbum.module.css";
-import { OwnedInclusionAlbum } from "../types/OwnedInclusionAlbumType";
-import { OwnedAlbum } from "../types/OwnedAlbumType";
+import albumService from "../../services/AlbumService";
+import ownedAlbumService from "../../services/OwnedAlbumService";
+import { Album } from "../../types/AlbumType";
+import ToastUtils from "../../utils/ToastUtils";
+import { useAuth } from "../../contexts/AuthProvider";
+import styles from "../../css/AppExploOneAlbum.module.css";
+import { OwnedInclusionAlbum } from "../../types/OwnedInclusionAlbumType";
+import { OwnedAlbum } from "../../types/OwnedAlbumType";
 
 export default function AppExploOneAlbum() {
   const { idAlbum } = useParams();

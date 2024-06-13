@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
-import { Post } from "../types/PostType";
-import { useAuth } from "../contexts/AuthProvider";
+import { Post } from "../../types/PostType";
+import { useAuth } from "../../contexts/AuthProvider";
 import AppPost from "./AppPost";
-import postService from "../services/PostService";
-import ToastUtils from "../utils/ToastUtils";
+import ToastUtils from "../../utils/ToastUtils";
 import { Typography } from "@mui/material";
 import AppHeaderProfile from "./AppHeaderProfile";
+import tagService from "../../services/TagService";
+import { useParams } from "react-router-dom";
 
 export default function AppMyPage() {
-  const [myFeed, setMyFeed] = useState<Post[]>([]);
+  const [tagPosts, setTagPosts] = useState<Post[]>([]);
   const { user } = useAuth();
+  const { tagName } = useParams();
 
   useEffect(() => {
-    fetchFeed();
+    fetchTagPosts();
   }, []);
 
-  async function fetchFeed() {
+  async function fetchTagPosts() {
     try {
-      if (user) {
-        const response = await postService.getFeed(user.username);
-        setMyFeed(response);
+      if (tagName) {
+        const response = await tagService.getOneTagPosts(tagName);
+        setTagPosts(response);
       }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des posts");
@@ -42,36 +44,34 @@ export default function AppMyPage() {
     return repostStatus;
   }
 
-  const repostStatus = getPostRepostStatus(myFeed);
+  const repostStatus = getPostRepostStatus(tagPosts);
 
   return (
     <>
       {user ? (
         <>
           <AppHeaderProfile userProfile={user} currentUser={user} />
-          {myFeed.length ? (
-            myFeed.map((myPost, index) => (
+          {tagPosts.length ? (
+            tagPosts.map((tagPost, index) => (
               <AppPost
-                key={`${myPost.id}${
-                  !!repostStatus.get(myPost.id) &&
-                  index === myFeed.findIndex((post) => post.id === myPost.id)
+                key={`${tagPost.id}${
+                  !!repostStatus.get(tagPost.id) &&
+                  index === tagPosts.findIndex((post) => post.id === tagPost.id)
                 }}`}
-                post={myPost}
+                post={tagPost}
                 repost={
-                  !!repostStatus.get(myPost.id) &&
-                  index === myFeed.findIndex((post) => post.id === myPost.id)
+                  !!repostStatus.get(tagPost.id) &&
+                  index === tagPosts.findIndex((post) => post.id === tagPost.id)
                 }
               />
             ))
           ) : (
-            <Typography variant="h6">
-              Commencez à liker, reposter et écrire des posts !
-            </Typography>
+            <Typography variant="h6">Pas de post avec ce tag.</Typography>
           )}
         </>
       ) : (
-        <Typography variant="h6">Chargement du profil...</Typography>
+        <Typography variant="h6">Chargement du des posts...</Typography>
       )}
     </>
-  );  
+  );
 }

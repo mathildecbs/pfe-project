@@ -17,4 +17,5 @@ export interface User {
   inclusions: OwnedInclusion[];
   posts: Post[];
   reposts: Post[];
+  isAdmin: boolean;
 }

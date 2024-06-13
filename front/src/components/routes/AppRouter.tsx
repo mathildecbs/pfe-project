@@ -1,25 +1,26 @@
 import { Route, Routes } from "react-router-dom";
-import AppHome from "./AppHome";
-import AppError404 from "./AppError404";
-import AppCommunity from "./AppCommunity";
-import AppExplorer from "./AppExplorer";
-import AppMyCollection from "./AppMyCollection";
-import AppMyPage from "./AppMyPage";
-import AppExploAlbums from "./AppExploAlbums";
-import AppCollectionAlbums from "./collection/AppCollectionAlbums";
-import AppCollectionPhotocards from "./collection/AppCollectionPhotocards";
-import AppExploArtists from "./AppExploArtists";
-import AppRegister from "./AppRegister";
-import AppLogin from "./AppLogin";
+import AppHome from "../home/AppHome";
+import AppError404 from "../home/AppError404";
+import AppCommunity from "../community/AppCommunity";
+import AppExplorer from "../exploration/AppExplorer";
+import AppMyCollection from "../collection/AppMyCollection";
+import AppMyPage from "../community/AppMyPage";
+import AppExploAlbums from "../exploration/AppExploAlbums";
+import AppCollectionAlbums from "../collection/AppCollectionAlbums";
+import AppCollectionInclusions from "../collection/AppCollectionInclusions";
+import AppExploArtists from "../exploration/AppExploArtists";
+import AppRegister from "../home/AppRegister";
+import AppLogin from "../home/AppLogin";
 import AppRoutesPrivate from "./AppRoutesPrivate";
 import AppRoutesNotConnected from "./AppRoutesNotConnected";
-import AppPostPage from "./AppPostPage";
-import AppExploOneArtist from "./AppExploOneArtist";
-import AppExploOneAlbum from "./AppExploOneAlbum";
-import AppExploGroups from "./AppExploGroups";
-import AppExploOneGroup from "./AppExploOneGroup";
-import AppUserPage from "./AppUserPage";
-import AppCreateNew from "./create/AppCreateNew";
+import AppPostPage from "../community/AppPostPage";
+import AppExploOneArtist from "../exploration/AppExploOneArtist";
+import AppExploOneAlbum from "../exploration/AppExploOneAlbum";
+import AppExploGroups from "../exploration/AppExploGroups";
+import AppExploOneGroup from "../exploration/AppExploOneGroup";
+import AppUserPage from "../community/AppUserPage";
+import AppCreateNew from "../create/AppCreateNew";
+import AppTagPage from "../community/AppTagPage";
 
 function AppRouter() {
   return (
@@ -40,11 +41,12 @@ function AppRouter() {
         <Route path="/exploAlbums" element={<AppExploAlbums />} />
         <Route path="/exploOneAlbum/:idAlbum" element={<AppExploOneAlbum />} />
         <Route path="/myCollection" element={<AppMyCollection />} />
-        <Route path="/collectionAlbums" element={<AppCollectionAlbums />} />
+        <Route path="/tagPage/:tagName" element={<AppTagPage />} />
         <Route path="/createNew" element={<AppCreateNew />} />
+        <Route path="/collectionAlbums" element={<AppCollectionAlbums />} />
         <Route
-          path="/collectionPhotocards"
-          element={<AppCollectionPhotocards />}
+          path="/collectionInclusions"
+          element={<AppCollectionInclusions />}
         />
         <Route path="/myPage" element={<AppMyPage />} />
         <Route path="/user/:username" element={<AppUserPage />} />

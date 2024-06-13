@@ -1,11 +1,11 @@
-import { Post } from "../types/PostType";
-import postService from "../services/PostService";
+import { Post } from "../../types/PostType";
+import postService from "../../services/PostService";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import AppPost from "./AppPost";
 import AppCommentWritingSection from "./AppCommentWritingSection";
-import { useAuth } from "../contexts/AuthProvider";
-import ToastUtils from "../utils/ToastUtils";
+import { useAuth } from "../../contexts/AuthProvider";
+import ToastUtils from "../../utils/ToastUtils";
 
 export default function AppPostPage() {
   const [selectedPost, setSelectedPost] = useState<Post>();

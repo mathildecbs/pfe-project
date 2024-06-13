@@ -12,10 +12,10 @@ import CollectionsIcon from "@mui/icons-material/Collections";
 import PersonIcon from "@mui/icons-material/Person";
 import GroupsIcon from '@mui/icons-material/Groups';
 import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import AlbumIcon from "@mui/icons-material/Album";
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import Diversity3Icon from '@mui/icons-material/Diversity3';
-import styles from "../css/AppSideMenu.module.css";
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
+import styles from "../../css/AppSideMenu.module.css";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
@@ -52,7 +52,7 @@ function AppSideMenu() {
         </ListItem>
         <ListItem className={styles.MenuItem} component={Link} to="/explorer">
           <ListItemIcon>
-            <AlbumIcon />
+            <TravelExploreIcon />
           </ListItemIcon>
           {isExpanded && <ListItemText primary="Explorer" />}
         </ListItem>
@@ -116,12 +116,12 @@ function AppSideMenu() {
           <ListItem
             className={styles.SubMenuItem}
             component={Link}
-            to="/collectionPhotocards"
+            to="/collectionInclusions"
           >
             <ListItemIcon>
               <CollectionsIcon />
             </ListItemIcon>
-            {isExpanded && <ListItemText primary="Photocards" />}
+            {isExpanded && <ListItemText primary="Inclusions" />}
           </ListItem>
         )}
         <ListItem className={styles.MenuItem} component={Link} to="/myPage">

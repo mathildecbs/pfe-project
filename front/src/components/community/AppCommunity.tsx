@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import AppPost from "./AppPost";
-import { usePosts } from "../contexts/PostsProvider";
-import postService from "../services/PostService";
-import ToastUtils from "../utils/ToastUtils";
-import { useAuth } from "../contexts/AuthProvider";
+import { usePosts } from "../../contexts/PostsProvider";
+import postService from "../../services/PostService";
+import ToastUtils from "../../utils/ToastUtils";
+import { useAuth } from "../../contexts/AuthProvider";
 import { Paper, Tabs, Tab } from "@mui/material";
-import { Post } from "../types/PostType";
-import styles from "../css/AppCommunity.module.css";
+import { Post } from "../../types/PostType";
+import styles from "../../css/AppCommunity.module.css";
 
 export default function AppCommunity() {
   const {

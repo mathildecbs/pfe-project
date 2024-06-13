@@ -4,12 +4,12 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import styles from "../css/AppPost.module.css";
-import postService from "../services/PostService";
-import { useAuth } from "../contexts/AuthProvider";
+import styles from "../../css/AppPost.module.css";
+import postService from "../../services/PostService";
+import { useAuth } from "../../contexts/AuthProvider";
 import { useState } from "react";
-import { Post } from "../types/PostType";
-import ToastUtils from "../utils/ToastUtils";
+import { Post } from "../../types/PostType";
+import ToastUtils from "../../utils/ToastUtils";
 
 interface AppCommentWritingSectionProps {
   post: Post;

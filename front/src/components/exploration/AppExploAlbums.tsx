@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import albumService from "../services/AlbumService";
-import ToastUtils from "../utils/ToastUtils";
+import albumService from "../../services/AlbumService";
+import ToastUtils from "../../utils/ToastUtils";
 import { Button, Paper, Typography } from "@mui/material";
-import { Album } from "../types/AlbumType";
+import { Album } from "../../types/AlbumType";
 import { useNavigate } from "react-router-dom";
-import styles from "../css/AppExploAlbums.module.css";
+import styles from "../../css/AppExploAlbums.module.css";
 
 export default function AppExploAlbums() {
   const [albums, setAlbums] = useState<Album[]>([]);

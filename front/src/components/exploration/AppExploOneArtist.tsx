@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, CircularProgress, Paper, Typography } from "@mui/material";
-import artistService from "../services/ArtistService";
-import { Artist } from "../types/ArtistType";
-import ToastUtils from "../utils/ToastUtils";
-import { useAuth } from "../contexts/AuthProvider";
-import styles from "../css/AppExploOneArtist.module.css";
+import artistService from "../../services/ArtistService";
+import { Artist } from "../../types/ArtistType";
+import ToastUtils from "../../utils/ToastUtils";
+import { useAuth } from "../../contexts/AuthProvider";
+import styles from "../../css/AppExploOneArtist.module.css";
 
 export default function AppExploOneArtist() {
   const { idArtist } = useParams();

@@ -1,3 +1,4 @@
+import { Post } from "../types/PostType";
 import { Tag } from "../types/TagType";
 import ApiUtils from "../utils/ApiUtils";
 
@@ -7,16 +8,16 @@ class TagService {
       const response = await ApiUtils.getApiInstanceJson().get("/tag");
       return response.data;
     } catch (error) {
-      throw new Error("Erreur lors de la récupération des tages");
+      throw new Error("Erreur lors de la récupération des tags");
     }
   }
 
-  async getOneTag(idTag: string): Promise<Tag> {
+  async getOneTagPosts(tagName: string): Promise<Post[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(`/tag/${idTag}`);
+      const response = await ApiUtils.getApiInstanceJson().get(`/tag/${tagName}`);
       return response.data;
     } catch (error) {
-      throw new Error("Erreur lors de la récupération du post");
+      throw new Error("Erreur lors de la récupération des posts");
     }
   }
 

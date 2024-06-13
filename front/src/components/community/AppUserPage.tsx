@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Post } from "../types/PostType";
-import { useAuth } from "../contexts/AuthProvider";
+import { Post } from "../../types/PostType";
+import { useAuth } from "../../contexts/AuthProvider";
 import AppPost from "./AppPost";
-import postService from "../services/PostService";
-import ToastUtils from "../utils/ToastUtils";
+import postService from "../../services/PostService";
+import ToastUtils from "../../utils/ToastUtils";
 import { Typography } from "@mui/material";
 import AppHeaderProfile from "./AppHeaderProfile";
-import userService from "../services/UserService";
-import { User } from "../types/UserType";
+import userService from "../../services/UserService";
+import { User } from "../../types/UserType";
 
 export default function AppUserPage() {
   const [userProfile, setUserProfile] = useState<User>();

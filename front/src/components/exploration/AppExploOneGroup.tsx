@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button, CircularProgress, Paper, Typography } from "@mui/material";
-import groupService from "../services/GroupService";
-import { Group } from "../types/GroupType";
-import ToastUtils from "../utils/ToastUtils";
-import { useAuth } from "../contexts/AuthProvider";
-import styles from "../css/AppExploOneGroup.module.css";
+import groupService from "../../services/GroupService";
+import { Group } from "../../types/GroupType";
+import ToastUtils from "../../utils/ToastUtils";
+import { useAuth } from "../../contexts/AuthProvider";
+import styles from "../../css/AppExploOneGroup.module.css";
 
 export default function AppExploOneGroup() {
   const { idGroup } = useParams();

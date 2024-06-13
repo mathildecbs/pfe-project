@@ -10,9 +10,9 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import styles from "../css/AppTopMenu.module.css";
+import styles from "../../css/AppTopMenu.module.css";
 import { Search } from "@mui/icons-material";
-import { useAuth } from "../contexts/AuthProvider";
+import { useAuth } from "../../contexts/AuthProvider";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { Link } from "react-router-dom";
 

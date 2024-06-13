@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Button, Typography } from '@mui/material';
-import { User } from '../types/UserType';
-import userService from '../services/UserService';
-import ToastUtils from '../utils/ToastUtils';
-import styles from '../css/AppHeaderProfile.module.css';
+import { User } from '../../types/UserType';
+import userService from '../../services/UserService';
+import ToastUtils from '../../utils/ToastUtils';
+import styles from '../../css/AppHeaderProfile.module.css';
 
 interface AppHeaderProfileProps {
   userProfile: User;

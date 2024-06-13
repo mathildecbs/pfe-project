@@ -4,14 +4,14 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
 import RepeatIcon from "@mui/icons-material/Repeat";
-import styles from "../css/AppPost.module.css";
-import { Post } from "../types/PostType";
-import { DateUtils } from "../utils/DateUtils";
-import postService from "../services/PostService";
-import { useAuth } from "../contexts/AuthProvider";
-import { Link } from "react-router-dom";
-import ToastUtils from "../utils/ToastUtils";
-import { usePosts } from "../contexts/PostsProvider";
+import styles from "../../css/AppPost.module.css";
+import { Post } from "../../types/PostType";
+import { DateUtils } from "../../utils/DateUtils";
+import postService from "../../services/PostService";
+import { useAuth } from "../../contexts/AuthProvider";
+import { Link, useNavigate } from "react-router-dom";
+import ToastUtils from "../../utils/ToastUtils";
+import { usePosts } from "../../contexts/PostsProvider";
 
 interface AppPostProps {
   post: Post;
@@ -33,8 +33,7 @@ export default function AppPost({ post, repost }: AppPostProps) {
       ? post.reposts.some((repost) => repost.username === user?.username)
       : false
   );
-  const linkToPost = `/post/${post.id}`;
-  const linkToProfile = `/user/${post.user.username}`;
+  const navigate = useNavigate();
 
   async function actionPost(actionType: string) {
     try {
@@ -88,6 +87,10 @@ export default function AppPost({ post, repost }: AppPostProps) {
     }
   }
 
+  function navigateTo(root: string, specification: string) {
+    navigate(`/${root}/${specification}`);
+  }
+
   return (
     <Paper className={styles.PostContainer}>
       {repost && (
@@ -96,15 +99,17 @@ export default function AppPost({ post, repost }: AppPostProps) {
           Reposté
         </Typography>
       )}
-      <div className={styles.Header}>
-        <Link className={styles.UserInfo} to={linkToProfile}>
-          <Typography variant="h6" className={styles.Name}>
-            {post.user.name}
-          </Typography>
-          <Typography variant="body2" className={styles.Username}>
-            @{post.user.username}
-          </Typography>
-        </Link>
+
+      <div
+        className={styles.Header}
+        onClick={() => navigateTo("user", post.user.username)}
+      >
+        <Typography variant="h6" className={styles.Name}>
+          {post.user.name}
+        </Typography>
+        <Typography variant="body2" className={styles.Username}>
+          @{post.user.username}
+        </Typography>
         <Typography variant="body2" className={styles.Time}>
           {DateUtils.formatReadableDate(post.create_date)}
         </Typography>
@@ -118,6 +123,7 @@ export default function AppPost({ post, repost }: AppPostProps) {
             key={index}
             variant="body2"
             component="span"
+            onClick={() => navigateTo("tagPage", tag.name)}
             className={styles.Tag}
           >
             #{tag.name}{" "}
@@ -127,8 +133,7 @@ export default function AppPost({ post, repost }: AppPostProps) {
       <div className={styles.Actions}>
         <IconButton
           className={styles.ActionButton}
-          component={Link}
-          to={linkToPost}
+          onClick={() => navigateTo("post", post.id.toString())}
         >
           <CommentIcon />
           <Typography variant="body2" className={styles.ActionCount}>

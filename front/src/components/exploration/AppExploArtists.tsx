@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import artistService from "../services/ArtistService";
-import ToastUtils from "../utils/ToastUtils";
+import artistService from "../../services/ArtistService";
+import ToastUtils from "../../utils/ToastUtils";
 import { Button, Paper, Typography } from "@mui/material";
-import { Artist } from "../types/ArtistType";
+import { Artist } from "../../types/ArtistType";
 import { useNavigate } from "react-router-dom";
-import styles from "../css/AppExploArtists.module.css";
+import styles from "../../css/AppExploArtists.module.css";
 
 export default function AppExploArtists() {
   const [artists, setArtists] = useState<Artist[]>([]);

@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Group } from "../types/GroupType";
-import groupService from "../services/GroupService";
-import ToastUtils from "../utils/ToastUtils";
+import { Group } from "../../types/GroupType";
+import groupService from "../../services/GroupService";
+import ToastUtils from "../../utils/ToastUtils";
 import { Button, Paper, Typography } from "@mui/material";
-import artistService from "../services/ArtistService";
-import { Artist } from "../types/ArtistType";
+import artistService from "../../services/ArtistService";
+import { Artist } from "../../types/ArtistType";
 import { useNavigate } from "react-router-dom";
-import styles from "../css/AppExploGroups.module.css";
+import styles from "../../css/AppExploGroups.module.css";
 
 export default function AppExploGroups() {
   const [groups, setGroups] = useState<Group[]>([]);
