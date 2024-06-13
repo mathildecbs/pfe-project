@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../../user/entities/user.entity';
 import { Post } from '../../post/entities/post.entity';
+import { Repost } from "../../post/entities/repost.entity";
 
 @Injectable()
 export class UtilsServiceService {
@@ -15,12 +16,14 @@ export class UtilsServiceService {
     delete user.description
     delete user.id
     delete user.create_date
+    delete user.maj_date
 
     return this.format_user(user)
   }
 
   format_post(post: Post) {
    post.user = this.format_user_simplify(post.user)
+    post.reposts = this.transform_reposts(post.reposts)
    post['nb_likes'] = post.likes.length
    post['nb_reposts'] = post.reposts.length
 
@@ -51,20 +54,25 @@ export class UtilsServiceService {
     return users
   }
 
-  create_feed(posts: Post[], reposts: Post[]):Post[] {
-    let feed: Post[] = []
-    const posts_without_com = posts.filter((post)=>
-      !post.comment
-    )
-    posts = this.sort_posts(posts)
-    feed = posts_without_com
-    feed.concat(reposts)
-    feed = this.sort_posts(feed)
-
-    return feed
-  }
-
   sort_posts(post:Post[]) {
     return post.sort((a, b)=> (a.create_date> b.create_date? -1: 1))
+  }
+
+  transform_reposts(reposts: any[]) :User[] {
+    const users: User[] = []
+    for (const repost of reposts) {
+      repost.user['repost_date'] = repost.create_date
+      users.push(repost.user)
+    }
+
+    return this.user_to_username(users)
+  }
+
+  transform_reposts_post(reposts: any[]): Post[] {
+    const posts: Post[] = []
+    for (const repost of reposts) {
+      posts.push(repost.post)
+    }
+    return posts
   }
 }

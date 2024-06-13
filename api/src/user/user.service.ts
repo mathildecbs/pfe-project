@@ -103,7 +103,8 @@ export class UserService {
     const user = {
       ...res,
       followers: [],
-      following: []
+      following: [],
+      reposts: this.utilsService.transform_reposts_post(res.reposts)
     }
     user.followers = this.utilsService.user_to_username(res.followers)
     user.following = this.utilsService.user_to_username(res.following)
