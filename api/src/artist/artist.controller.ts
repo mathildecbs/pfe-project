@@ -10,12 +10,12 @@ export class ArtistController {
   constructor(private readonly artistService: ArtistService) {}
 
   @Post()
+  @IsAdmin()
   async create(@Body() createArtistDto: CreateArtistDto) {
     return await this.artistService.create(createArtistDto);
   }
 
   @Get()
-  @IsAdmin()
   async findAll(@Query() query: BaseQP) {
     return await this.artistService.findAll(query);
   }
