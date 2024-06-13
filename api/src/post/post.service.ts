@@ -29,7 +29,7 @@ export class PostService {
     const user = await this.userService.findOne(createPostDto.user)
     const tags = []
     for (const tag of createPostDto.tags) {
-      const tag_object = await this.tagService.findOneTag(tag)
+      const tag_object = await this.tagService.findOne(tag)
       tags.push(tag_object)
     }
     const post = {
@@ -148,6 +148,27 @@ export class PostService {
     }
 
     return reposts
+  }
+
+  async findByTag(tag_name: string) {
+    const tag = await this.tagService.findOne(tag_name)
+
+    const posts = await this.postRepository.createQueryBuilder('post')
+        .leftJoinAndSelect('post.tags', 'tag')
+        .where('tag.id=:id', {id: tag.id})
+        .getMany()
+
+    const tag_posts: Post[]= []
+
+    for (let post of posts) {
+      post = await this.findOne(post.id)
+      post['nb_comments'] = await this.get_nb_comments(post)
+      tag_posts.push(post)
+    }
+
+
+    return tag_posts
+
   }
 
   async remove(id: string) {

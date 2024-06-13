@@ -11,7 +11,7 @@ export class Post extends BaseEntity{
   @Column({type: 'text', nullable: false})
   content: string
 
-  @ManyToOne(()=> User, (user)=> user.posts, {eager: true})
+  @ManyToOne(()=> User, (user)=> user.posts, {eager: true, onDelete:"CASCADE"})
   user: User
 
   @Column({type:"boolean"})

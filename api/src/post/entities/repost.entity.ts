@@ -6,10 +6,10 @@ import { Post } from "./post.entity";
 @Entity()
 export class Repost extends BaseEntity{
 
-    @ManyToOne(()=> User, (user)=> user.reposts, {eager: true})
+    @ManyToOne(()=> User, (user)=> user.reposts, {eager: true, onDelete:"CASCADE"})
     user: User
 
-    @ManyToOne(()=> Post, (post)=> post.reposts, {eager: true})
+    @ManyToOne(()=> Post, (post)=> post.reposts, {eager: true, onDelete: "CASCADE"})
     post: Post
 
 }
