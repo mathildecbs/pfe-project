@@ -211,7 +211,7 @@ export class UserService {
       throw new HttpException(`authentication failed`, HttpStatus.BAD_REQUEST)
     }
 
-    const payload = { username: user.username, sub: user.id };
+    const payload = { username: user.username, sub: user.id, isAdmin: user.isAdmin };
     const token = this.jwtService.sign(payload, {
       secret: this.configService.get<string>('JWT_SECRET'),
       expiresIn: '12h',
