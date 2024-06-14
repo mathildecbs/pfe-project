@@ -24,25 +24,18 @@ export class UserGuard implements CanActivate {
             context.getHandler()
         );
 
-        console.log("ici", isRouteAdmin);
-
-
         if (isPublic) {
             return true;
         } else if (isRouteAdmin) {
             const request = context.switchToHttp().getRequest();
-            console.log("c admin");
             return this.validateRequestAdmin(request);
         } else {
             const request = context.switchToHttp().getRequest();
-            console.log("c pas admin");
             return this.validateRequest(request);
         }
     }
 
     private validateRequest(request: Request): boolean {
-
-        console.log("c pas admin2");
         const header = request.headers['authorization'];
         
         if (!header) {
@@ -69,7 +62,6 @@ export class UserGuard implements CanActivate {
     }
 
     private async validateRequestAdmin(request: Request): Promise<boolean> {
-        console.log("c admin 2");
         const header = request.headers['authorization'];
 
         if (!header) {
@@ -88,8 +80,6 @@ export class UserGuard implements CanActivate {
             const user = this.userService.findOne(decoded.username);
             const isUserAdmin = await this.userService.is_user_admin(decoded.username);
 
-            console.log("il est admin ? ", isUserAdmin);
-
             if (!user) {
                 return false;
             }
@@ -102,8 +92,3 @@ export class UserGuard implements CanActivate {
         }
     }
 }
-
-// une activation pour acceder à des trucs quand il est co, donc il récupère dans le header, il voit s'il y a bine le token
-// voir u admin a le droit à quoi, et à ce moment là, je le laisse passer pour juste ce à quoi il a le droit
-
-//creer un admin guard
