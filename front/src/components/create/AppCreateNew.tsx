@@ -39,7 +39,7 @@ export default function AppCreateNew() {
   }
 
   return (
-    <Paper className={styles.createNewContainer}>
+    <Paper className={styles.CreateNewContainer}>
       <Typography variant="h4">Création d'éléments</Typography>
       <TextField
         className={styles.languageSelect}

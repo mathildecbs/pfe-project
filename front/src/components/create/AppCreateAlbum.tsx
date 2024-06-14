@@ -106,16 +106,23 @@ export default function AppCreateAlbum() {
   }
 
   function handleAddVersion() {
+    if (formData.version.trim() === "") {
+      ToastUtils.error("Veuillez entrer un nom de version ou laisser vide si album sans version.");
+      return;
+    }
+  
     if (formData.versions.includes(formData.version)) {
       ToastUtils.error("La version existe déjà");
       return;
     }
+  
     setFormData((prevState) => ({
       ...prevState,
       versions: [...prevState.versions, prevState.version],
       version: "",
     }));
   }
+  
 
   function handleRemoveVersion(versionToRemove: string) {
     setFormData((prevState) => ({

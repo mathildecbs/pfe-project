@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Paper, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ToastUtils from "../../utils/ToastUtils";
-import { Artist } from "../../types/ArtistType";
-import { Group } from "../../types/GroupType";
 import styles from "../../css/AppExplorer.module.css";
 import ownedInclusionService from "../../services/OwnedInclusionService";
 import ownedAlbumService from "../../services/OwnedAlbumService";

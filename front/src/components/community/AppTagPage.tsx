@@ -5,7 +5,7 @@ import AppPost from "./AppPost";
 import ToastUtils from "../../utils/ToastUtils";
 import { Typography } from "@mui/material";
 import AppHeaderProfile from "./AppHeaderProfile";
-import tagService from "../../services/TagService";
+import styles from "../../css/AppTagPage.module.css";
 import { useParams } from "react-router-dom";
 import postService from "../../services/PostService";
 
@@ -49,29 +49,24 @@ export default function AppMyPage() {
 
   return (
     <>
-      {user ? (
-        <>
-          <AppHeaderProfile userProfile={user} currentUser={user} />
-          {tagPosts.length ? (
-            tagPosts.map((tagPost, index) => (
-              <AppPost
-                key={`${tagPost.id}${
-                  !!repostStatus.get(tagPost.id) &&
-                  index === tagPosts.findIndex((post) => post.id === tagPost.id)
-                }}`}
-                post={tagPost}
-                repost={
-                  !!repostStatus.get(tagPost.id) &&
-                  index === tagPosts.findIndex((post) => post.id === tagPost.id)
-                }
-              />
-            ))
-          ) : (
-            <Typography variant="h6">Pas de post avec ce tag.</Typography>
-          )}
-        </>
+      {tagPosts.length ? (
+        <div className={styles.ContainerPosts}>
+          {tagPosts.map((tagPost, index) => (
+            <AppPost
+              key={`${tagPost.id}${
+                !!repostStatus.get(tagPost.id) &&
+                index === tagPosts.findIndex((post) => post.id === tagPost.id)
+              }}`}
+              post={tagPost}
+              repost={
+                !!repostStatus.get(tagPost.id) &&
+                index === tagPosts.findIndex((post) => post.id === tagPost.id)
+              }
+            />
+          ))}
+        </div>
       ) : (
-        <Typography variant="h6">Chargement du des posts...</Typography>
+        <Typography variant="h6">Pas de post avec ce tag.</Typography>
       )}
     </>
   );
