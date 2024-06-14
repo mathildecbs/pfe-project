@@ -23,8 +23,12 @@ import { TagModule } from './tag/tag.module';
 import { Tag } from './tag/entities/tag.entity';
 import { Post } from './post/entities/post.entity';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
-import { UserGuard } from './user/user.guard';
+import { UserGuard } from './guards/user.guard';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from "@nestjs/config";
+import { UserService } from "./user/user.service";
 import { Repost } from "./post/entities/repost.entity";
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -55,7 +59,7 @@ import { Repost } from "./post/entities/repost.entity";
     AlbumModule,
     InclusionModule,
     PostModule,
-    TagModule,
+    TagModule
   ],
   controllers: [
     AppController
@@ -64,6 +68,8 @@ import { Repost } from "./post/entities/repost.entity";
     AppService, 
     BaseEntityService, 
     UtilsServiceService,
+    JwtService,
+    ConfigService,
     {
       provide: APP_GUARD,
       useClass: UserGuard,
