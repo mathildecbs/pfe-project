@@ -1,4 +1,5 @@
 .SideMenu {
+  position: sticky;
   height: 100%;
   width: 200px;
   transition: width 0.2s ease;
@@ -30,14 +31,20 @@
 
 .MenuItem{
   border-radius: 40px;
+  transition: 0.2s;
 }
 
 .MenuItem:hover, .SubMenuItem:hover{
-  background-color: #D0E4F5;
+  background-color: #deeffa;
+  transform: scale(1.02);
 }
 
 .SubMenuItem{
   margin-left: 2em;
   border-radius: 40px;
   max-width: 80%;
+}
+
+.ActiveMenuItem {
+  background-color: #D0E4F5; 
 }

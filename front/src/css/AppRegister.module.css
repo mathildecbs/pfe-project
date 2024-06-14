@@ -1,0 +1,9 @@
+.InscriptionContainer {
+  padding: 2em;
+  text-align: center;
+
+  Button,
+  .InputText {
+    margin: 0.5em;
+  }
+}

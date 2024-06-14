@@ -37,6 +37,11 @@ export class PostController {
     return await this.postService.following_feed(username)
   }
 
+  @Get('tag/:tag_name')
+  async getPostByTag(@Param('tag_name') tag_name: string) {
+    return await this.postService.findByTag(tag_name)
+  }
+
   @Patch(':id/like/:username')
   async like(@Param('id') id: string, @Param('username') username: string){
     return await this.postService.like(username, id)

@@ -20,4 +20,7 @@ export class CreateAlbumDto {
   @IsArray()
   version?: string[]
 
+  @IsString()
+  image: string
+
 }

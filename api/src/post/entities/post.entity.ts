@@ -1,7 +1,8 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, Tree, TreeChildren, TreeParent } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, Tree, TreeChildren, TreeParent } from 'typeorm';
 import { BaseEntity } from '../../utils/base_entity/base_entity.service';
 import { User } from '../../user/entities/user.entity';
 import { Tag } from '../../tag/entities/tag.entity';
+import { Repost } from "./repost.entity";
 
 @Entity()
 @Tree("materialized-path")
@@ -10,7 +11,7 @@ export class Post extends BaseEntity{
   @Column({type: 'text', nullable: false})
   content: string
 
-  @ManyToOne(()=> User, (user)=> user.posts, {eager: true})
+  @ManyToOne(()=> User, (user)=> user.posts, {eager: true, onDelete:"CASCADE"})
   user: User
 
   @Column({type:"boolean"})
@@ -26,10 +27,12 @@ export class Post extends BaseEntity{
   @JoinTable()
   likes: User[]
 
-  @ManyToMany(()=>User, (user)=> user.reposts)
-  @JoinTable()
+  @OneToMany(()=>Repost, (repost)=> repost.post)
   reposts: User[]
 
   @ManyToMany(()=> Tag, (tag)=> tag.posts)
   tags: Tag[]
+
+  @Column({type: "varchar", nullable: true, default: null})
+  image: string
 }

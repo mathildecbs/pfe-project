@@ -18,4 +18,7 @@ export class Inclusion extends BaseEntity{
   @Column({type:'enum', enum: IncluEnum, default: IncluEnum.PHOTOCARD})
   type: IncluEnum
 
+  @Column({type: "varchar", nullable: true, default: null})
+  image: string
+
 }

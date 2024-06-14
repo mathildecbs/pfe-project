@@ -9,10 +9,10 @@ export class OwnedInclusion extends BaseEntity{
   @Column({type:'int', default:1, nullable:false})
   quantity: number
 
-  @ManyToOne(()=> User, (user)=> user.inclusions)
+  @ManyToOne(()=> User, (user)=> user.inclusions, {onDelete: "CASCADE"})
   user: User
 
-  @ManyToOne(()=> Inclusion, {eager: true})
+  @ManyToOne(()=> Inclusion, {eager: true, onDelete: "CASCADE" })
   inclusion: Inclusion
 
 }

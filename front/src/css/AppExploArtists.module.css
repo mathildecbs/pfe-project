@@ -1,0 +1,39 @@
+.Container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.ItemCard {
+  flex: 1 1 calc(25% - 16px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fddbdb;
+  padding: 16px;
+  margin: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.ItemCard:hover {
+  transform: scale(1.05);
+}
+
+.ItemText {
+  text-align: center;
+}
+
+.Section {
+  padding: 16px;
+  margin: 16px;
+}
+
+.MoreButton {
+  margin-top: 16px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}

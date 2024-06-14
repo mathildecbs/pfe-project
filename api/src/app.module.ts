@@ -27,6 +27,8 @@ import { UserGuard } from './guards/user.guard';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from "@nestjs/config";
 import { UserService } from "./user/user.service";
+import { Repost } from "./post/entities/repost.entity";
+
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -46,7 +48,8 @@ import { UserService } from "./user/user.service";
         Inclusion,
         OwnedInclusion,
         Tag,
-        Post
+        Post,
+        Repost
       ],
       synchronize: true,
     }),

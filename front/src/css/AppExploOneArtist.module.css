@@ -1,0 +1,67 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 16px;
+}
+
+.ImageContainer {
+  align-self: center;
+}
+
+.ArtistImage {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.InfoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ArtistTitle {
+  font-weight: bold;
+  text-align: center;
+}
+
+.ReleaseDate,
+.ArtistName {
+  margin-bottom: 8px;
+}
+
+.Subtitle {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.AlbumsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.AlbumCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.AlbumImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+}
+
+.AlbumName {
+  text-align: center;
+}
+
+.NoItems {
+  font-style: italic;
+  text-align: center;
+}

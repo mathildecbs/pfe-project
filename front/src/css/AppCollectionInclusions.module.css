@@ -1,0 +1,45 @@
+.Container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.ItemCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: transform 0.2s;
+}
+
+.ItemCard:hover {
+  transform: scale(1.05);
+}
+
+.AlbumImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.ItemText {
+  margin-top: 8px;
+  text-align: center;
+}
+
+.VersionText {
+  margin-top: 4px;
+  text-align: center;
+  color: #555;
+}
+
+.Section {
+  padding: 16px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
