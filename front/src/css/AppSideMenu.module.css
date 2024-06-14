@@ -31,10 +31,12 @@
 
 .MenuItem{
   border-radius: 40px;
+  transition: 0.2s;
 }
 
 .MenuItem:hover, .SubMenuItem:hover{
-  background-color: #D0E4F5;
+  background-color: #deeffa;
+  transform: scale(1.02);
 }
 
 .SubMenuItem{

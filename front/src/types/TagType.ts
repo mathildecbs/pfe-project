@@ -1,7 +1,7 @@
 import { Post } from "./PostType";
 
 export interface Tag {
-  id: number;
+  id: string;
   create_date: string;
   maj_date: string;
   name: string;

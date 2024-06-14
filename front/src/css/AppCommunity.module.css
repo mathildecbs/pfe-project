@@ -1,4 +1,5 @@
 .Posts {
+  flex: 1;
   margin: 1em 3em;
 }
 
@@ -7,4 +8,50 @@
   top: 0;
   background-color: white !important;
   z-index: 999;
+}
+
+.PostsContainer {
+  display: flex;
+  flex: 1;
+}
+
+.TrendingTags {
+  margin: 0;
+  position: sticky;
+  top: 50px;
+  width: 200px;
+  height: calc(100vh - 155px);
+  padding: 1.5em 1.5em 1.5em 0;
+}
+
+.TagsContainer {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.TagsTitle {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.TagsList {
+  list-style-type: none;
+  padding: 0;
+}
+
+.TagItem {
+  padding: 6px 12px;
+  background-color: #ffffff;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.TagItem:hover {
+  background-color: #f0f0f0;
+  color: rgb(27, 172, 217);
 }

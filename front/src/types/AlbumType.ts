@@ -1,5 +1,6 @@
 import { Artist } from "./ArtistType";
 import { Group } from "./GroupType";
+import { Inclusion } from "./InclusionType";
 
 export interface Album {
   id: string;
@@ -12,4 +13,5 @@ export interface Album {
   group: Group;
   versions: string[];
   image: string;
+  inclusions: Inclusion[];
 }

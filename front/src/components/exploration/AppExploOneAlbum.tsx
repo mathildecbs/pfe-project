@@ -60,7 +60,7 @@ export default function AppExploOneAlbum() {
   ) {
     try {
       if (user?.username && idAlbum) {
-        const response = await ownedAlbumService.getOneOwnedAlbumInlusion(
+        const response = await ownedAlbumService.getOneOwnedAlbumInclusion(
           user?.username,
           idAlbum
         );

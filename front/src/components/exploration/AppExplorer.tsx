@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Paper, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import groupService from "../../services/GroupService";

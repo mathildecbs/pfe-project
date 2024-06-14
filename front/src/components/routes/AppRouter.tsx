@@ -21,6 +21,7 @@ import AppExploOneGroup from "../exploration/AppExploOneGroup";
 import AppUserPage from "../community/AppUserPage";
 import AppCreateNew from "../create/AppCreateNew";
 import AppTagPage from "../community/AppTagPage";
+import AppExploOneInclusion from "../exploration/AppExploOneInclusion";
 
 function AppRouter() {
   return (
@@ -40,6 +41,7 @@ function AppRouter() {
         <Route path="/exploOneGroup/:idGroup" element={<AppExploOneGroup />} />
         <Route path="/exploAlbums" element={<AppExploAlbums />} />
         <Route path="/exploOneAlbum/:idAlbum" element={<AppExploOneAlbum />} />
+        <Route path="/exploOneInclusion/:idInclusion" element={<AppExploOneInclusion />} />
         <Route path="/myCollection" element={<AppMyCollection />} />
         <Route path="/tagPage/:tagName" element={<AppTagPage />} />
         <Route path="/createNew" element={<AppCreateNew />} />

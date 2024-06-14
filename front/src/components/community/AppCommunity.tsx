@@ -4,9 +4,10 @@ import { usePosts } from "../../contexts/PostsProvider";
 import postService from "../../services/PostService";
 import ToastUtils from "../../utils/ToastUtils";
 import { useAuth } from "../../contexts/AuthProvider";
-import { Paper, Tabs, Tab } from "@mui/material";
+import { Paper, Tabs, Tab, Typography } from "@mui/material";
 import { Post } from "../../types/PostType";
 import styles from "../../css/AppCommunity.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function AppCommunity() {
   const {
@@ -16,9 +17,12 @@ export default function AppCommunity() {
     setTrendingPosts,
     followingPosts,
     setFollowingPosts,
+    trendingTags,
+    setTrendingTags,
   } = usePosts();
   const { user } = useAuth();
   const [selectedTab, setSelectedTab] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchPosts();
@@ -33,8 +37,10 @@ export default function AppCommunity() {
         const response = await postService.getFollowingPosts(user.username);
         setFollowingPosts(response);
       } else if (selectedTab === 2 && user) {
-        const response = await postService.getTrendingPosts();
-        setTrendingPosts(response);
+        const posts = await postService.getTrendingPosts();
+        setTrendingPosts(posts);
+        const tags = await postService.getTrendingTags();
+        setTrendingTags(tags);
       }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des posts");
@@ -44,6 +50,10 @@ export default function AppCommunity() {
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
   };
+
+  function navigateTo(artistId: string) {
+    navigate(`/tagPage/${artistId}`);
+  }
 
   let displayedPosts: Post[] = [];
   if (selectedTab === 0) {
@@ -66,13 +76,31 @@ export default function AppCommunity() {
         >
           <Tab label="Posts" />
           <Tab label="Abonnements" />
-          <Tab label="Trending" />
+          <Tab label="Trendings" />
         </Tabs>
       </Paper>
-      <div className={styles.Posts}>
-        {displayedPosts.map((postReceived) => (
-          <AppPost key={postReceived.id} post={postReceived} repost={false} />
-        ))}
+      <div className={styles.PostsContainer}>
+        <div className={styles.Posts}>
+          {displayedPosts.map((postReceived) => (
+            <AppPost key={postReceived.id} post={postReceived} repost={false} />
+          ))}
+        </div>
+        {selectedTab === 2 && (
+          <div className={styles.TrendingTags}>
+            <Paper className={styles.TagsContainer}>
+              <Typography variant="h6" className={styles.TagsTitle}>
+                Trending Tags
+              </Typography>
+              <ul className={styles.TagsList}>
+                {trendingTags.map((tag) => (
+                  <li key={tag.id} className={styles.TagItem} onClick={() => navigateTo(tag.name)}>
+                    #{tag.name}
+                  </li>
+                ))}
+              </ul>
+            </Paper>
+          </div>
+        )}
       </div>
     </>
   );

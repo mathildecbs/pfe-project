@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import albumService from "../../services/AlbumService";
 import ToastUtils from "../../utils/ToastUtils";
-import { Button, Paper, Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import { Album } from "../../types/AlbumType";
 import { useNavigate } from "react-router-dom";
 import styles from "../../css/AppExploAlbums.module.css";

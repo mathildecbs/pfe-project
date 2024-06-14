@@ -3,9 +3,9 @@ import { OwnedInclusionAlbum } from "../types/OwnedInclusionAlbumType";
 import ApiUtils from "../utils/ApiUtils";
 
 class OwnedAlbumService {
-  async getOwnedAlbumsInclusions(
+  async getOwnedAlbums(
     username: string
-  ): Promise<OwnedInclusionAlbum[]> {
+  ): Promise<OwnedAlbum[]> {
     try {
       const response = await ApiUtils.getApiInstanceJson().get(
         `/user/${username}/album`
@@ -16,7 +16,7 @@ class OwnedAlbumService {
     }
   }
 
-  async getOneOwnedAlbumInlusion(
+  async getOneOwnedAlbumInclusion(
     username: string,
     idOwnedAlbum: string
   ): Promise<OwnedInclusionAlbum> {
