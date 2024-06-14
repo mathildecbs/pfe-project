@@ -109,7 +109,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
   );
 
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog open={isOpen} onClose={onClose} fullWidth>
       <DialogTitle>Ecrire une nouvelle publication</DialogTitle>
       <DialogContent>
         <TextField
