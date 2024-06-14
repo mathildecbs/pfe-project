@@ -1,26 +1,22 @@
 .PostIconContainer {
-    position: absolute;
-    right: 5%;
-    bottom: 5%;
-    border-style: solid;
+    position: fixed;
+    right: 7%;
+    bottom: 7%;
     border-radius: 100%;
     border-width: 1px;
-    border-color: rgb(170, 170, 170);
+    border-style: none;
 }
 
 .PostIconContainer:hover {
     position: absolute;
-    right: 5%;
-    bottom: 5%;
-    border-style: solid;
     border-radius: 100%;
-    border-width: 1px;
     border-color: #B3CEE5;
 }
 
 .PostIcon {
-    width: 2em;
-    height: 2em;
+    border-style: none;
+    width: 2.5em;
+    height: 2.5em;
     align-items: center;
     vertical-align: center;
     background-color: #B3CEE5 !important;

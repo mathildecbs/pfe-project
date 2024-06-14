@@ -1,0 +1,21 @@
+.LoginContainer {
+  padding: 2em;
+  max-width: 400px;
+  margin: 2em auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Title {
+  margin-bottom: 1em;
+}
+
+.FormGroup {
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.Input {
+  margin-bottom: 1em;
+}
