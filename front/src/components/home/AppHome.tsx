@@ -47,7 +47,7 @@ export default function AppHome() {
         </div>
         <Button
           className={styles.MoreButton}
-          onClick={() => navigate("/collectionInclusions")}
+          onClick={() => navigate("/community")}
         >
           Plus...
         </Button>
@@ -71,7 +71,7 @@ export default function AppHome() {
         ))}
         <Button
           className={styles.MoreButton}
-          onClick={() => navigate("/collectionAlbums")}
+          onClick={() => navigate("/exploAlbums")}
         >
           Plus...
         </Button>
