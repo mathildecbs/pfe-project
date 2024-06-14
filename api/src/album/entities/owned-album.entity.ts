@@ -11,10 +11,10 @@ export class OwnedAlbum extends BaseEntity{
   @Column({type: 'varchar', nullable:true})
   version: string
 
-  @ManyToOne(()=> User, (user)=> user.albums)
+  @ManyToOne(()=> User, (user)=> user.albums, {onDelete: "CASCADE"})
   user: User
 
-  @ManyToOne(()=> Album, {eager: true})
+  @ManyToOne(()=> Album, {eager: true, onDelete: "CASCADE"})
   album: Album
 
 

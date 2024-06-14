@@ -24,6 +24,7 @@ import { Tag } from './tag/entities/tag.entity';
 import { Post } from './post/entities/post.entity';
 import { APP_FILTER, APP_GUARD } from '@nestjs/core';
 import { UserGuard } from './user/user.guard';
+import { Repost } from "./post/entities/repost.entity";
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -43,7 +44,8 @@ import { UserGuard } from './user/user.guard';
         Inclusion,
         OwnedInclusion,
         Tag,
-        Post
+        Post,
+        Repost
       ],
       synchronize: true,
     }),
