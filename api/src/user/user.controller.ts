@@ -20,7 +20,6 @@ export class UserController {
   }
 
   @Get()
-  @Public()
   async findAll(@Query() query: UserQP) {
     return await this.userService.findAll(query);
   }
@@ -58,7 +57,6 @@ export class UserController {
   }
 
   @Get(':username/album')
-  @Public()
   async get_all_albums(@Param('username') username: string){
     return await this.userService.get_all_albums(username)
   }
@@ -70,7 +68,6 @@ export class UserController {
   }
 
   @Get(':username/album/:albumId')
-  @Public()
   async get_one_owned_album(@Param('username') username: string, @Param('albumId') albumId: string){
     return await this.userService.get_one_owned_album(username, albumId)
   }
@@ -85,7 +82,6 @@ export class UserController {
   }
 
   @Get(':username/inclusion')
-  @Public()
   async get_all_inclusions(@Param('username') username: string){
     return await this.userService.get_all_inclusions(username)
   }
@@ -106,7 +102,6 @@ export class UserController {
   }
 
   @Get(':username/collection')
-  @Public()
   async get_collection(@Param('username') username: string) {
     return await this.userService.get_collection(username)
   }
