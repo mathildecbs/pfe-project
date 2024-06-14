@@ -16,5 +16,8 @@ export class CreateInclusionDto {
   @IsEnum(IncluEnum)
   type: IncluEnum
 
+  @IsString()
+  image: string
+
 
 }

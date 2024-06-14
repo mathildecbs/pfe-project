@@ -12,4 +12,7 @@ export class CreateArtistDto {
 
   @IsArray()
   groups: Array<string>
+
+  @IsString()
+  image: string
 }

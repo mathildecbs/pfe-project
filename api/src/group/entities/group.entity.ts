@@ -24,4 +24,7 @@ export class Group extends BaseEntity {
 
   @OneToMany(()=>Album, (album)=> album.group)
   albums: Album[]
+
+  @Column({type: "varchar", nullable: true, default: null})
+  image: string
 }

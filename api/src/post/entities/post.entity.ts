@@ -32,4 +32,7 @@ export class Post extends BaseEntity{
 
   @ManyToMany(()=> Tag, (tag)=> tag.posts)
   tags: Tag[]
+
+  @Column({type: "varchar", nullable: true, default: null})
+  image: string
 }

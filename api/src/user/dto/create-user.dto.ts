@@ -17,4 +17,7 @@ export class CreateUserDto {
   @IsString()
   description?: string
 
+  @IsString()
+  image: string
+
 }
