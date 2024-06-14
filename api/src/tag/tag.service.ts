@@ -29,7 +29,6 @@ export class TagService {
 
   async findAll(query: TagQP) {
     const options = {}
-    options['take'] = 5
     if (query.search) options['where'] = {}
     if (query.search) options['where']['name'] = Like(`${query.search}%`)
 
