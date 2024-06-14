@@ -85,7 +85,7 @@ class PostService {
     try {
       const response = await ApiUtils.getApiInstanceJson().post('/post', {
         user: username,
-        tags: [],
+        tags: tags,
         content: postContent,
         parent: parent ? parent : ""
       });
