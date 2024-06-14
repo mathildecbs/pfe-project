@@ -81,13 +81,13 @@ class PostService {
     }
   }
 
-  async publishPost(user: User, postContent: string, parent? : number): Promise<Post> {
+  async publishPost(username: string, postContent: string, tags: string[], parent? : number): Promise<Post> {
     try {
       const response = await ApiUtils.getApiInstanceJson().post('/post', {
-        user: user?.username,
-        parent: parent ? parent : "",
+        user: username,
         tags: [],
-        content: postContent
+        content: postContent,
+        parent: parent ? parent : ""
       });
       return response.data;
     } catch (error) {

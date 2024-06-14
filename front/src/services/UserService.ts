@@ -1,3 +1,4 @@
+import { TokenUser } from "../types/TokenUserType";
 import { User } from "../types/UserType";
 import ApiUtils from "../utils/ApiUtils";
 
@@ -19,6 +20,32 @@ class UserService {
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération du post");
+    }
+  }
+
+  async createUser(username : string, hashedPassword: string, name: string, description: string | null): Promise<TokenUser> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson().post("/user", {
+        username: username,
+        password: hashedPassword,
+        name: name,
+        description: description,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Erreur lors du follow');
+    }
+  }
+
+  async loginUser(username : string, hashedPassword: string): Promise<TokenUser> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson().post("/user/login", {
+        username: username,
+        password: hashedPassword,
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error('Erreur lors du follow');
     }
   }
 

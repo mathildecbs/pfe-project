@@ -5,6 +5,11 @@
   gap: 16px;
 }
 
+.ContainerPosts {
+  display: flex;
+  flex-direction: column;
+}
+
 .ItemCard {
   flex: 1 1 calc(15% - 16px);
   display: flex;

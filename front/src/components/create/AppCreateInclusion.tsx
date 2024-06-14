@@ -18,6 +18,7 @@ import albumService from "../../services/AlbumService";
 import { InclusionEnum } from "../../enums/InclusionEnum";
 import { Group } from "../../types/GroupType";
 import groupService from "../../services/GroupService";
+import inclusionService from "../../services/InclusionService";
 
 export default function AppCreateInclusion() {
   const [formData, setFormData] = useState({
@@ -53,10 +54,8 @@ export default function AppCreateInclusion() {
 
   async function fetchMembers(albumId: string) {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(
-        `/album/${albumId}`
-      );
-      const album = response.data as Album;
+      const response = await albumService.getOneAlbum(albumId);
+      const album = response;
       if (album.artist) {
         setMembers([{ id: album.artist.id, name: album.artist.name }]);
       } else if (album.group && album.group.id) {
@@ -74,6 +73,24 @@ export default function AppCreateInclusion() {
         error,
         "Erreur lors de la récupération des membres liés à l'album"
       );
+    }
+  }
+
+  async function createInclusion() {
+    try {
+      const { name, album, member, type } = formData;
+      const response = await inclusionService.createInclusion(
+        name,
+        album,
+        member,
+        type
+      );
+      if (response) {
+        ToastUtils.success("Inclusion créée avec succès !");
+        resetForm();
+      }
+    } catch (error) {
+      ToastUtils.error("Problème lors de la création.");
     }
   }
 
@@ -107,25 +124,11 @@ export default function AppCreateInclusion() {
     setMembers([]);
   }
 
-  async function createInclusion() {
-    try {
-      const { name, album, member, type } = formData;
-      const response = await ApiUtils.getApiInstanceJson().post("/inclusion", {
-        name: name,
-        album: album,
-        member: member,
-        type: type,
-      });
-      if (response) {
-        ToastUtils.success("Inclusion créée avec succès !");
-        resetForm();  // Réinitialiser le formulaire après la création
-      }
-    } catch (error) {
-      ToastUtils.error("Problème lors de la création.");
-    }
-  }
-
   function handleSubmit() {
+    if (formData.name.trim() === "") {
+      ToastUtils.error("Veuillez entrer un nom valide.");
+      return;
+    }
     createInclusion();
   }
 

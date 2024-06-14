@@ -46,11 +46,13 @@ export default function AppExploOneAlbum() {
       if (idAlbum) {
         const response = await albumService.getOneAlbum(idAlbum);
         setThisAlbum(response);
-        if (response.versions.length) {
+        if (response.versions) {
           setSelectedVersion(response.versions[0]);
           setMultipleVersion(true);
+          fetchOwnedAlbumVersionsInclusions(response.versions[0], response);
+        } else {
+          fetchOwnedAlbumVersionsInclusions("", response);
         }
-        fetchOwnedAlbumVersionsInclusions(response.versions[0], response);
       }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération de l'album");
@@ -84,9 +86,9 @@ export default function AppExploOneAlbum() {
         }
       }
     } catch (error) {
-      console.log("Album non possédé");
       setOwnedInclusionAlbum(undefined);
       setOwnedVersionOfAlbum(undefined);
+      console.log("Album non possédé");
     }
   }
 
@@ -240,7 +242,7 @@ export default function AppExploOneAlbum() {
             {thisAlbum.solo ? thisAlbum.artist.name : thisAlbum.group.name}
           </Typography>
 
-          {thisAlbum.versions.length ? (
+          {thisAlbum.versions ? (
             <FormControl fullWidth className={styles.FormControl}>
               <InputLabel>Version</InputLabel>
               <Select value={selectedVersion} onChange={handleVersionChange}>

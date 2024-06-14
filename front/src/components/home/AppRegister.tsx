@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthProvider";
 import ToastUtils from "../../utils/ToastUtils";
 import { TokenUser } from "../../types/TokenUserType";
+import userService from "../../services/UserService";
 
 export default function AppRegister() {
   const [formData, setFormData] = useState({
@@ -49,18 +50,17 @@ export default function AppRegister() {
     try {
       const { username, name, password, description } = formData;
       const hashedPassword = hashPassword(password);
-      const response = await ApiUtils.getApiInstanceJson().post("/user", {
-        username: username,
-        password: hashedPassword,
-        name: name,
-        description: description || null,
-      });
-      const tokenAndUser = response.data as TokenUser;
-
+      const tokenAndUser = await userService.createUser(
+        username,
+        hashedPassword,
+        name,
+        description || null
+      );
       const newUser = tokenAndUser.user;
       const token = tokenAndUser.access_token;
 
       login(newUser, token);
+      ToastUtils.success(`Bienvenue ${newUser.username} !`);
     } catch (error) {
       ToastUtils.error(
         "Inscription impossible. Veuillez utiliser un autre pseudo."

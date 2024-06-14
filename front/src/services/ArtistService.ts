@@ -30,11 +30,11 @@ class ArtistService {
     }
   }
 
-  async createArtist(artistName: string, mainGroup?: string, groups? : string[]): Promise<Artist> {
+  async createArtist(artistName: string, birthday: string, mainGroup?: string | null, groups? : string[]): Promise<Artist> {
     try {
       const response = await ApiUtils.getApiInstanceJson().post('/artist', {
         name: artistName,
-        main_group: mainGroup ? mainGroup : "",
+        main_group: mainGroup,
         groups: groups
       });
       return response.data;

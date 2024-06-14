@@ -25,6 +25,7 @@ import artistService from "../../services/ArtistService";
 import groupService from "../../services/GroupService";
 import { Group } from "../../types/GroupType";
 import { Artist } from "../../types/ArtistType";
+import albumService from "../../services/AlbumService";
 
 export default function AppCreateAlbum() {
   const [formData, setFormData] = useState({
@@ -107,41 +108,45 @@ export default function AppCreateAlbum() {
 
   function handleAddVersion() {
     if (formData.version.trim() === "") {
-      ToastUtils.error("Veuillez entrer un nom de version ou laisser vide si album sans version.");
+      ToastUtils.error(
+        "Veuillez entrer un nom de version ou laisser vide si album sans version."
+      );
       return;
     }
-  
+
     if (formData.versions.includes(formData.version)) {
       ToastUtils.error("La version existe déjà");
       return;
     }
-  
+
     setFormData((prevState) => ({
       ...prevState,
       versions: [...prevState.versions, prevState.version],
       version: "",
     }));
   }
-  
 
   function handleRemoveVersion(versionToRemove: string) {
     setFormData((prevState) => ({
       ...prevState,
-      versions: prevState.versions.filter((version) => version !== versionToRemove),
+      versions: prevState.versions.filter(
+        (version) => version !== versionToRemove
+      ),
     }));
   }
 
   async function createAlbum() {
     try {
       const { name, releaseDate, solo, versions, artist, group } = formData;
-      const response = await ApiUtils.getApiInstanceJson().post("/album", {
-        name: name,
-        release_date: releaseDate,
-        solo: solo,
-        versions: versions,
-        artist: artist,
-        group: group,
-      });
+      const response = await albumService.createAlbum(
+        name,
+        releaseDate,
+        solo,
+        versions,
+        artist,
+        group
+      );
+
       if (response) {
         ToastUtils.success("Album créé avec succès !");
         setFormData({
@@ -160,6 +165,10 @@ export default function AppCreateAlbum() {
   }
 
   function handleSubmit() {
+    if (formData.name.trim() === "") {
+      ToastUtils.error("Veuillez entrer un nom d'album valide.");
+      return;
+    }
     createAlbum();
   }
 

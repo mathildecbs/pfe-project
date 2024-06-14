@@ -26,7 +26,7 @@ export default function AppCommentWritingSection({
   async function submitComment() {
     try {
       if (user) {
-        const newComment = await postService.publishPost(user, commentContent, post.id);
+        const newComment = await postService.publishPost(user.username, commentContent, [], post.id);
         addNewComment(newComment);
         setCommentContent("");
       }

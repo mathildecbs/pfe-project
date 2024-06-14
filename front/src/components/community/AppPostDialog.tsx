@@ -16,6 +16,8 @@ import ApiUtils from "../../utils/ApiUtils";
 import { useAuth } from "../../contexts/AuthProvider";
 import { usePosts } from "../../contexts/PostsProvider";
 import ToastUtils from "../../utils/ToastUtils";
+import tagService from "../../services/TagService";
+import postService from "../../services/PostService";
 
 interface AppPostDialogProps {
   isOpen: boolean;
@@ -36,8 +38,8 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
 
   async function fetchTags() {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get("/tag");
-      setTags(response.data);
+      const response = await tagService.getTags();
+      setTags(response);
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des tags");
     }
@@ -45,10 +47,8 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
 
   async function publishTag(tagName: string) {
     try {
-      const response = await ApiUtils.getApiInstanceJson().post("/tag", {
-        name: tagName,
-      });
-      return response.data;
+      const response = await tagService.createTag(tagName);
+      return response;
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la création du tag");
     }
@@ -68,16 +68,18 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
         })
       );
 
-      const tagsToSend = newTags.map((tag) => tag.name);
-      const response = await ApiUtils.getApiInstanceJson().post("/post", {
-        user: user.username,
-        parent: "",
-        tags: tagsToSend,
-        content: postContent,
-      });
+      const tagsToSend = newTags
+        .filter((tag): tag is Tag => !!tag) //Filtre les undefined tags
+        .map((tag) => tag.name);
 
-      addPost(response.data);
-      addPostMyFeed(response.data);
+      const response = await postService.publishPost(
+        user.username,
+        postContent,
+        tagsToSend
+      );
+
+      addPost(response);
+      addPostMyFeed(response);
       ToastUtils.success("Publication créée avec succès !");
       onClose();
       resetForm();

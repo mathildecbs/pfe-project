@@ -13,45 +13,57 @@ class AlbumService {
 
   async getOneAlbum(idAlbum: string): Promise<Album> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(`/album/${idAlbum}`);
+      const response = await ApiUtils.getApiInstanceJson().get(
+        `/album/${idAlbum}`
+      );
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération de l'album");
     }
   }
 
-  async createAlbum(albumName: string, solo: boolean, version: string, group?: string, artist? : string): Promise<Album> {
+  async createAlbum(
+    albumName: string,
+    releaseDate: string,
+    solo: boolean,
+    versions: string[],
+    artist: string,
+    group: string
+  ): Promise<Album> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().post('/album', {
+      const response = await ApiUtils.getApiInstanceJson().post("/album", {
         name: albumName,
-        version: version,
+        release_date: releaseDate,
         solo: solo,
-        group: group ? group : "",
-        artist: artist ? artist : "",
+        version: versions,
+        artist: artist,
+        group: group,
       });
       return response.data;
     } catch (error) {
-      throw new Error('Erreur lors du post album');
+      throw new Error("Erreur lors du post album");
     }
   }
 
   async deleteAlbum(idAlbum: string): Promise<boolean> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().delete(`/album/${idAlbum}`);
+      const response = await ApiUtils.getApiInstanceJson().delete(
+        `/album/${idAlbum}`
+      );
       return response.data;
     } catch (error) {
-      throw new Error('Erreur lors du delete album  ');
+      throw new Error("Erreur lors du delete album  ");
     }
   }
 
-  async modifyAlbum(groups : string[]): Promise<Album> {
+  async modifyAlbum(groups: string[]): Promise<Album> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().patch('/album', {
-        groups: groups
+      const response = await ApiUtils.getApiInstanceJson().patch("/album", {
+        groups: groups,
       });
       return response.data;
     } catch (error) {
-      throw new Error('Erreur lors de la modification de l\'album');
+      throw new Error("Erreur lors de la modification de l'album");
     }
   }
 }

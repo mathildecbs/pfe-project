@@ -2,20 +2,21 @@ import { useEffect, useState } from "react";
 import { Paper, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ToastUtils from "../../utils/ToastUtils";
-import styles from "../../css/AppExplorer.module.css";
-import { useAuth } from "../../contexts/AuthProvider";
+import styles from "../../css/AppHome.module.css";
 import { usePosts } from "../../contexts/PostsProvider";
 import albumService from "../../services/AlbumService";
 import AppPost from "../community/AppPost";
 import { Album } from "../../types/AlbumType";
+import postService from "../../services/PostService";
 
 export default function AppHome() {
-  const { posts } = usePosts();
+  const { posts, setPosts } = usePosts();
   const [albums, setAlbums] = useState<Album[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchAlbums();
+    fetchPosts();
   }, []);
 
   async function fetchAlbums() {
@@ -27,9 +28,18 @@ export default function AppHome() {
     }
   }
 
+  async function fetchPosts() {
+    try {
+      const response = await postService.getPosts();
+      setPosts(response);
+    } catch (error) {
+      ToastUtils.error(error, "Erreur lors de la récupération des posts");
+    }
+  }
+
   function renderPosts() {
     return (
-      <div className={styles.Container}>
+      <div className={styles.ContainerPosts}>
         <div className={styles.Posts}>
           {posts.slice(0, 4).map((post) => (
             <AppPost key={post.id} post={post} repost={false} />

@@ -6,6 +6,8 @@ import { useAuth } from "../../contexts/AuthProvider";
 import ApiUtils from "../../utils/ApiUtils";
 import { hashPassword } from "../../utils/HashUtils";
 import { TokenUser } from "../../types/TokenUserType";
+import userService from "../../services/UserService";
+import ToastUtils from "../../utils/ToastUtils";
 
 export default function AppLogin() {
   const [username, setUsername] = useState("");
@@ -24,20 +26,17 @@ export default function AppLogin() {
 
     try {
       const hashedPassword = hashPassword(password);
-      const response = await ApiUtils.getApiInstanceJson().post("/user/login", {
-        username: username,
-        password: hashedPassword,
-      });
+      const tokenAndUser = await userService.loginUser(
+        username,
+        hashedPassword
+      );
 
-      const tokenAndUser = response.data as TokenUser;
-
-      if (tokenAndUser) {
-        const token = tokenAndUser.access_token;
-        const user = tokenAndUser.user;        
-        login(user, token);
-      }
+      const token = tokenAndUser.access_token;
+      const newUser = tokenAndUser.user;
+      login(newUser, token);
+      ToastUtils.success(`Connecté en tant que ${newUser.username}`);
     } catch (error) {
-      console.log("Erreur lors de la connexion.");
+      ToastUtils.error(error, "Erreur lors de la connexion.");
     }
   }
 

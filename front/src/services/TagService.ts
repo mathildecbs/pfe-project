@@ -15,32 +15,34 @@ class TagService {
   async getOneTagPosts(tagName: string): Promise<Post[]> {
     try {
       // incomplete posts
-      const response = await ApiUtils.getApiInstanceJson().get(`/tag/${tagName}`);
+      const response = await ApiUtils.getApiInstanceJson().get(
+        `/tag/${tagName}`
+      );
       return response.data.posts;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des posts");
     }
   }
 
-  async createTag(tagName: string, company: string, parent? : string): Promise<Tag> {
+  async createTag(tagName: string): Promise<Tag> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().post('/tag', {
+      const response = await ApiUtils.getApiInstanceJson().post("/tag", {
         name: tagName,
-        parent: parent ? parent : "",
-        company: company
       });
       return response.data;
     } catch (error) {
-      throw new Error('Erreur lors du post tag');
+      throw new Error("Erreur lors du post tag");
     }
   }
 
   async deleteTag(idTag: string): Promise<boolean> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().delete(`/tag/${idTag}`);
+      const response = await ApiUtils.getApiInstanceJson().delete(
+        `/tag/${idTag}`
+      );
       return response.data;
     } catch (error) {
-      throw new Error('Erreur lors du delete tag');
+      throw new Error("Erreur lors du delete tag");
     }
   }
 }

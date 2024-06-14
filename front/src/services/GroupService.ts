@@ -24,8 +24,8 @@ class GroupService {
     try {
       const response = await ApiUtils.getApiInstanceJson().post('/group', {
         name: groupName,
-        parent: parent ? parent : "",
-        company: company
+        company: company,
+        parent: parent ? parent : ""
       });
       return response.data;
     } catch (error) {

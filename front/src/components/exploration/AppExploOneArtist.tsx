@@ -42,6 +42,10 @@ export default function AppExploOneArtist() {
     }
   }
 
+  function navigateTo(root: string, specification: string) {
+    navigate(`/${root}/${specification}`);
+  }
+
   if (!thisArtist) {
     return <CircularProgress />;
   }
@@ -71,7 +75,7 @@ export default function AppExploOneArtist() {
             Groupe principal: {thisArtist.main_group.name}
           </Typography>
         )}
-                <div>
+        <div>
           <Typography variant="h5" className={styles.Subtitle}>
             Groupes secondaires
           </Typography>
@@ -133,6 +137,9 @@ export default function AppExploOneArtist() {
                     src={inclusion.image}
                     alt={inclusion.name}
                     className={styles.AlbumImage}
+                    onClick={() =>
+                      navigateTo("exploOneInclusion", inclusion.id.toString())
+                    }
                   />
                   <Typography variant="body2" className={styles.AlbumName}>
                     {inclusion.name}
