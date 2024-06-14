@@ -44,4 +44,7 @@ export class User extends BaseEntity {
   @OneToMany(()=> Repost, (repost)=> repost.user)
   reposts: Post[]
 
+  @Column({type: "varchar", nullable: true, default: null})
+  image: string
+
 }

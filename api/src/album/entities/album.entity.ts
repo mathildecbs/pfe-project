@@ -27,4 +27,7 @@ export class Album extends BaseEntity{
   @OneToMany(()=> Inclusion, (inclusion)=> inclusion.album)
   inclusions: Inclusion[]
 
+  @Column({type: "varchar", nullable: true, default: null})
+  image: string
+
 }

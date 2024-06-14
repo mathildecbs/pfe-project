@@ -23,4 +23,7 @@ export class Artist extends BaseEntity{
 
   @OneToMany(()=> Inclusion, (inclusion)=> inclusion.member, {onDelete: "CASCADE"})
   inclusions: Inclusion[]
+
+  @Column({type: "varchar", nullable: true, default: null})
+  image: string
 }

@@ -13,6 +13,8 @@ export class CreateGroupDto {
   @IsString()
   parent?: string
 
+  @IsString()
+  image: string
 
 
 }
