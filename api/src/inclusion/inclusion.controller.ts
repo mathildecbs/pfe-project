@@ -3,14 +3,14 @@ import { InclusionService } from './inclusion.service';
 import { CreateInclusionDto } from './dto/create-inclusion.dto';
 import { UpdateInclusionDto } from './dto/update-inclusion.dto';
 import { BaseQP } from '../utils/base_entity/base_entity.service';
-import { IsAdmin } from 'src/decorator/isAdmin.decorator';
+import { IsRouteAdmin } from 'src/decorator/admin.decorator';
 
 @Controller('inclusion')
 export class InclusionController {
   constructor(private readonly inclusionService: InclusionService) {}
 
   @Post()
-  @IsAdmin()
+  @IsRouteAdmin()
   async create(@Body() createInclusionDto: CreateInclusionDto) {
     return await this.inclusionService.create(createInclusionDto);
   }
@@ -26,13 +26,13 @@ export class InclusionController {
   }
 
   @Patch(':id')
-  @IsAdmin()
+  @IsRouteAdmin()
   async update(@Param('id') id: string, @Body() updateInclusionDto: UpdateInclusionDto) {
     return await this.inclusionService.update(id, updateInclusionDto);
   }
 
   @Delete(':id')
-  @IsAdmin()
+  @IsRouteAdmin()
   async remove(@Param('id') id: string) {
     return await this.inclusionService.remove(id);
   }

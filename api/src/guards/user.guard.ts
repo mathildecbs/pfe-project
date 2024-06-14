@@ -24,21 +24,26 @@ export class UserGuard implements CanActivate {
             context.getHandler()
         );
 
+        console.log("ici", isRouteAdmin);
+
+
         if (isPublic) {
             return true;
-        } else if (!isRouteAdmin) {
+        } else if (isRouteAdmin) {
             const request = context.switchToHttp().getRequest();
-            return this.validateRequest(request);
+            console.log("c admin");
+            return this.validateRequestAdmin(request);
         } else {
-            return true;
+            const request = context.switchToHttp().getRequest();
+            console.log("c pas admin");
+            return this.validateRequest(request);
         }
     }
 
     private validateRequest(request: Request): boolean {
-        console.log(request.headers);
-        const header = request.headers['authorization'];
 
-        console.log(header);
+        console.log("c pas admin2");
+        const header = request.headers['authorization'];
         
         if (!header) {
             return false;
@@ -55,6 +60,40 @@ export class UserGuard implements CanActivate {
 
             const user = this.userService.findOne(decoded.username);
             if (!user) {
+                return false;
+            }
+            return true;
+        } catch (err) {
+            throw new UnauthorizedException('Invalid token');
+        }
+    }
+
+    private async validateRequestAdmin(request: Request): Promise<boolean> {
+        console.log("c admin 2");
+        const header = request.headers['authorization'];
+
+        if (!header) {
+            return false;
+        }
+
+        const token = header.split(' ')[1];
+        if (!token) {
+            return false;
+        }
+
+        try {
+            const secretKey = this.configService.get<string>('JWT_SECRET');
+            const decoded = this.jwtService.verify(token, {secret: secretKey});
+
+            const user = this.userService.findOne(decoded.username);
+            const isUserAdmin = await this.userService.is_user_admin(decoded.username);
+
+            console.log("il est admin ? ", isUserAdmin);
+
+            if (!user) {
+                return false;
+            }
+            if (!isUserAdmin) {
                 return false;
             }
             return true;

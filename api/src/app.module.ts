@@ -27,7 +27,6 @@ import { UserGuard } from './guards/user.guard';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from "@nestjs/config";
 import { UserService } from "./user/user.service";
-import { AdminGuard } from './guards/admin.guard';
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -71,10 +70,6 @@ import { AdminGuard } from './guards/admin.guard';
     {
       provide: APP_GUARD,
       useClass: UserGuard,
-    },
-    {
-      provide: APP_GUARD,
-      useClass: AdminGuard,
     }
   ],
 })
