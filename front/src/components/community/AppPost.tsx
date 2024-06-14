@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Paper, Typography, IconButton } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -9,7 +9,7 @@ import { Post } from "../../types/PostType";
 import { DateUtils } from "../../utils/DateUtils";
 import postService from "../../services/PostService";
 import { useAuth } from "../../contexts/AuthProvider";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ToastUtils from "../../utils/ToastUtils";
 import { usePosts } from "../../contexts/PostsProvider";
 
