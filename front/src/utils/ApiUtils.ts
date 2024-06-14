@@ -7,7 +7,7 @@ interface LoginRequestBody {
 }
 
 export default abstract class ApiUtils {
-  private static readonly API_BASE_URL = "https://kollection-blue.vercel.app/";
+  private static readonly API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
   private static readonly API_INSTANCE_JSON = axios.create({
     baseURL: ApiUtils.API_BASE_URL,
     headers: {

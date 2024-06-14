@@ -17,6 +17,7 @@ jobs:
         working-directory: ./front
         env:
           CI: false
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
