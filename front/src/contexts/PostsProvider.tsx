@@ -5,7 +5,10 @@ import { Tag } from "../types/TagType";
 interface PostsContextType {
   posts: Post[];
   setPosts: (posts: Post[]) => void;
+  myFeed: Post[];
+  setMyFeed: (posts: Post[]) => void;
   addPost: (post: Post) => void;
+  addPostMyFeed: (post: Post) => void;
   followingPosts: Post[];
   setFollowingPosts: (posts: Post[]) => void;
   trendingPosts: Post[];
@@ -26,6 +29,7 @@ export function usePosts() {
 
 export function PostsProvider({ children }: { children: ReactNode }) {
   const [posts, setPosts] = useState<Post[]>([]);
+  const [myFeed, setMyFeed] = useState<Post[]>([]);
   const [followingPosts, setFollowingPosts] = useState<Post[]>([]);
   const [trendingPosts, setTrendingPosts] = useState<Post[]>([]);
   const [trendingTags, setTrendingTags] = useState<Tag[]>([]);
@@ -34,12 +38,19 @@ export function PostsProvider({ children }: { children: ReactNode }) {
     setPosts([post, ...posts]);
   }
 
+  function addPostMyFeed(post: Post) {
+    setMyFeed([post, ...myFeed]);
+  }
+
   return (
     <PostsContext.Provider
       value={{
         posts,
         setPosts,
         addPost,
+        myFeed,
+        setMyFeed,
+        addPostMyFeed,
         followingPosts,
         setFollowingPosts,
         trendingPosts,

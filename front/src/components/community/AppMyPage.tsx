@@ -6,9 +6,11 @@ import postService from "../../services/PostService";
 import ToastUtils from "../../utils/ToastUtils";
 import { Typography } from "@mui/material";
 import AppHeaderProfile from "./AppHeaderProfile";
+import styles from "../../css/AppMyPage.module.css";
+import { usePosts } from "../../contexts/PostsProvider";
 
 export default function AppMyPage() {
-  const [myFeed, setMyFeed] = useState<Post[]>([]);
+  const { myFeed, setMyFeed } = usePosts();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -45,24 +47,27 @@ export default function AppMyPage() {
   const repostStatus = getPostRepostStatus(myFeed);
 
   return (
-    <>
+    <div className={styles.Container}>
       {user ? (
         <>
           <AppHeaderProfile userProfile={user} currentUser={user} />
+
           {myFeed.length ? (
-            myFeed.map((myPost, index) => (
-              <AppPost
-                key={`${myPost.id}${
-                  !!repostStatus.get(myPost.id) &&
-                  index === myFeed.findIndex((post) => post.id === myPost.id)
-                }}`}
-                post={myPost}
-                repost={
-                  !!repostStatus.get(myPost.id) &&
-                  index === myFeed.findIndex((post) => post.id === myPost.id)
-                }
-              />
-            ))
+            <div className={styles.ContainerPosts}>
+              {myFeed.map((myPost, index) => (
+                <AppPost
+                  key={`${myPost.id}${
+                    !!repostStatus.get(myPost.id) &&
+                    index === myFeed.findIndex((post) => post.id === myPost.id)
+                  }}`}
+                  post={myPost}
+                  repost={
+                    !!repostStatus.get(myPost.id) &&
+                    index === myFeed.findIndex((post) => post.id === myPost.id)
+                  }
+                />
+              ))}
+            </div>
           ) : (
             <Typography variant="h6">
               Commencez à liker, reposter et écrire des posts !
@@ -72,6 +77,6 @@ export default function AppMyPage() {
       ) : (
         <Typography variant="h6">Chargement du profil...</Typography>
       )}
-    </>
-  );  
+    </div>
+  );
 }

@@ -325,21 +325,19 @@ export default function AppExploOneAlbum() {
                         <Typography variant="body2">
                           Type: {inclusion.type}
                         </Typography>
-                        <Typography variant="body2">
-                          {checkIfOwnedInclusion(inclusion.id) ? (
-                            <div className={styles.Owned}>
-                              <CheckCircleIcon /> Possédée
-                            </div>
-                          ) : (
-                            <Button
-                              onClick={() =>
-                                handleAddInclusionToCollection(inclusion.id)
-                              }
-                            >
-                              Ajouter à la collection
-                            </Button>
-                          )}
-                        </Typography>
+                        {checkIfOwnedInclusion(inclusion.id) ? (
+                          <Typography variant="body2" className={styles.Owned}>
+                            <CheckCircleIcon /> Possédée
+                          </Typography>
+                        ) : (
+                          <Button
+                            onClick={() =>
+                              handleAddInclusionToCollection(inclusion.id)
+                            }
+                          >
+                            Ajouter à la collection
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ))}

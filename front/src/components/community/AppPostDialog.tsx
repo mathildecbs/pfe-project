@@ -28,7 +28,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
   const [inputValue, setInputValue] = useState("");
   const [postContent, setPostContent] = useState("");
   const { user } = useAuth();
-  const { addPost } = usePosts();
+  const { addPost, addPostMyFeed } = usePosts();
 
   useEffect(() => {
     fetchTags();
@@ -77,6 +77,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
       });
 
       addPost(response.data);
+      addPostMyFeed(response.data);
       ToastUtils.success("Publication créée avec succès !");
       onClose();
       resetForm();
