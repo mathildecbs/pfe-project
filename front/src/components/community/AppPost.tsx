@@ -104,12 +104,14 @@ export default function AppPost({ post, repost }: AppPostProps) {
         className={styles.Header}
         onClick={() => navigateTo("user", post.user.username)}
       >
-        <Typography variant="h6" className={styles.Name}>
-          {post.user.name}
-        </Typography>
-        <Typography variant="body2" className={styles.Username}>
-          @{post.user.username}
-        </Typography>
+        <div className={styles.UserInfo}>
+          <Typography variant="h6" className={styles.Name}>
+            {post.user.name}
+          </Typography>
+          <Typography variant="body2" className={styles.Username}>
+            @{post.user.username}
+          </Typography>
+        </div>
         <Typography variant="body2" className={styles.Time}>
           {DateUtils.formatReadableDate(post.create_date)}
         </Typography>
