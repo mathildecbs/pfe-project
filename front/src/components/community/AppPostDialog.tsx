@@ -12,7 +12,6 @@ import {
 import Autocomplete from "@mui/material/Autocomplete";
 import styles from "../../css/AppPostDialog.module.css";
 import { Tag } from "../../types/TagType";
-import ApiUtils from "../../utils/ApiUtils";
 import { useAuth } from "../../contexts/AuthProvider";
 import { usePosts } from "../../contexts/PostsProvider";
 import ToastUtils from "../../utils/ToastUtils";
@@ -109,7 +108,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
   );
 
   return (
-    <Dialog open={isOpen} onClose={onClose}>
+    <Dialog open={isOpen} onClose={onClose} fullWidth>
       <DialogTitle>Ecrire une nouvelle publication</DialogTitle>
       <DialogContent>
         <TextField

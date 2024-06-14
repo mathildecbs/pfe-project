@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Paper, Typography, IconButton } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -9,7 +9,7 @@ import { Post } from "../../types/PostType";
 import { DateUtils } from "../../utils/DateUtils";
 import postService from "../../services/PostService";
 import { useAuth } from "../../contexts/AuthProvider";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ToastUtils from "../../utils/ToastUtils";
 import { usePosts } from "../../contexts/PostsProvider";
 
@@ -104,12 +104,14 @@ export default function AppPost({ post, repost }: AppPostProps) {
         className={styles.Header}
         onClick={() => navigateTo("user", post.user.username)}
       >
-        <Typography variant="h6" className={styles.Name}>
-          {post.user.name}
-        </Typography>
-        <Typography variant="body2" className={styles.Username}>
-          @{post.user.username}
-        </Typography>
+        <div className={styles.UserInfo}>
+          <Typography variant="h6" className={styles.Name}>
+            {post.user.name}
+          </Typography>
+          <Typography variant="body2" className={styles.Username}>
+            @{post.user.username}
+          </Typography>
+        </div>
         <Typography variant="body2" className={styles.Time}>
           {DateUtils.formatReadableDate(post.create_date)}
         </Typography>
