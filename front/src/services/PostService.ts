@@ -72,6 +72,15 @@ class PostService {
     }
   }
 
+  async getOneTagPosts(tagName: string): Promise<Post[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson().get(`/post/tag/${tagName}`);
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des posts");
+    }
+  }
+
   async publishPost(user: User, postContent: string, parent? : number): Promise<Post> {
     try {
       const response = await ApiUtils.getApiInstanceJson().post('/post', {

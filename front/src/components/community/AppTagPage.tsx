@@ -7,6 +7,7 @@ import { Typography } from "@mui/material";
 import AppHeaderProfile from "./AppHeaderProfile";
 import tagService from "../../services/TagService";
 import { useParams } from "react-router-dom";
+import postService from "../../services/PostService";
 
 export default function AppMyPage() {
   const [tagPosts, setTagPosts] = useState<Post[]>([]);
@@ -20,7 +21,7 @@ export default function AppMyPage() {
   async function fetchTagPosts() {
     try {
       if (tagName) {
-        const response = await tagService.getOneTagPosts(tagName);
+        const response = await postService.getOneTagPosts(tagName);
         setTagPosts(response);
       }
     } catch (error) {

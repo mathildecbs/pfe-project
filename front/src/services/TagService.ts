@@ -14,8 +14,9 @@ class TagService {
 
   async getOneTagPosts(tagName: string): Promise<Post[]> {
     try {
+      // incomplete posts
       const response = await ApiUtils.getApiInstanceJson().get(`/tag/${tagName}`);
-      return response.data;
+      return response.data.posts;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des posts");
     }

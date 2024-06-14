@@ -40,13 +40,24 @@ export default function AppPostPage() {
     <>
       {selectedPost && (
         <>
-          <AppPost key={selectedPost.id} post={selectedPost} repost={selectedPost.user.username !== user?.username}/>
+          <AppPost
+            key={selectedPost.id}
+            post={selectedPost}
+            repost={selectedPost.user.username !== user?.username}
+          />
           <div>
-            <AppCommentWritingSection post={selectedPost} addNewComment={addNewComment} />
-            <h2>Commentaires</h2>
+            <AppCommentWritingSection
+              post={selectedPost}
+              addNewComment={addNewComment}
+            />
+            {selectedPost.nb_comments ? <h2>Commentaires</h2> : ""}
           </div>
           {selectedPost.children.map((postComment) => (
-            <AppPost key={postComment.id} post={postComment} repost={selectedPost.user.username !== user?.username}/>
+            <AppPost
+              key={postComment.id}
+              post={postComment}
+              repost={postComment.user.username !== user?.username}
+            />
           ))}
         </>
       )}
