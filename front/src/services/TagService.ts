@@ -3,19 +3,18 @@ import { Tag } from "../types/TagType";
 import ApiUtils from "../utils/ApiUtils";
 
 class TagService {
-  async getTags(): Promise<Tag[]> {
+  async getTags(authToken: string): Promise<Tag[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get("/tag");
+      const response = await ApiUtils.getApiInstanceJson(authToken).get("/tag");
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des tags");
     }
   }
 
-  async getOneTagPosts(tagName: string): Promise<Post[]> {
+  async getOneTagPosts(tagName: string, authToken: string): Promise<Post[]> {
     try {
-      // incomplete posts
-      const response = await ApiUtils.getApiInstanceJson().get(
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
         `/tag/${tagName}`
       );
       return response.data.posts;
@@ -24,9 +23,9 @@ class TagService {
     }
   }
 
-  async createTag(tagName: string): Promise<Tag> {
+  async createTag(tagName: string, authToken: string): Promise<Tag> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().post("/tag", {
+      const response = await ApiUtils.getApiInstanceJson(authToken).post("/tag", {
         name: tagName,
       });
       return response.data;
@@ -35,9 +34,9 @@ class TagService {
     }
   }
 
-  async deleteTag(idTag: string): Promise<boolean> {
+  async deleteTag(idTag: string, authToken: string): Promise<boolean> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().delete(
+      const response = await ApiUtils.getApiInstanceJson(authToken).delete(
         `/tag/${idTag}`
       );
       return response.data;

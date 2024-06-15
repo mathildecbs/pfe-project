@@ -18,8 +18,7 @@ import inclusionService from "../../services/InclusionService";
 
 export default function AppExploOneInclusion() {
   const { idInclusion } = useParams();
-  const { user } = useAuth();
-  const [ownedInclusions, setOwnedInclusions] = useState<OwnedInclusion[]>([]);
+  const { user, authToken } = useAuth();
   const [thisInclusion, setThisInclusion] = useState<Inclusion>();
   const [quantity, setQuantity] = useState<number>(1);
   const [ownInclusion, setOwnInclusion] = useState<OwnedInclusion | undefined>(undefined);
@@ -31,8 +30,8 @@ export default function AppExploOneInclusion() {
 
   async function fetchInclusion() {
     try {
-      if (idInclusion) {
-        const response = await inclusionService.getOneInclusion(idInclusion);
+      if (idInclusion && authToken) {
+        const response = await inclusionService.getOneInclusion(idInclusion, authToken);
         setThisInclusion(response);
       }
     } catch (error) {
@@ -42,11 +41,10 @@ export default function AppExploOneInclusion() {
 
   async function fetchOwnInclusions() {
     try {
-      if (user) {
-        const response = await ownedInclusionService.getOwnedInclusions(user.username);
-        setOwnedInclusions(response);
+      if (user && authToken) {
+        const ownedInclusions = await ownedInclusionService.getOwnedInclusions(user.username, authToken);
 
-        const owned = response.find(
+        const owned = ownedInclusions.find(
           (ownedInclusion) => ownedInclusion.inclusion.id.toString() === idInclusion
         );
         setOwnInclusion(owned);
@@ -58,12 +56,13 @@ export default function AppExploOneInclusion() {
 
   async function handleAddToCollection() {
     try {
-      if (user?.username && thisInclusion) {
+      if (user?.username && thisInclusion && authToken) {
         if (ownInclusion) {
           const response = await ownedInclusionService.modifyOwnedInclusion(
             user.username,
             ownInclusion.inclusion.id,
-            quantity
+            quantity,
+            authToken
           );
           if (response) {
             ToastUtils.success("Quantité mise à jour avec succès !");
@@ -72,7 +71,8 @@ export default function AppExploOneInclusion() {
           const response = await ownedInclusionService.createOwnedInclusion(
             user.username,
             thisInclusion.id,
-            quantity
+            quantity,
+            authToken
           );
           if (response) {
             ToastUtils.success("Inclusion ajoutée avec succès !");
@@ -94,10 +94,11 @@ export default function AppExploOneInclusion() {
 
   async function deleteOwnedInclusion() {
     try {
-      if (idInclusion && user) {
+      if (idInclusion && user && authToken) {
         const response = await ownedInclusionService.deleteOwnedInclusion(
           user.username,
-          idInclusion
+          idInclusion,
+          authToken
         );
         if (response) {
           ToastUtils.success(

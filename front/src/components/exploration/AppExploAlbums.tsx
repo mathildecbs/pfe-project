@@ -5,10 +5,12 @@ import { Paper, Typography } from "@mui/material";
 import { Album } from "../../types/AlbumType";
 import { useNavigate } from "react-router-dom";
 import styles from "../../css/AppExploAlbums.module.css";
+import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppExploAlbums() {
   const [albums, setAlbums] = useState<Album[]>([]);
   const navigate = useNavigate();
+  const { authToken } = useAuth();
 
   useEffect(() => {
     fetchAlbums();
@@ -16,8 +18,10 @@ export default function AppExploAlbums() {
 
   async function fetchAlbums() {
     try {
-      const response = await albumService.getAlbums();
-      setAlbums(response);
+      if (authToken) {
+        const response = await albumService.getAlbums(authToken);
+        setAlbums(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des albums");
     }

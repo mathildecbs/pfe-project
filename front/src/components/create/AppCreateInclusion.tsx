@@ -12,13 +12,13 @@ import {
 import styles from "../../css/AppCreateNew.module.css";
 import { useEffect, useState } from "react";
 import ToastUtils from "../../utils/ToastUtils";
-import ApiUtils from "../../utils/ApiUtils";
 import { Album } from "../../types/AlbumType";
 import albumService from "../../services/AlbumService";
 import { InclusionEnum } from "../../enums/InclusionEnum";
 import { Group } from "../../types/GroupType";
 import groupService from "../../services/GroupService";
 import inclusionService from "../../services/InclusionService";
+import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppCreateInclusion() {
   const [formData, setFormData] = useState({
@@ -31,6 +31,7 @@ export default function AppCreateInclusion() {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<Album | null>(null);
   const [members, setMembers] = useState<{ id: string; name: string }[]>([]);
+  const { authToken } = useAuth();
 
   useEffect(() => {
     const isAllFieldsFilled = Object.values(formData).every(
@@ -45,8 +46,10 @@ export default function AppCreateInclusion() {
 
   async function fetchAlbums() {
     try {
-      const response = await albumService.getAlbums();
-      setAlbums(response);
+      if (authToken) {
+        const response = await albumService.getAlbums(authToken);
+        setAlbums(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des albums");
     }
@@ -54,19 +57,22 @@ export default function AppCreateInclusion() {
 
   async function fetchMembers(albumId: string) {
     try {
-      const response = await albumService.getOneAlbum(albumId);
-      const album = response;
-      if (album.artist) {
-        setMembers([{ id: album.artist.id, name: album.artist.name }]);
-      } else if (album.group && album.group.id) {
-        const groupResponse = (await groupService.getOneGroup(
-          album.group.id
-        )) as Group;
-        const memberNames = groupResponse.members.map((member) => ({
-          id: member.id,
-          name: member.name,
-        }));
-        setMembers(memberNames);
+      if (authToken) {
+        const response = await albumService.getOneAlbum(albumId, authToken);
+        const album = response;
+        if (album.artist) {
+          setMembers([{ id: album.artist.id, name: album.artist.name }]);
+        } else if (album.group && album.group.id) {
+          const groupResponse = (await groupService.getOneGroup(
+            album.group.id,
+            authToken
+          )) as Group;
+          const memberNames = groupResponse.members.map((member) => ({
+            id: member.id,
+            name: member.name,
+          }));
+          setMembers(memberNames);
+        }
       }
     } catch (error) {
       ToastUtils.error(
@@ -78,16 +84,19 @@ export default function AppCreateInclusion() {
 
   async function createInclusion() {
     try {
-      const { name, album, member, type } = formData;
-      const response = await inclusionService.createInclusion(
-        name,
-        album,
-        member,
-        type
-      );
-      if (response) {
-        ToastUtils.success("Inclusion créée avec succès !");
-        resetForm();
+      if (authToken) {
+        const { name, album, member, type } = formData;
+        const response = await inclusionService.createInclusion(
+          name,
+          album,
+          member,
+          type,
+          authToken
+        );
+        if (response) {
+          ToastUtils.success("Inclusion créée avec succès !");
+          resetForm();
+        }
       }
     } catch (error) {
       ToastUtils.error("Problème lors de la création.");

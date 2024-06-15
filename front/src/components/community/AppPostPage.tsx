@@ -9,7 +9,7 @@ import ToastUtils from "../../utils/ToastUtils";
 
 export default function AppPostPage() {
   const [selectedPost, setSelectedPost] = useState<Post>();
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const { idPost } = useParams();
 
   useEffect(() => {
@@ -18,8 +18,8 @@ export default function AppPostPage() {
 
   async function fetchPost() {
     try {
-      if (idPost) {
-        const response = await postService.getOnePost(idPost);
+      if (idPost && authToken) {
+        const response = await postService.getOnePost(idPost, authToken);
         setSelectedPost(response);
       }
     } catch (error) {

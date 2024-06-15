@@ -27,7 +27,7 @@ import { Inclusion } from "../../types/InclusionType";
 
 export default function AppExploOneAlbum() {
   const { idAlbum } = useParams();
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const [thisAlbum, setThisAlbum] = useState<Album>();
   const [ownedInclusionAlbum, setOwnedInclusionAlbum] =
     useState<OwnedInclusionAlbum>();
@@ -43,8 +43,8 @@ export default function AppExploOneAlbum() {
 
   async function fetchAlbum() {
     try {
-      if (idAlbum) {
-        const response = await albumService.getOneAlbum(idAlbum);
+      if (idAlbum && authToken) {
+        const response = await albumService.getOneAlbum(idAlbum, authToken);
         setThisAlbum(response);
         if (response.versions) {
           setSelectedVersion(response.versions[0]);
@@ -64,10 +64,11 @@ export default function AppExploOneAlbum() {
     thisCurrentAlbum?: Album
   ) {
     try {
-      if (user?.username && idAlbum) {
+      if (user?.username && idAlbum && authToken) {
         const response = await ownedAlbumService.getOneOwnedAlbumInclusion(
           user?.username,
-          idAlbum
+          idAlbum,
+          authToken
         );
         if (response) {
           setOwnedInclusionAlbum(response);
@@ -94,13 +95,14 @@ export default function AppExploOneAlbum() {
 
   async function handleAddToCollection() {
     try {
-      if (user?.username && thisAlbum) {
+      if (user?.username && thisAlbum && authToken) {
         if (ownedVersionOfAlbum || (!multipleVersion && ownedInclusionAlbum)) {
           const response = await ownedAlbumService.modifyOwnedAlbum(
             user.username,
             ownedVersionOfAlbum ? ownedVersionOfAlbum?.album.id : "",
             quantity,
-            selectedVersion
+            selectedVersion,
+            authToken
           );
           if (response) {
             ToastUtils.success("Quantité mise à jour avec succès !");
@@ -110,7 +112,8 @@ export default function AppExploOneAlbum() {
             user.username,
             thisAlbum.id,
             quantity,
-            selectedVersion
+            selectedVersion,
+            authToken
           );
           if (response) {
             ToastUtils.success("Album ajouté avec succès !");
@@ -126,11 +129,12 @@ export default function AppExploOneAlbum() {
 
   async function deleteOwnedAlbum() {
     try {
-      if (idAlbum && user) {
+      if (idAlbum && user && authToken) {
         const response = await ownedAlbumService.deleteOwnedAlbum(
           user.username,
           idAlbum,
-          ownedVersionOfAlbum?.version
+          ownedVersionOfAlbum?.version,
+          authToken
         );
         if (response) {
           ToastUtils.success("Suppression de l'album dans votre collection");
@@ -147,11 +151,12 @@ export default function AppExploOneAlbum() {
 
   async function handleAddInclusionToCollection(inclusionId: string) {
     try {
-      if (user) {
+      if (user && authToken) {
         const response = await ownedInclusionService.createOwnedInclusion(
           user.username,
           inclusionId,
-          1
+          1,
+          authToken
         );
         if (response) {
           ToastUtils.success("Inclusion ajoutée avec succès !");

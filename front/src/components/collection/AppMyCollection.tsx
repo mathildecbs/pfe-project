@@ -14,6 +14,7 @@ export default function AppMyCollection() {
   const [ownedAlbums, setOwnedAlbums] = useState<OwnedAlbum[]>([]);
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { authToken } = useAuth();
 
   useEffect(() => {
     fetchOwnedAlbums();
@@ -22,8 +23,11 @@ export default function AppMyCollection() {
 
   async function fetchOwnedAlbums() {
     try {
-      if (user) {
-        const response = await ownedAlbumService.getOwnedAlbums(user.username);
+      if (user && authToken) {
+        const response = await ownedAlbumService.getOwnedAlbums(
+          user.username,
+          authToken
+        );
         setOwnedAlbums(response);
       }
     } catch (error) {
@@ -33,9 +37,10 @@ export default function AppMyCollection() {
 
   async function fetchOwnedInclusions() {
     try {
-      if (user) {
+      if (user && authToken) {
         const response = await ownedInclusionService.getOwnedInclusions(
-          user.username
+          user.username,
+          authToken
         );
         setOwnedInclusions(response);
       }

@@ -3,9 +3,7 @@ import { Button, Paper, Typography, TextField, Box } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "../../css/AppLogin.module.css";
 import { useAuth } from "../../contexts/AuthProvider";
-import ApiUtils from "../../utils/ApiUtils";
 import { hashPassword } from "../../utils/HashUtils";
-import { TokenUser } from "../../types/TokenUserType";
 import userService from "../../services/UserService";
 import ToastUtils from "../../utils/ToastUtils";
 

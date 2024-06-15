@@ -9,6 +9,7 @@ import { Artist } from "../../types/ArtistType";
 import { Group } from "../../types/GroupType";
 import { Album } from "../../types/AlbumType";
 import styles from "../../css/AppExplorer.module.css";
+import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppExplorer() {
   const [groups, setGroups] = useState<Group[]>([]);
@@ -16,6 +17,7 @@ export default function AppExplorer() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [albums, setAlbums] = useState<Album[]>([]);
   const navigate = useNavigate();
+  const { authToken } = useAuth();
 
   useEffect(() => {
     fetchGroups();
@@ -26,8 +28,10 @@ export default function AppExplorer() {
 
   async function fetchGroups() {
     try {
-      const response = await groupService.getGroups();
-      setGroups(response);
+      if (authToken) {
+        const response = await groupService.getGroups(authToken);
+        setGroups(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des groupes");
     }
@@ -35,8 +39,10 @@ export default function AppExplorer() {
 
   async function fetchSoloArtists() {
     try {
-      const response = await artistService.getSoloArtists();
-      setSoloArtists(response);
+      if (authToken) {
+        const response = await artistService.getSoloArtists(authToken);
+        setSoloArtists(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des soloistes");
     }
@@ -44,8 +50,10 @@ export default function AppExplorer() {
 
   async function fetchArtists() {
     try {
-      const response = await artistService.getArtists();
-      setArtists(response);
+      if (authToken) {
+        const response = await artistService.getArtists(authToken);
+        setArtists(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des artistes");
     }
@@ -53,8 +61,10 @@ export default function AppExplorer() {
 
   async function fetchAlbums() {
     try {
-      const response = await albumService.getAlbums();
-      setAlbums(response);
+      if (authToken) {
+        const response = await albumService.getAlbums(authToken);
+        setAlbums(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des albums");
     }
@@ -82,7 +92,10 @@ export default function AppExplorer() {
             </Typography>
           </div>
         ))}
-        <Button className={styles.MoreButton} onClick={() => navigate("/exploGroups")}>
+        <Button
+          className={styles.MoreButton}
+          onClick={() => navigate("/exploGroups")}
+        >
           Plus...
         </Button>
       </div>
@@ -93,37 +106,49 @@ export default function AppExplorer() {
     return (
       <div className={styles.Container}>
         {artists.slice(0, 4).map((artist) => (
-          <div key={artist.id} className={styles.ItemCard} onClick={() => navigate(`/exploOneArtist/${artist.id}`)}>
-            <Typography variant="h6" className={styles.ItemText}>{artist.name}</Typography>
+          <div
+            key={artist.id}
+            className={styles.ItemCard}
+            onClick={() => navigate(`/exploOneArtist/${artist.id}`)}
+          >
+            <Typography variant="h6" className={styles.ItemText}>
+              {artist.name}
+            </Typography>
           </div>
         ))}
-          <Button
-            className={styles.MoreButton}
-            onClick={() => navigate("/exploArtists")}
-          >
-            Plus...
-          </Button>
+        <Button
+          className={styles.MoreButton}
+          onClick={() => navigate("/exploArtists")}
+        >
+          Plus...
+        </Button>
       </div>
     );
-  };
+  }
 
   function renderAlbums() {
     return (
       <div className={styles.Container}>
         {albums.slice(0, 4).map((album) => (
-          <div key={album.id} className={styles.ItemCard} onClick={() => navigate(`/exploOneAlbum/${album.id}`)}>
-            <Typography variant="h6" className={styles.ItemText}>{album.name}</Typography>
+          <div
+            key={album.id}
+            className={styles.ItemCard}
+            onClick={() => navigate(`/exploOneAlbum/${album.id}`)}
+          >
+            <Typography variant="h6" className={styles.ItemText}>
+              {album.name}
+            </Typography>
           </div>
         ))}
-          <Button
-            className={styles.MoreButton}
-            onClick={() => navigate("/exploAlbums")}
-          >
-            Plus...
-          </Button>
+        <Button
+          className={styles.MoreButton}
+          onClick={() => navigate("/exploAlbums")}
+        >
+          Plus...
+        </Button>
       </div>
     );
-  };
+  }
 
   return (
     <>

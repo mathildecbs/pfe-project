@@ -2,18 +2,18 @@ import { Album } from "../types/AlbumType";
 import ApiUtils from "../utils/ApiUtils";
 
 class AlbumService {
-  async getAlbums(): Promise<Album[]> {
+  async getAlbums(authToken: string): Promise<Album[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get("/album");
+      const response = await ApiUtils.getApiInstanceJson(authToken).get("/album");
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des albums");
     }
   }
 
-  async getOneAlbum(idAlbum: string): Promise<Album> {
+  async getOneAlbum(idAlbum: string, authToken: string): Promise<Album> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
         `/album/${idAlbum}`
       );
       return response.data;
@@ -28,10 +28,11 @@ class AlbumService {
     solo: boolean,
     versions: string[],
     artist: string,
-    group: string
+    group: string,
+    authToken: string
   ): Promise<Album> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().post("/album", {
+      const response = await ApiUtils.getApiInstanceJson(authToken).post("/album", {
         name: albumName,
         release_date: releaseDate,
         solo: solo,
@@ -45,20 +46,20 @@ class AlbumService {
     }
   }
 
-  async deleteAlbum(idAlbum: string): Promise<boolean> {
+  async deleteAlbum(idAlbum: string, authToken: string): Promise<boolean> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().delete(
+      const response = await ApiUtils.getApiInstanceJson(authToken).delete(
         `/album/${idAlbum}`
       );
       return response.data;
     } catch (error) {
-      throw new Error("Erreur lors du delete album  ");
+      throw new Error("Erreur lors du delete album");
     }
   }
 
-  async modifyAlbum(groups: string[]): Promise<Album> {
+  async modifyAlbum(groups: string[], authToken: string): Promise<Album> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().patch("/album", {
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch("/album", {
         groups: groups,
       });
       return response.data;

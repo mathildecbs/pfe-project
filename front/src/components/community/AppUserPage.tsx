@@ -14,7 +14,7 @@ export default function AppUserPage() {
   const [userProfile, setUserProfile] = useState<User>();
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [repostStatus, setRepostStatus] = useState<Map<number, boolean>>(new Map());
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const { username } = useParams();
 
   useEffect(() => {
@@ -42,8 +42,8 @@ export default function AppUserPage() {
 
   async function fetchUserPosts() {
     try {
-      if (username) {
-        const response = await postService.getFeed(username);
+      if (username && authToken) {
+        const response = await postService.getFeed(username, authToken);
         setUserPosts(response);
       }
     } catch (error) {

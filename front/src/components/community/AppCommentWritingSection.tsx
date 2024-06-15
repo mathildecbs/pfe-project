@@ -1,9 +1,4 @@
-import {
-  Paper,
-  Typography,
-  TextField,
-  Button,
-} from "@mui/material";
+import { Paper, Typography, TextField, Button } from "@mui/material";
 import styles from "../../css/AppPost.module.css";
 import postService from "../../services/PostService";
 import { useAuth } from "../../contexts/AuthProvider";
@@ -21,12 +16,18 @@ export default function AppCommentWritingSection({
   addNewComment,
 }: AppCommentWritingSectionProps) {
   const [commentContent, setCommentContent] = useState("");
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
 
   async function submitComment() {
     try {
-      if (user) {
-        const newComment = await postService.publishPost(user.username, commentContent, [], post.id);
+      if (user && authToken) {
+        const newComment = await postService.publishPost(
+          user.username,
+          commentContent,
+          [],
+          authToken,
+          post.id
+        );
         addNewComment(newComment);
         setCommentContent("");
       }
@@ -38,9 +39,9 @@ export default function AppCommentWritingSection({
   return (
     <Paper className={styles.PostContainer}>
       <div className={styles.Header}>
-          <Typography variant="h6" className={styles.Name}>
-            Répondre à la publication
-          </Typography>
+        <Typography variant="h6" className={styles.Name}>
+          Répondre à la publication
+        </Typography>
       </div>
       <TextField
         autoFocus
@@ -55,7 +56,9 @@ export default function AppCommentWritingSection({
         value={commentContent}
         onChange={(e) => setCommentContent(e.target.value)}
       />
-      <Button disabled={commentContent === ""} onClick={submitComment}>Commenter</Button>
+      <Button disabled={commentContent === ""} onClick={submitComment}>
+        Commenter
+      </Button>
     </Paper>
   );
 }

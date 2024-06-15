@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import { Group } from "../../types/GroupType";
 import groupService from "../../services/GroupService";
 import ToastUtils from "../../utils/ToastUtils";
-import { Button, Paper, Typography } from "@mui/material";
+import { Paper, Typography } from "@mui/material";
 import artistService from "../../services/ArtistService";
 import { Artist } from "../../types/ArtistType";
 import { useNavigate } from "react-router-dom";
 import styles from "../../css/AppExploGroups.module.css";
+import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppExploGroups() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [soloArtists, setSoloArtists] = useState<Artist[]>([]);
   const navigate = useNavigate();
+  const { authToken } = useAuth();
 
   useEffect(() => {
     fetchGroups();
@@ -20,8 +22,10 @@ export default function AppExploGroups() {
 
   async function fetchGroups() {
     try {
-      const response = await groupService.getGroups();
-      setGroups(response);
+      if (authToken) {
+        const response = await groupService.getGroups(authToken);
+        setGroups(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des groupes");
     }
@@ -29,8 +33,10 @@ export default function AppExploGroups() {
 
   async function fetchSoloArtists() {
     try {
-      const response = await artistService.getSoloArtists();
-      setSoloArtists(response);
+      if (authToken) {
+        const response = await artistService.getSoloArtists(authToken);
+        setSoloArtists(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des soloistes");
     }

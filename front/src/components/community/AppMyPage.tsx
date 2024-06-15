@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Post } from "../../types/PostType";
 import { useAuth } from "../../contexts/AuthProvider";
 import AppPost from "./AppPost";
@@ -11,7 +11,7 @@ import { usePosts } from "../../contexts/PostsProvider";
 
 export default function AppMyPage() {
   const { myFeed, setMyFeed } = usePosts();
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
 
   useEffect(() => {
     fetchFeed();
@@ -19,8 +19,8 @@ export default function AppMyPage() {
 
   async function fetchFeed() {
     try {
-      if (user) {
-        const response = await postService.getFeed(user.username);
+      if (user && authToken) {
+        const response = await postService.getFeed(user.username, authToken);
         setMyFeed(response);
       }
     } catch (error) {
