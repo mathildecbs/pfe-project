@@ -16,4 +16,5 @@ export interface Post {
   nb_likes: number;
   tags: Tag[];
   content: string;
+  repost_date?: string;
 }

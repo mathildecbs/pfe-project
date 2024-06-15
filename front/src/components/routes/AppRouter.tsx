@@ -23,6 +23,7 @@ import AppCreateNew from "../create/AppCreateNew";
 import AppTagPage from "../community/AppTagPage";
 import AppExploOneInclusion from "../exploration/AppExploOneInclusion";
 import AppRoutesAdmin from "./AppRoutesAdmin";
+import AppExploSearch from "../exploration/AppExploSearch";
 
 function AppRouter() {
   return (
@@ -49,6 +50,7 @@ function AppRouter() {
           path="/exploOneInclusion/:idInclusion"
           element={<AppExploOneInclusion />}
         />
+        <Route path="/exploSearch/:searchQuery" element={<AppExploSearch />} />
         <Route path="/myCollection" element={<AppMyCollection />} />
         <Route path="/tagPage/:tagName" element={<AppTagPage />} />
         <Route path="/collectionAlbums" element={<AppCollectionAlbums />} />
@@ -58,7 +60,7 @@ function AppRouter() {
         />
         <Route path="/myPage" element={<AppMyPage />} />
         <Route path="/user/:username" element={<AppUserPage />} />
-        <Route element={<AppRoutesAdmin/>}>
+        <Route element={<AppRoutesAdmin />}>
           <Route path="/createNew" element={<AppCreateNew />} />
         </Route>
       </Route>

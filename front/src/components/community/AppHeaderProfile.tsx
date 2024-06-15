@@ -70,8 +70,8 @@ export default function AppHeaderProfile({
 
   const renderProfileInfo = () => (
     <div className={styles.ProfileInfo}>
-      <Typography variant="body1">{userProfile.name}</Typography>
-      <Typography variant="body2">{userProfile.description}</Typography>
+      <Typography variant="body1" className={styles.Username}>@{userProfile.username}</Typography>
+      <Typography variant="body2" className={styles.Description}>{userProfile.description}</Typography>
       {renderFollowButton()}
     </div>
   );
@@ -88,11 +88,11 @@ export default function AppHeaderProfile({
         </div>
       ) : (
         <Avatar className={`${styles.DefaultAvatar} ${styles.UserDefault}`}>
-          {userProfile.name.charAt(0).toUpperCase()}
+          {userProfile.username.charAt(0).toUpperCase()}
         </Avatar>
       )}
       <div className={styles.UserInfo}>
-        <Typography variant="h5">{userProfile.username}</Typography>
+        <Typography variant="h5">{userProfile.name}</Typography>
         {renderProfileInfo()}
       </div>
     </div>

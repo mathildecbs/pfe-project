@@ -118,7 +118,7 @@ export default function AppCommunity() {
             )}
           </>
         ) : (
-          <Typography variant="h6">Pas de posts disponibles</Typography>
+          <Typography variant="h6" className={styles.Unavailable}>Pas de posts disponibles</Typography>
         )}
       </div>
     </>
