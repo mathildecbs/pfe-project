@@ -22,6 +22,7 @@ import AppUserPage from "../community/AppUserPage";
 import AppCreateNew from "../create/AppCreateNew";
 import AppTagPage from "../community/AppTagPage";
 import AppExploOneInclusion from "../exploration/AppExploOneInclusion";
+import AppRoutesAdmin from "./AppRoutesAdmin";
 
 function AppRouter() {
   return (
@@ -57,7 +58,7 @@ function AppRouter() {
         />
         <Route path="/myPage" element={<AppMyPage />} />
         <Route path="/user/:username" element={<AppUserPage />} />
-        <Route element={<AppRoutesNotConnected />}>
+        <Route element={<AppRoutesAdmin/>}>
           <Route path="/createNew" element={<AppCreateNew />} />
         </Route>
       </Route>
