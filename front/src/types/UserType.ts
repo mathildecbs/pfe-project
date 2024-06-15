@@ -18,4 +18,5 @@ export interface User {
   posts: Post[];
   reposts: Post[];
   isAdmin: boolean;
+  image: string;
 }

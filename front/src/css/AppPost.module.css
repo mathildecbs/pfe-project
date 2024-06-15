@@ -15,6 +15,14 @@
   gap: 0.5em;
 }
 
+.UserImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.25em;
+}
+
 .UserInfo {
   display: flex;
   align-items: center;
@@ -24,9 +32,11 @@
 }
 
 .UserInfo:hover {
-  text-decoration: underline;
-
+  .Name {
+    text-decoration: underline;
+  }
   .Username {
+    text-decoration: underline;
     color: rgb(85, 85, 85);
   }
 }

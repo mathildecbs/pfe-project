@@ -9,8 +9,7 @@ import {
   SelectChangeEvent,
   List,
   ListItem,
-  IconButton,
-  Grid,
+  IconButton
 } from "@mui/material";
 import styles from "../../css/AppCreateArtist.module.css";
 import AttachFileIcon from "@mui/icons-material/AttachFile";

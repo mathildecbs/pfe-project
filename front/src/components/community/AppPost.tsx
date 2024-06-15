@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Paper, Typography, IconButton } from "@mui/material";
+import { Paper, Typography, IconButton, Avatar } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -106,11 +106,22 @@ export default function AppPost({ post, repost }: AppPostProps) {
         </Typography>
       )}
 
-      <div
-        className={styles.Header}
-        onClick={() => navigateTo("user", post.user.username)}
-      >
-        <div className={styles.UserInfo}>
+      <div className={styles.Header}>
+        <div
+          className={styles.UserInfo}
+          onClick={() => navigateTo("user", post.user.username)}
+        >
+          {post.user.image ? (
+            <Avatar
+              src={post.user.image}
+              alt={post.user.name}
+              className={styles.UserImage}
+            />
+          ) : (
+            <Avatar className={`${styles.DefaultAvatar} ${styles.UserImage}`}>
+              {post.user.username.charAt(0).toUpperCase()}
+            </Avatar>
+          )}
           <Typography variant="h6" className={styles.Name}>
             {post.user.name}
           </Typography>
