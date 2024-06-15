@@ -15,11 +15,11 @@ import {
 import styles from "../../css/AppCreateNew.module.css";
 import { useEffect, useState } from "react";
 import ToastUtils from "../../utils/ToastUtils";
-import ApiUtils from "../../utils/ApiUtils";
 import groupService from "../../services/GroupService";
 import { Group } from "../../types/GroupType";
 import { Add, Delete } from "@mui/icons-material";
 import artistService from "../../services/ArtistService";
+import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppCreateArtist() {
   const [formData, setFormData] = useState({
@@ -31,6 +31,7 @@ export default function AppCreateArtist() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [selectedGroups, setSelectedGroups] = useState<Group[]>([]);
   const [selectedGroup, setSelectedGroup] = useState<string>("");
+  const { authToken } = useAuth();
 
   useEffect(() => {
     const isAllFieldsFilled = formData.name !== "" && formData.birthday !== "";
@@ -43,8 +44,10 @@ export default function AppCreateArtist() {
 
   async function fetchGroups() {
     try {
-      const response = await groupService.getGroups();
-      setGroups(response);
+      if (authToken) {
+        const response = await groupService.getGroups(authToken);
+        setGroups(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des groupes");
     }
@@ -57,23 +60,25 @@ export default function AppCreateArtist() {
       if (mainGroup !== null && mainGroup !== "") {
         groupIds.push(mainGroup);
       }
+      if (authToken) {
+        const response = await artistService.createArtist(
+          name,
+          birthday,
+          mainGroup === "" ? null : mainGroup,
+          groupIds,
+          authToken
+        );
 
-      const response = await artistService.createArtist(
-        name,
-        birthday,
-        mainGroup === "" ? null : mainGroup,
-        groupIds
-      );
-
-      if (response) {
-        ToastUtils.success("Artiste créé avec succès !");
-        setFormData({
-          name: "",
-          birthday: "",
-          mainGroup: null,
-        });
-        setSelectedGroups([]);
-        setSelectedGroup("");
+        if (response) {
+          ToastUtils.success("Artiste créé avec succès !");
+          setFormData({
+            name: "",
+            birthday: "",
+            mainGroup: null,
+          });
+          setSelectedGroups([]);
+          setSelectedGroup("");
+        }
       }
     } catch (error) {
       ToastUtils.error("Problème lors de la création.");

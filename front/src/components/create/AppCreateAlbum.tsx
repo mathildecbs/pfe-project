@@ -20,12 +20,12 @@ import { Add, Delete } from "@mui/icons-material";
 import styles from "../../css/AppCreateNew.module.css";
 import { useEffect, useState } from "react";
 import ToastUtils from "../../utils/ToastUtils";
-import ApiUtils from "../../utils/ApiUtils";
 import artistService from "../../services/ArtistService";
 import groupService from "../../services/GroupService";
 import { Group } from "../../types/GroupType";
 import { Artist } from "../../types/ArtistType";
 import albumService from "../../services/AlbumService";
+import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppCreateAlbum() {
   const [formData, setFormData] = useState({
@@ -40,6 +40,7 @@ export default function AppCreateAlbum() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [groups, setGroups] = useState<Group[]>([]);
   const [artists, setArtists] = useState<Artist[]>([]);
+  const { authToken } = useAuth();
 
   useEffect(() => {
     const isAllFieldsFilled =
@@ -56,8 +57,10 @@ export default function AppCreateAlbum() {
 
   async function fetchGroups() {
     try {
-      const response = await groupService.getGroups();
-      setGroups(response);
+      if (authToken) {
+        const response = await groupService.getGroups(authToken);
+        setGroups(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des groupes");
     }
@@ -65,8 +68,10 @@ export default function AppCreateAlbum() {
 
   async function fetchArtists() {
     try {
-      const response = await artistService.getArtists();
-      setArtists(response);
+      if (authToken) {
+        const response = await artistService.getArtists(authToken);
+        setArtists(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des artistes");
     }
@@ -137,27 +142,30 @@ export default function AppCreateAlbum() {
 
   async function createAlbum() {
     try {
-      const { name, releaseDate, solo, versions, artist, group } = formData;
-      const response = await albumService.createAlbum(
-        name,
-        releaseDate,
-        solo,
-        versions,
-        artist,
-        group
-      );
+      if (authToken) {
+        const { name, releaseDate, solo, versions, artist, group } = formData;
+        const response = await albumService.createAlbum(
+          name,
+          releaseDate,
+          solo,
+          versions,
+          artist,
+          group,
+          authToken
+        );
 
-      if (response) {
-        ToastUtils.success("Album créé avec succès !");
-        setFormData({
-          name: "",
-          releaseDate: "",
-          solo: false,
-          artist: "",
-          group: "",
-          versions: [],
-          version: "",
-        });
+        if (response) {
+          ToastUtils.success("Album créé avec succès !");
+          setFormData({
+            name: "",
+            releaseDate: "",
+            solo: false,
+            artist: "",
+            group: "",
+            versions: [],
+            version: "",
+          });
+        }
       }
     } catch (error) {
       ToastUtils.error("Problème lors de la création.");

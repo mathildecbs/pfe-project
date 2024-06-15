@@ -9,7 +9,7 @@ import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppExploAlbums() {
   const [ownedAlbums, setOwnedAlbums] = useState<OwnedAlbum[]>([]);
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,8 +18,8 @@ export default function AppExploAlbums() {
 
   async function fetchOwnedAlbums() {
     try {
-      if (user) {
-        const response = await ownedAlbumService.getOwnedAlbums(user.username);
+      if (user && authToken) {
+        const response = await ownedAlbumService.getOwnedAlbums(user.username, authToken);
         setOwnedAlbums(response);
       }
     } catch (error) {

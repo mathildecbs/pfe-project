@@ -3,9 +3,9 @@ import { OwnedInclusionAlbum } from "../types/OwnedInclusionAlbumType";
 import ApiUtils from "../utils/ApiUtils";
 
 class OwnedInclusionService {
-  async getOwnedInclusions(username: string): Promise<OwnedInclusion[]> {
+  async getOwnedInclusions(username: string, authToken: string): Promise<OwnedInclusion[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
         `/user/${username}/inclusion`
       );
       return response.data;
@@ -14,12 +14,9 @@ class OwnedInclusionService {
     }
   }
 
-  async getOneOwnedInclusion(
-    username: string,
-    idOwnedInclusion: string
-  ): Promise<OwnedInclusionAlbum> {
+  async getOneOwnedInclusion(username: string, idOwnedInclusion: string, authToken: string): Promise<OwnedInclusionAlbum> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
         `/user/${username}/inclusion/${idOwnedInclusion}`
       );
       return response.data;
@@ -28,13 +25,9 @@ class OwnedInclusionService {
     }
   }
 
-  async createOwnedInclusion(
-    username: string,
-    inclusionId: string,
-    quantity: number
-  ): Promise<OwnedInclusion[]> {
+  async createOwnedInclusion(username: string, inclusionId: string, quantity: number, authToken: string): Promise<OwnedInclusion[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().post(
+      const response = await ApiUtils.getApiInstanceJson(authToken).post(
         `/user/${username}/inclusion`,
         {
           inclusion: inclusionId,
@@ -47,12 +40,9 @@ class OwnedInclusionService {
     }
   }
 
-  async deleteOwnedInclusion(
-    username: string,
-    idInclusion: string
-  ): Promise<boolean> {
+  async deleteOwnedInclusion(username: string, idInclusion: string, authToken: string): Promise<boolean> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().delete(
+      const response = await ApiUtils.getApiInstanceJson(authToken).delete(
         `/user/${username}/inclusion/${idInclusion}`
       );
       return response.data;
@@ -61,13 +51,9 @@ class OwnedInclusionService {
     }
   }
 
-  async modifyOwnedInclusion(
-    username: string,
-    idOwnedInclusion: string,
-    quantity: number
-  ): Promise<OwnedInclusion> {
+  async modifyOwnedInclusion(username: string, idOwnedInclusion: string, quantity: number, authToken: string): Promise<OwnedInclusion> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().patch(
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch(
         `/user/${username}/inclusion/${idOwnedInclusion}`,
         {
           quantity: quantity,

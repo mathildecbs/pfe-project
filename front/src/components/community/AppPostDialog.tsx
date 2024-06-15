@@ -28,7 +28,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [postContent, setPostContent] = useState("");
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const { addPost, addPostMyFeed } = usePosts();
 
   useEffect(() => {
@@ -37,8 +37,10 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
 
   async function fetchTags() {
     try {
-      const response = await tagService.getTags();
-      setTags(response);
+      if (authToken) {
+        const response = await tagService.getTags(authToken);
+        setTags(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des tags");
     }
@@ -46,8 +48,10 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
 
   async function publishTag(tagName: string) {
     try {
-      const response = await tagService.createTag(tagName);
-      return response;
+      if (authToken) {
+        const response = await tagService.createTag(tagName, authToken);
+        return response;
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la création du tag");
     }
@@ -55,7 +59,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
 
   async function publishPost(): Promise<void> {
     try {
-      if (!user) return;
+      if (!user || !authToken) return;
 
       const newTags = await Promise.all(
         selectedTags.map(async (tag) => {
@@ -74,7 +78,8 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
       const response = await postService.publishPost(
         user.username,
         postContent,
-        tagsToSend
+        tagsToSend,
+        authToken
       );
 
       addPost(response);

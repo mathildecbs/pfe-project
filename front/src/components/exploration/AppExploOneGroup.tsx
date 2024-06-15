@@ -9,7 +9,7 @@ import styles from "../../css/AppExploOneGroup.module.css";
 
 export default function AppExploOneGroup() {
   const { idGroup } = useParams();
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const [thisGroup, setThisGroup] = useState<Group>();
   const navigate = useNavigate();
 
@@ -19,8 +19,8 @@ export default function AppExploOneGroup() {
 
   async function fetchGroup() {
     try {
-      if (idGroup) {
-        const response = await groupService.getOneGroup(idGroup);
+      if (idGroup && authToken) {
+        const response = await groupService.getOneGroup(idGroup, authToken);
         setThisGroup(response);
       }
     } catch (error) {
@@ -30,8 +30,8 @@ export default function AppExploOneGroup() {
 
   async function deleteOwnedGroup() {
     try {
-      if (idGroup && user) {
-        const response = await groupService.deleteGroup(idGroup);
+      if (idGroup && authToken) {
+        const response = await groupService.deleteGroup(idGroup, authToken);
         if (response) {
           ToastUtils.success("Suppression du groupe");
           navigate(`/exploGroups`);

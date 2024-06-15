@@ -7,12 +7,10 @@ import {
 } from "@mui/material";
 import styles from "../../css/AppRegister.module.css";
 import { useEffect, useState } from "react";
-import ApiUtils from "../../utils/ApiUtils";
 import { hashPassword } from "../../utils/HashUtils";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthProvider";
 import ToastUtils from "../../utils/ToastUtils";
-import { TokenUser } from "../../types/TokenUserType";
 import userService from "../../services/UserService";
 
 export default function AppRegister() {

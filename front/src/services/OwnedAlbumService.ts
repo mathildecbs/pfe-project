@@ -3,11 +3,9 @@ import { OwnedInclusionAlbum } from "../types/OwnedInclusionAlbumType";
 import ApiUtils from "../utils/ApiUtils";
 
 class OwnedAlbumService {
-  async getOwnedAlbums(
-    username: string
-  ): Promise<OwnedAlbum[]> {
+  async getOwnedAlbums(username: string, authToken: string): Promise<OwnedAlbum[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
         `/user/${username}/album`
       );
       return response.data;
@@ -16,12 +14,9 @@ class OwnedAlbumService {
     }
   }
 
-  async getOneOwnedAlbumInclusion(
-    username: string,
-    idOwnedAlbum: string
-  ): Promise<OwnedInclusionAlbum> {
+  async getOneOwnedAlbumInclusion(username: string, idOwnedAlbum: string, authToken: string): Promise<OwnedInclusionAlbum> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
         `/user/${username}/album/${idOwnedAlbum}`
       );
       return response.data;
@@ -30,14 +25,9 @@ class OwnedAlbumService {
     }
   }
 
-  async createOwnedAlbum(
-    username: string,
-    albumId: string,
-    quantity: number,
-    version: string
-  ): Promise<OwnedAlbum[]> {
+  async createOwnedAlbum(username: string, albumId: string, quantity: number, version: string, authToken: string): Promise<OwnedAlbum[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().post(
+      const response = await ApiUtils.getApiInstanceJson(authToken).post(
         `/user/${username}/album`,
         {
           album: albumId,
@@ -47,17 +37,13 @@ class OwnedAlbumService {
       );
       return response.data;
     } catch (error) {
-      throw new Error("Erreur lors du post album possédé");
+      throw new Error("Erreur lors de la création de l'album possédé");
     }
   }
 
-  async deleteOwnedAlbum(
-    username: string,
-    idAlbum: string,
-    version: string | undefined
-  ): Promise<boolean> {
+  async deleteOwnedAlbum(username: string, idAlbum: string, version: string | undefined, authToken: string): Promise<boolean> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().delete(
+      const response = await ApiUtils.getApiInstanceJson(authToken).delete(
         `/user/${username}/album/${idAlbum}`,
         {
           data: {
@@ -67,18 +53,13 @@ class OwnedAlbumService {
       );
       return response.data;
     } catch (error) {
-      throw new Error("Erreur lors du delete album");
+      throw new Error("Erreur lors de la suppression de l'album");
     }
   }
 
-  async modifyOwnedAlbum(
-    username: string,
-    idOwnedAlbum: string,
-    quantity: number,
-    version: string
-  ): Promise<OwnedAlbum> {
+  async modifyOwnedAlbum(username: string, idOwnedAlbum: string, quantity: number, version: string, authToken: string): Promise<OwnedAlbum> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().patch(
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch(
         `/user/${username}/album/${idOwnedAlbum}`,
         {
           quantity: quantity,

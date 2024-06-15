@@ -34,45 +34,49 @@ export default function AppPost({ post, repost }: AppPostProps) {
       : false
   );
   const navigate = useNavigate();
+  const { authToken } = useAuth();
 
   async function actionPost(actionType: string) {
     try {
-      const response = await postService.actionPost(
-        post.id,
-        user?.username,
-        actionType
-      );
+      if (authToken) {
+        const response = await postService.actionPost(
+          post.id,
+          user?.username,
+          actionType,
+          authToken
+        );
 
-      if (response) {
-        if (actionType === "like") {
-          if (hasLiked) {
+        if (response) {
+          if (actionType === "like") {
+            if (hasLiked) {
+              setLikes(likes - 1);
+            } else {
+              setLikes(likes + 1);
+            }
+            setHasLiked(!hasLiked);
+          }
+
+          if (actionType === "unlike") {
             setLikes(likes - 1);
-          } else {
-            setLikes(likes + 1);
+            setHasLiked(false);
           }
-          setHasLiked(!hasLiked);
-        }
 
-        if (actionType === "unlike") {
-          setLikes(likes - 1);
-          setHasLiked(false);
-        }
+          if (actionType === "repost") {
+            if (hasReposted) {
+              setReposts(reposts - 1);
+            } else {
+              setReposts(reposts + 1);
+            }
+            setHasReposted(!hasReposted);
+          }
 
-        if (actionType === "repost") {
-          if (hasReposted) {
+          if (actionType === "unrepost") {
             setReposts(reposts - 1);
-          } else {
-            setReposts(reposts + 1);
+            setHasReposted(false);
           }
-          setHasReposted(!hasReposted);
         }
-
-        if (actionType === "unrepost") {
-          setReposts(reposts - 1);
-          setHasReposted(false);
-        }
+        fetchPosts();
       }
-      fetchPosts();
     } catch (error) {
       ToastUtils.error(error, `Erreur lors du ${actionType} du post`);
     }
@@ -80,8 +84,10 @@ export default function AppPost({ post, repost }: AppPostProps) {
 
   async function fetchPosts() {
     try {
-      const response = await postService.getPosts();
-      setPosts(response);
+      if (authToken) {
+        const response = await postService.getPosts(authToken);
+        setPosts(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des posts");
     }

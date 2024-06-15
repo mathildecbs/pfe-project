@@ -8,11 +8,13 @@ import albumService from "../../services/AlbumService";
 import AppPost from "../community/AppPost";
 import { Album } from "../../types/AlbumType";
 import postService from "../../services/PostService";
+import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppHome() {
   const { posts, setPosts } = usePosts();
   const [albums, setAlbums] = useState<Album[]>([]);
   const navigate = useNavigate();
+  const { authToken } = useAuth();
 
   useEffect(() => {
     fetchAlbums();
@@ -21,8 +23,10 @@ export default function AppHome() {
 
   async function fetchAlbums() {
     try {
-      const response = await albumService.getAlbums();
-      setAlbums(response);
+      if (authToken) {
+        const response = await albumService.getAlbums(authToken);
+        setAlbums(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des albums");
     }
@@ -30,8 +34,10 @@ export default function AppHome() {
 
   async function fetchPosts() {
     try {
-      const response = await postService.getPosts();
-      setPosts(response);
+      if (authToken) {
+        const response = await postService.getPosts(authToken);
+        setPosts(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des posts");
     }

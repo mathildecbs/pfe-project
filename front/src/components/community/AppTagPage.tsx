@@ -11,7 +11,7 @@ import postService from "../../services/PostService";
 
 export default function AppMyPage() {
   const [tagPosts, setTagPosts] = useState<Post[]>([]);
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const { tagName } = useParams();
 
   useEffect(() => {
@@ -20,8 +20,8 @@ export default function AppMyPage() {
 
   async function fetchTagPosts() {
     try {
-      if (tagName) {
-        const response = await postService.getOneTagPosts(tagName);
+      if (tagName && authToken) {
+        const response = await postService.getOneTagPosts(tagName, authToken);
         setTagPosts(response);
       }
     } catch (error) {

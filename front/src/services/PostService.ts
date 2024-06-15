@@ -1,89 +1,87 @@
 import { Post } from "../types/PostType";
 import { Tag } from "../types/TagType";
 import { Trending } from "../types/TrendingType";
-import { User } from "../types/UserType";
 import ApiUtils from "../utils/ApiUtils";
 
 class PostService {
-  async getPosts(): Promise<Post[]> {
+  async getPosts(authToken: string): Promise<Post[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get("/post");
+      const response = await ApiUtils.getApiInstanceJson(authToken).get("/post");
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des posts");
     }
   }
 
-  async getOnePost(idPost: string): Promise<Post> {
+  async getOnePost(idPost: string, authToken: string): Promise<Post> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(`/post/${idPost}`);
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(`/post/${idPost}`);
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération du post");
     }
   }
 
-  async getTrendingPosts(): Promise<Post[]> {
+  async getTrendingPosts(authToken: string): Promise<Post[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get("/post/trending");
+      const response = await ApiUtils.getApiInstanceJson(authToken).get("/post/trending");
       const trendings = response.data as Trending;
       const posts = trendings.posts.map((trendingPost) => trendingPost.post);
       return posts;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des posts trending");
     }
-  }  
+  }
 
-  async getTrendingTags(): Promise<Tag[]> {
+  async getTrendingTags(authToken: string): Promise<Tag[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get("/post/trending");
+      const response = await ApiUtils.getApiInstanceJson(authToken).get("/post/trending");
       const trendings = response.data as Trending;
       return trendings.tags;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des tags trending");
     }
-  }  
+  }
 
-  async getTrendingPostsTags(): Promise<Trending[]> {
+  async getTrendingPostsTags(authToken: string): Promise<Trending[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get("/post/trending");
+      const response = await ApiUtils.getApiInstanceJson(authToken).get("/post/trending");
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des posts trending");
     }
-  } 
+  }
 
-  async getFollowingPosts(username: string): Promise<Post[]> {
+  async getFollowingPosts(username: string, authToken: string): Promise<Post[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(`/post/following/${username}`);
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(`/post/following/${username}`);
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des posts feed");
     }
   }
 
-
-  async getFeed(username: string): Promise<Post[]> {
+  async getFeed(username: string, authToken: string): Promise<Post[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(`/post/feed/${username}`);
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(`/post/feed/${username}`);
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des posts");
     }
   }
 
-  async getOneTagPosts(tagName: string): Promise<Post[]> {
+  async getOneTagPosts(tagName: string, authToken: string): Promise<Post[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(`/post/tag/${tagName}`);
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(`/post/tag/${tagName}`);
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des posts");
     }
   }
 
-  async publishPost(username: string, postContent: string, tags: string[], parent? : number): Promise<Post> {
+  async publishPost(username: string, postContent: string, tags: string[], authToken: string, parent?: number): Promise<Post> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().post('/post', {
+      const response = await ApiUtils.getApiInstanceJson(authToken).post('/post', {
         user: username,
         tags: tags,
         content: postContent,
@@ -95,9 +93,9 @@ class PostService {
     }
   }
 
-  async actionPost(postId: number, username: string | undefined, actionType: string): Promise<Post> {
+  async actionPost(postId: number, username: string | undefined, actionType: string, authToken: string): Promise<Post> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().patch(`/post/${postId}/${actionType}/${username}`);
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch(`/post/${postId}/${actionType}/${username}`);
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des posts");

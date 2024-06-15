@@ -2,64 +2,77 @@ import { Artist } from "../types/ArtistType";
 import ApiUtils from "../utils/ApiUtils";
 
 class ArtistService {
-  async getArtists(): Promise<Artist[]> {
+  async getArtists(authToken: string): Promise<Artist[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get("/artist");
+      const response = await ApiUtils.getApiInstanceJson(authToken).get("/artist");
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des artistes");
     }
   }
 
-  async getSoloArtists(): Promise<Artist[]> {
+  async getSoloArtists(authToken: string): Promise<Artist[]> {
     try {
-      const artists = await this.getArtists();
-      const soloArtists = artists.filter(artist => artist.main_group === null);
+      const artists = await this.getArtists(authToken);
+      const soloArtists = artists.filter(
+        (artist) => artist.main_group === null
+      );
       return soloArtists;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des artistes");
     }
   }
 
-  async getOneArtist(idArtist: string): Promise<Artist> {
+  async getOneArtist(idArtist: string, authToken: string): Promise<Artist> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().get(`/artist/${idArtist}`);
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
+        `/artist/${idArtist}`
+      );
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération de l'artiste");
     }
   }
 
-  async createArtist(artistName: string, birthday: string, mainGroup?: string | null, groups? : string[]): Promise<Artist> {
+  async createArtist(
+    artistName: string,
+    birthday: string,
+    mainGroup: string | null,
+    groups: string[],
+    authToken: string
+  ): Promise<Artist> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().post('/artist', {
+      const response = await ApiUtils.getApiInstanceJson(authToken).post("/artist", {
         name: artistName,
+        birthday: birthday,
         main_group: mainGroup,
-        groups: groups
+        groups: groups,
       });
       return response.data;
     } catch (error) {
-      throw new Error('Erreur lors du post artiste');
+      throw new Error("Erreur lors du post artiste");
     }
   }
 
-  async deleteArtist(idArtist: string): Promise<boolean> {
+  async deleteArtist(idArtist: string, authToken: string): Promise<boolean> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().delete(`/artist/${idArtist}`);
+      const response = await ApiUtils.getApiInstanceJson(authToken).delete(
+        `/artist/${idArtist}`
+      );
       return response.data;
     } catch (error) {
-      throw new Error('Erreur lors du delete artiste');
+      throw new Error("Erreur lors du delete artiste");
     }
   }
 
-  async modifyArtist(groups : string[]): Promise<Artist> {
+  async modifyArtist(groups: string[], authToken: string): Promise<Artist> {
     try {
-      const response = await ApiUtils.getApiInstanceJson().patch('/artist', {
-        groups: groups
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch("/artist", {
+        groups: groups,
       });
       return response.data;
     } catch (error) {
-      throw new Error('Erreur lors de la modification de l\'artiste');
+      throw new Error("Erreur lors de la modification de l'artiste");
     }
   }
 }

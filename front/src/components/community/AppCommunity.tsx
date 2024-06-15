@@ -20,7 +20,7 @@ export default function AppCommunity() {
     trendingTags,
     setTrendingTags,
   } = usePosts();
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const [selectedTab, setSelectedTab] = useState(0);
   const navigate = useNavigate();
 
@@ -30,17 +30,19 @@ export default function AppCommunity() {
 
   async function fetchPosts() {
     try {
-      if (selectedTab === 0) {
-        const response = await postService.getPosts();
-        setPosts(response);
-      } else if (selectedTab === 1 && user) {
-        const response = await postService.getFollowingPosts(user.username);
-        setFollowingPosts(response);
-      } else if (selectedTab === 2 && user) {
-        const posts = await postService.getTrendingPosts();
-        setTrendingPosts(posts);
-        const tags = await postService.getTrendingTags();
-        setTrendingTags(tags);
+      if (authToken) {
+        if (selectedTab === 0) {
+          const response = await postService.getPosts(authToken);
+          setPosts(response);
+        } else if (selectedTab === 1 && user) {
+          const response = await postService.getFollowingPosts(user.username, authToken);
+          setFollowingPosts(response);
+        } else if (selectedTab === 2 && user) {
+          const posts = await postService.getTrendingPosts(authToken);
+          setTrendingPosts(posts);
+          const tags = await postService.getTrendingTags(authToken);
+          setTrendingTags(tags);
+        }
       }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des posts");
@@ -93,7 +95,11 @@ export default function AppCommunity() {
               </Typography>
               <ul className={styles.TagsList}>
                 {trendingTags.map((tag) => (
-                  <li key={tag.id} className={styles.TagItem} onClick={() => navigateTo(tag.name)}>
+                  <li
+                    key={tag.id}
+                    className={styles.TagItem}
+                    onClick={() => navigateTo(tag.name)}
+                  >
                     #{tag.name}
                   </li>
                 ))}

@@ -9,7 +9,7 @@ import styles from "../../css/AppExploOneArtist.module.css";
 
 export default function AppExploOneArtist() {
   const { idArtist } = useParams();
-  const { user } = useAuth();
+  const { authToken } = useAuth();
   const [thisArtist, setThisArtist] = useState<Artist>();
   const navigate = useNavigate();
 
@@ -19,8 +19,8 @@ export default function AppExploOneArtist() {
 
   async function fetchArtist() {
     try {
-      if (idArtist) {
-        const response = await artistService.getOneArtist(idArtist);
+      if (idArtist && authToken) {
+        const response = await artistService.getOneArtist(idArtist, authToken);
         setThisArtist(response);
       }
     } catch (error) {
@@ -30,8 +30,8 @@ export default function AppExploOneArtist() {
 
   async function deleteArtist() {
     try {
-      if (idArtist && user) {
-        const response = await artistService.deleteArtist(idArtist);
+      if (idArtist && authToken) {
+        const response = await artistService.deleteArtist(idArtist, authToken);
         if (response) {
           ToastUtils.success("Suppression de l'artiste");
           navigate(`/exploArtists`);

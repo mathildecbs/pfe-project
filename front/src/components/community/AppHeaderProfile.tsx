@@ -4,6 +4,7 @@ import { User } from '../../types/UserType';
 import userService from '../../services/UserService';
 import ToastUtils from '../../utils/ToastUtils';
 import styles from '../../css/AppHeaderProfile.module.css';
+import { useAuth } from '../../contexts/AuthProvider';
 
 interface AppHeaderProfileProps {
   userProfile: User;
@@ -14,32 +15,33 @@ const AppHeaderProfile: React.FC<AppHeaderProfileProps> = ({ userProfile, curren
   const [isFollowing, setIsFollowing] = useState<boolean>(
     currentUser?.following.some((user) => user.id === userProfile.id) ?? false
   );
+  const { authToken } = useAuth();
 
-  const handleFollow = async () => {
+  async function handleFollow() {
     try {
-      if (currentUser) {
-        await userService.followUser(currentUser.username, userProfile.username);
+      if (currentUser && authToken) {
+        await userService.followUser(currentUser.username, userProfile.username, authToken);
         setIsFollowing(true);
         ToastUtils.success(`Vous suivez maintenant ${userProfile.username}`);
       }
     } catch (error) {
       ToastUtils.error('Erreur lors du suivi');
     }
-  };
+  }
 
-  const handleUnfollow = async () => {
+  async function handleUnfollow() {
     try {
-      if (currentUser) {
-        await userService.unfollowUser(currentUser.username, userProfile.username);
+      if (currentUser && authToken) {
+        await userService.unfollowUser(currentUser.username, userProfile.username, authToken);
         setIsFollowing(false);
         ToastUtils.success(`Vous ne suivez plus ${userProfile.username}`);
       }
     } catch (error) {
       ToastUtils.error('Erreur lors du désabonnement');
     }
-  };
+  }
 
-  const renderFollowButton = () => {
+  function renderFollowButton() {
     if (currentUser && userProfile.id !== currentUser.id) {
       return (
         <Button
@@ -53,7 +55,7 @@ const AppHeaderProfile: React.FC<AppHeaderProfileProps> = ({ userProfile, curren
       );
     }
     return null;
-  };
+  }
 
   return (
     <div className={styles.Header}>

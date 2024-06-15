@@ -9,7 +9,7 @@ import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppCollectionInclusions() {
   const [ownedInclusions, setOwnedInclusions] = useState<OwnedInclusion[]>([]);
-  const { user } = useAuth();
+  const { user, authToken } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,8 +18,8 @@ export default function AppCollectionInclusions() {
 
   async function fetchOwnedInclusions() {
     try {
-      if (user) {
-        const response = await ownedInclusionService.getOwnedInclusions(user.username);
+      if (user && authToken) {
+        const response = await ownedInclusionService.getOwnedInclusions(user.username, authToken);
         setOwnedInclusions(response);
       }
     } catch (error) {

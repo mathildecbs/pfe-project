@@ -14,6 +14,7 @@ import ToastUtils from "../../utils/ToastUtils";
 import ApiUtils from "../../utils/ApiUtils";
 import groupService from "../../services/GroupService";
 import { Group } from "../../types/GroupType";
+import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppCreateGroup() {
   const [formData, setFormData] = useState({
@@ -23,6 +24,7 @@ export default function AppCreateGroup() {
   });
   const [groups, setGroups] = useState<Group[]>([]);
   const [isFormValid, setIsFormValid] = useState(false);
+  const { authToken } = useAuth();
 
   useEffect(() => {
     const isAllFieldsFilled = formData.name !== "" && formData.company !== "";
@@ -35,8 +37,10 @@ export default function AppCreateGroup() {
 
   async function fetchGroups() {
     try {
-      const response = await groupService.getGroups();
-      setGroups(response);
+      if (authToken) {
+        const response = await groupService.getGroups(authToken);
+        setGroups(response);
+      }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des groupes");
     }
@@ -44,15 +48,22 @@ export default function AppCreateGroup() {
 
   async function createGroup() {
     try {
-      const { name, company, parentGroup } = formData;
-      const response = await groupService.createGroup(name, company, parentGroup || "");
-      if (response) {
-        ToastUtils.success("Groupe créé avec succès !");
-        setFormData({
-          name: "",
-          company: "",
-          parentGroup: "",
-        });
+      if (authToken) {
+        const { name, company, parentGroup } = formData;
+        const response = await groupService.createGroup(
+          name,
+          company,
+          parentGroup || "",
+          authToken
+        );
+        if (response) {
+          ToastUtils.success("Groupe créé avec succès !");
+          setFormData({
+            name: "",
+            company: "",
+            parentGroup: "",
+          });
+        }
       }
     } catch (error) {
       ToastUtils.error("Problème lors de la création.");
