@@ -14,7 +14,9 @@ interface PostsContextType {
   trendingPosts: Post[];
   setTrendingPosts: (posts: Post[]) => void;
   trendingTags: Tag[];
-  setTrendingTags: (tags: Tag[]) => void; 
+  setTrendingTags: (tags: Tag[]) => void;
+  tagPosts: Post[];
+  setTagPosts: (posts: Post[]) => void;
 }
 
 const PostsContext = createContext<PostsContextType | undefined>(undefined);
@@ -33,6 +35,7 @@ export function PostsProvider({ children }: { children: ReactNode }) {
   const [followingPosts, setFollowingPosts] = useState<Post[]>([]);
   const [trendingPosts, setTrendingPosts] = useState<Post[]>([]);
   const [trendingTags, setTrendingTags] = useState<Tag[]>([]);
+  const [tagPosts, setTagPosts] = useState<Post[]>([]);
 
   function addPost(post: Post) {
     setPosts([post, ...posts]);
@@ -57,6 +60,8 @@ export function PostsProvider({ children }: { children: ReactNode }) {
         setTrendingPosts,
         trendingTags,
         setTrendingTags,
+        tagPosts,
+        setTagPosts, 
       }}
     >
       {children}

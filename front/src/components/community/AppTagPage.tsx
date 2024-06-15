@@ -7,11 +7,12 @@ import { Typography } from "@mui/material";
 import styles from "../../css/AppTagPage.module.css";
 import { useParams } from "react-router-dom";
 import postService from "../../services/PostService";
+import { usePosts } from "../../contexts/PostsProvider";
 
-export default function AppMyPage() {
-  const [tagPosts, setTagPosts] = useState<Post[]>([]);
+export default function AppTagPage() {
   const { user, authToken } = useAuth();
   const { tagName } = useParams();
+  const { tagPosts, setTagPosts } = usePosts();
 
   useEffect(() => {
     fetchTagPosts();
@@ -29,16 +30,13 @@ export default function AppMyPage() {
   }
 
   function getPostRepostStatus(posts: Post[]) {
-    const occurrences = new Map<number, number>();
     const repostStatus = new Map<number, boolean>();
 
     posts.forEach((post) => {
-      const count = (occurrences.get(post.id) || 0) + 1;
-      occurrences.set(post.id, count);
-      repostStatus.set(
-        post.id,
-        count > 1 || post.user.username !== user?.username
-      );
+      const isUserInPostReposts = post.reposts
+        ? post.reposts.some((repost) => repost.username === user?.username)
+        : false;
+      repostStatus.set(post.id, isUserInPostReposts);
     });
 
     return repostStatus;
@@ -57,10 +55,8 @@ export default function AppMyPage() {
                 index === tagPosts.findIndex((post) => post.id === tagPost.id)
               }}`}
               post={tagPost}
-              repost={
-                !!repostStatus.get(tagPost.id) &&
-                index === tagPosts.findIndex((post) => post.id === tagPost.id)
-              }
+              repost={false}
+              tag={tagName}
             />
           ))}
         </div>

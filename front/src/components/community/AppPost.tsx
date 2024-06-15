@@ -16,11 +16,18 @@ import { usePosts } from "../../contexts/PostsProvider";
 interface AppPostProps {
   post: Post;
   repost: boolean;
+  tag?: string;
 }
 
-export default function AppPost({ post, repost }: AppPostProps) {
-  const { user } = useAuth();
-  const { setPosts } = usePosts();
+export default function AppPost({ post, repost, tag }: AppPostProps) {
+  const { user, authToken, updateUser } = useAuth();
+  const {
+    setPosts,
+    setTrendingPosts,
+    setFollowingPosts,
+    setTagPosts,
+    setMyFeed,
+  } = usePosts();
   const [likes, setLikes] = useState(post.nb_likes ? post.nb_likes : 0);
   const [reposts, setReposts] = useState(post.nb_reposts ? post.nb_reposts : 0);
   const [hasLiked, setHasLiked] = useState(
@@ -34,7 +41,6 @@ export default function AppPost({ post, repost }: AppPostProps) {
       : false
   );
   const navigate = useNavigate();
-  const { authToken } = useAuth();
 
   async function actionPost(actionType: string) {
     try {
@@ -84,9 +90,22 @@ export default function AppPost({ post, repost }: AppPostProps) {
 
   async function fetchPosts() {
     try {
-      if (authToken) {
-        const response = await postService.getPosts(authToken);
-        setPosts(response);
+      if (authToken && user?.username) {
+        const posts = await postService.getPosts(authToken);
+        setPosts(posts);
+        const followingPosts = await postService.getFollowingPosts(
+          user.username,
+          authToken
+        );
+        setFollowingPosts(followingPosts);
+        const myFeed = await postService.getFeed(user.username, authToken);
+        setMyFeed(myFeed);
+        const trendings = await postService.getTrendingPosts(authToken);
+        setTrendingPosts(trendings);
+        if (tag) {
+          const tagPosts = await postService.getOneTagPosts(tag, authToken);
+          setTagPosts(tagPosts);
+        }
       }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des posts");
