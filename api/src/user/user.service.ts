@@ -47,7 +47,8 @@ export class UserService {
 
     const new_user = await this.usersRepository.save({
       ...createUserDto,
-      password: hashedPassword
+      password: hashedPassword,
+      isAdmin: false
     })
 
     if (!new_user ){
@@ -114,13 +115,13 @@ export class UserService {
   async update(username: string, updateUserDto: UpdateUserDto) {
     const user = await this.findOne(username)
 
-    if( updateUserDto.username) {
+    if(updateUserDto.username) {
       const unique = await this.check_unity(updateUserDto.username)
     }
 
     const new_user = {
       ...user,
-      ...updateUserDto
+      ...updateUserDto,
     }
     const updateResult = await this.usersRepository.update(user.id, {
       ...updateUserDto
