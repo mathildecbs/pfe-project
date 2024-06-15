@@ -9,7 +9,13 @@
   height: 80px;
   overflow: hidden;
   border-radius: 50%;
-  margin-right: 16px;
+  margin-right: 1em;
+}
+
+.UserDefault {
+  width: 80px !important;
+  height: 80px !important;
+  margin-right: 1em;
 }
 
 .ProfilePhoto {

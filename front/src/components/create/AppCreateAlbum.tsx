@@ -15,6 +15,7 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  CircularProgress,
 } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -43,6 +44,7 @@ export default function AppCreateAlbum() {
   const [artists, setArtists] = useState<Artist[]>([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageName, setImageName] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const { authToken } = useAuth();
 
   useEffect(() => {
@@ -157,6 +159,7 @@ export default function AppCreateAlbum() {
   }
 
   async function createAlbum() {
+    setLoading(true);
     try {
       if (authToken) {
         const { name, releaseDate, solo, versions, artist, group } = formData;
@@ -183,12 +186,13 @@ export default function AppCreateAlbum() {
             version: "",
           });
           setImageFile(null);
-          setImageFile(null);
           setImageName("");
         }
       }
     } catch (error) {
       ToastUtils.error("Problème lors de la création.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -338,9 +342,9 @@ export default function AppCreateAlbum() {
           color="primary"
           fullWidth
           onClick={handleSubmit}
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
         >
-          Créer
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Créer"}
         </Button>
       </FormControl>
     </Paper>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Avatar } from "@mui/material";
 import { User } from "../../types/UserType";
 import userService from "../../services/UserService";
 import ToastUtils from "../../utils/ToastUtils";
@@ -78,13 +78,19 @@ export default function AppHeaderProfile({
 
   return (
     <div className={styles.Header}>
-      <div className={styles.UserPhoto}>
-        <img
-          src={userProfile.image}
-          alt={userProfile.username}
-          className={styles.ProfilePhoto}
-        />
-      </div>
+      {userProfile.image ? (
+        <div className={styles.UserPhoto}>
+          <img
+            src={userProfile.image}
+            alt={userProfile.username}
+            className={styles.ProfilePhoto}
+          />
+        </div>
+      ) : (
+        <Avatar className={`${styles.DefaultAvatar} ${styles.UserDefault}`}>
+          {userProfile.name.charAt(0).toUpperCase()}
+        </Avatar>
+      )}
       <div className={styles.UserInfo}>
         <Typography variant="h5">{userProfile.username}</Typography>
         {renderProfileInfo()}

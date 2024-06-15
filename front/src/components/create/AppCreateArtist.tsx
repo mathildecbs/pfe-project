@@ -9,7 +9,8 @@ import {
   SelectChangeEvent,
   List,
   ListItem,
-  IconButton
+  IconButton,
+  CircularProgress,
 } from "@mui/material";
 import styles from "../../css/AppCreateArtist.module.css";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
@@ -35,6 +36,7 @@ export default function AppCreateArtist() {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageName, setImageName] = useState<string>("");
   const { authToken } = useAuth();
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -59,6 +61,7 @@ export default function AppCreateArtist() {
 
   async function createArtist() {
     try {
+      setLoading(true);
       const { name, birthday, mainGroup } = formData;
       const groupIds = selectedGroups.map((group) => group.id);
       if (mainGroup !== null && mainGroup !== "") {
@@ -92,6 +95,8 @@ export default function AppCreateArtist() {
       }
     } catch (error) {
       ToastUtils.error("Problème lors de la création.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -282,9 +287,9 @@ export default function AppCreateArtist() {
           color="primary"
           fullWidth
           onClick={handleSubmit}
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
         >
-          Créer
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Créer"}
         </Button>
       </FormControl>
     </Paper>

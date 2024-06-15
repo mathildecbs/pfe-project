@@ -7,6 +7,7 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  CircularProgress,
 } from "@mui/material";
 import styles from "../../css/AppCreateGroup.module.css";
 import { useEffect, useState, useRef } from "react";
@@ -28,6 +29,7 @@ export default function AppCreateGroup() {
   const [groups, setGroups] = useState<Group[]>([]);
   const [isFormValid, setIsFormValid] = useState(false);
   const { authToken } = useAuth();
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -52,6 +54,7 @@ export default function AppCreateGroup() {
 
   async function createGroup() {
     try {
+      setLoading(true);
       if (authToken) {
         const { name, company, parentGroup } = formData;
         const response = await groupService.createGroup(
@@ -77,6 +80,8 @@ export default function AppCreateGroup() {
       }
     } catch (error) {
       ToastUtils.error("Problème lors de la création.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -193,9 +198,9 @@ export default function AppCreateGroup() {
           color="primary"
           fullWidth
           onClick={handleSubmit}
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
         >
-          Créer
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Créer"}
         </Button>
       </FormControl>
     </Paper>

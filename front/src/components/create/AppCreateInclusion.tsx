@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Button,
+  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
@@ -35,6 +36,7 @@ export default function AppCreateInclusion() {
   const [members, setMembers] = useState<{ id: string; name: string }[]>([]);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageName, setImageName] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const { authToken } = useAuth();
 
   useEffect(() => {
@@ -88,6 +90,7 @@ export default function AppCreateInclusion() {
 
   async function createInclusion() {
     try {
+      setLoading(true);
       if (authToken) {
         const { name, album, member, type } = formData;
         const response = await inclusionService.createInclusion(
@@ -105,6 +108,8 @@ export default function AppCreateInclusion() {
       }
     } catch (error) {
       ToastUtils.error("Problème lors de la création.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -267,9 +272,9 @@ export default function AppCreateInclusion() {
             color="primary"
             fullWidth
             className={styles.SubmitButton}
-            disabled={!isFormValid}
+            disabled={!isFormValid || loading}
           >
-            Créer
+            {loading ? <CircularProgress size={24} color="inherit" /> : "Créer"}
           </Button>
         </FormControl>
       </form>

@@ -45,7 +45,11 @@ class InclusionService {
       };
 
       if (imageFile) {
-        const filePath = `inclusions/${inclusionName}/${imageFile.name}`;
+        const filePath = `${
+          process.env.REACT_APP_FIREBASE_STORAGE_DIR === undefined
+            ? ""
+            : process.env.REACT_APP_FIREBASE_STORAGE_DIR
+        }inclusions/${inclusionName}/${imageFile.name}`;
         const imageUrl = await FirebaseStorageService.uploadFile(
           filePath,
           imageFile
