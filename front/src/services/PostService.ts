@@ -105,7 +105,7 @@ class PostService {
     tags: string[],
     imageFile: File | null,
     authToken: string,
-    parent?: number
+    parent?: string
   ): Promise<Post> {
     try {
       const postData: any = {
@@ -139,7 +139,7 @@ class PostService {
   }
 
   async actionPost(
-    postId: number,
+    postId: string,
     username: string | undefined,
     actionType: string,
     authToken: string
@@ -151,6 +151,17 @@ class PostService {
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des posts");
+    }
+  }
+
+  async deletePost(idPost: string, authToken: string): Promise<Post> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).delete(
+        `/post/${idPost}`
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la suppression du post");
     }
   }
 }

@@ -29,8 +29,8 @@ export default function AppMyPage() {
   }
 
   function getPostRepostStatus(posts: Post[]) {
-    const occurrences = new Map<number, number>();
-    const repostStatus = new Map<number, boolean>();
+    const occurrences = new Map<string, number>();
+    const repostStatus = new Map<string, boolean>();
 
     posts.forEach((post) => {
       const count = (occurrences.get(post.id) || 0) + 1;

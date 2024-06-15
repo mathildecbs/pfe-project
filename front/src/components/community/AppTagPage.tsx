@@ -30,7 +30,7 @@ export default function AppTagPage() {
   }
 
   function getPostRepostStatus(posts: Post[]) {
-    const repostStatus = new Map<number, boolean>();
+    const repostStatus = new Map<string, boolean>();
 
     posts.forEach((post) => {
       const isUserInPostReposts = post.reposts

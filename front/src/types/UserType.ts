@@ -3,7 +3,7 @@ import { OwnedInclusion } from "./OwnedInclusionType";
 import { Post } from "./PostType";
 
 export interface User {
-  id: number;
+  id: string;
   create_date: string;
   maj_date: string;
   username: string;

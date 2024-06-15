@@ -13,7 +13,7 @@ import { User } from "../../types/UserType";
 export default function AppUserPage() {
   const [userProfile, setUserProfile] = useState<User>();
   const [userPosts, setUserPosts] = useState<Post[]>([]);
-  const [repostStatus, setRepostStatus] = useState<Map<number, boolean>>(new Map());
+  const [repostStatus, setRepostStatus] = useState<Map<string, boolean>>(new Map());
   const { user, authToken } = useAuth();
   const { username } = useParams();
 
@@ -55,7 +55,7 @@ export default function AppUserPage() {
   }
 
   function getPostRepostStatus(posts: Post[]) {
-    const repostStatus = new Map<number, boolean>();
+    const repostStatus = new Map<string, boolean>();
 
     posts.forEach((post) => {
       const isRepost = userProfile?.reposts.some((repost) => repost.id === post.id);

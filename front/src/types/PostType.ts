@@ -2,7 +2,7 @@ import { Tag } from "./TagType";
 import { User } from "./UserType";
 
 export interface Post {
-  id: number;
+  id: string;
   create_date: string;
   maj_date: string;
   user: User;
