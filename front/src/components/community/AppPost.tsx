@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Paper, Typography, IconButton, Avatar } from "@mui/material";
+import { Paper, Typography, IconButton, Avatar, Box } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
@@ -136,6 +136,11 @@ export default function AppPost({ post, repost }: AppPostProps) {
       <Typography variant="body1" className={styles.Message}>
         {post.content}
       </Typography>
+      {post.image && (
+        <Box display="flex" justifyContent="center" mt={2}>
+          <img src={post.image} alt="Post image" className={styles.PostImage} />
+        </Box>
+      )}
       <div className={styles.Tags}>
         {post.tags.map((tag, index) => (
           <Typography

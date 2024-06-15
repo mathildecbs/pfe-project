@@ -58,6 +58,13 @@
   margin-bottom: 0.5em;
 }
 
+.PostImage {
+  max-width: 75%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 0.75em;
+}
+
 .Tags {
   color: rgb(27, 172, 217);
   margin-bottom: 0.5em;

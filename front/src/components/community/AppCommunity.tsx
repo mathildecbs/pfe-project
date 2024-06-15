@@ -86,39 +86,39 @@ export default function AppCommunity() {
       </Paper>
       <div className={styles.PostsContainer}>
         {displayedPosts.length ? (
-          <div className={styles.Posts}>
-            {displayedPosts.map((postReceived) => (
-              <AppPost
-                key={postReceived.id}
-                post={postReceived}
-                repost={false}
-              />
-            ))}
-          </div>
+          <>
+            <div className={styles.Posts}>
+              {displayedPosts.map((postReceived) => (
+                <AppPost
+                  key={postReceived.id}
+                  post={postReceived}
+                  repost={false}
+                />
+              ))}
+            </div>
+            {selectedTab === 2 && (
+              <div className={styles.TrendingTags}>
+                <Paper className={styles.TagsContainer}>
+                  <Typography variant="h6" className={styles.TagsTitle}>
+                    Trending Tags
+                  </Typography>
+                  <ul className={styles.TagsList}>
+                    {trendingTags.map((tag) => (
+                      <li
+                        key={tag.id}
+                        className={styles.TagItem}
+                        onClick={() => navigateTo(tag.name)}
+                      >
+                        #{tag.name}
+                      </li>
+                    ))}
+                  </ul>
+                </Paper>
+              </div>
+            )}
+          </>
         ) : (
-          <Typography variant="h6">
-            Pas de posts disponibles
-          </Typography>
-        )}
-        {selectedTab === 2 && (
-          <div className={styles.TrendingTags}>
-            <Paper className={styles.TagsContainer}>
-              <Typography variant="h6" className={styles.TagsTitle}>
-                Trending Tags
-              </Typography>
-              <ul className={styles.TagsList}>
-                {trendingTags.map((tag) => (
-                  <li
-                    key={tag.id}
-                    className={styles.TagItem}
-                    onClick={() => navigateTo(tag.name)}
-                  >
-                    #{tag.name}
-                  </li>
-                ))}
-              </ul>
-            </Paper>
-          </div>
+          <Typography variant="h6">Pas de posts disponibles</Typography>
         )}
       </div>
     </>
