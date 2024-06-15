@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Button,
   FormControl,
@@ -9,16 +10,17 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import styles from "../../css/AppCreateNew.module.css";
-import { useEffect, useState } from "react";
+import styles from "../../css/AppCreateInclusion.module.css";
 import ToastUtils from "../../utils/ToastUtils";
 import { Album } from "../../types/AlbumType";
-import albumService from "../../services/AlbumService";
 import { InclusionEnum } from "../../enums/InclusionEnum";
-import { Group } from "../../types/GroupType";
+import albumService from "../../services/AlbumService";
 import groupService from "../../services/GroupService";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import CancelIcon from "@mui/icons-material/Cancel";
 import inclusionService from "../../services/InclusionService";
 import { useAuth } from "../../contexts/AuthProvider";
+import { Group } from "../../types/GroupType";
 
 export default function AppCreateInclusion() {
   const [formData, setFormData] = useState({
@@ -31,14 +33,16 @@ export default function AppCreateInclusion() {
   const [albums, setAlbums] = useState<Album[]>([]);
   const [selectedAlbum, setSelectedAlbum] = useState<Album | null>(null);
   const [members, setMembers] = useState<{ id: string; name: string }[]>([]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageName, setImageName] = useState<string>("");
   const { authToken } = useAuth();
 
   useEffect(() => {
     const isAllFieldsFilled = Object.values(formData).every(
       (val) => val !== ""
     );
-    setIsFormValid(isAllFieldsFilled);
-  }, [formData]);
+    setIsFormValid(isAllFieldsFilled && imageFile !== null);
+  }, [formData, imageFile]);
 
   useEffect(() => {
     fetchAlbums();
@@ -91,6 +95,7 @@ export default function AppCreateInclusion() {
           album,
           member,
           type,
+          imageFile,
           authToken
         );
         if (response) {
@@ -122,6 +127,19 @@ export default function AppCreateInclusion() {
     }));
   }
 
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] || null;
+    if (file) {
+      setImageFile(file);
+      setImageName(file.name);
+    }
+  }
+
+  function handleRemoveImage() {
+    setImageFile(null);
+    setImageName("");
+  }
+
   function resetForm() {
     setFormData({
       name: "",
@@ -131,9 +149,12 @@ export default function AppCreateInclusion() {
     });
     setSelectedAlbum(null);
     setMembers([]);
+    setImageFile(null);
+    setImageName("");
   }
 
-  function handleSubmit() {
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
     if (formData.name.trim() === "") {
       ToastUtils.error("Veuillez entrer un nom valide.");
       return;
@@ -142,81 +163,116 @@ export default function AppCreateInclusion() {
   }
 
   return (
-    <Paper>
+    <Paper className={styles.PaperContainer}>
       <Typography variant="h5">Créer une inclusion</Typography>
-      <FormControl>
-        <InputLabel id="album-label">Album lié</InputLabel>
-        <Select
-          className={styles.InputText}
-          labelId="album-label"
-          id="album"
-          name="album"
-          value={formData.album}
-          onChange={handleAlbumChange}
+      <form onSubmit={handleSubmit}>
+        <FormControl
+          fullWidth
           variant="outlined"
-          fullWidth
+          className={styles.FormControl}
         >
-          {albums.map((album) => (
-            <MenuItem key={album.id} value={album.id}>
-              {album.name}
-            </MenuItem>
-          ))}
-        </Select>
-        <TextField
-          className={styles.InputText}
-          id="name"
-          name="name"
-          label="Nom de l'inclusion"
-          variant="outlined"
-          fullWidth
-          onChange={handleInputChange}
-          value={formData.name}
-        />
-        <TextField
-          className={styles.InputText}
-          id="type"
-          name="type"
-          label="Type d'inclusion"
-          variant="outlined"
-          fullWidth
-          select
-          value={formData.type}
-          onChange={handleInputChange}
-        >
-          {Object.values(InclusionEnum).map((type) => (
-            <MenuItem key={type} value={type}>
-              {type}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          className={styles.InputText}
-          id="member"
-          name="member"
-          label="Membre lié"
-          variant="outlined"
-          fullWidth
-          select
-          disabled={!selectedAlbum}
-          value={formData.member}
-          onChange={handleInputChange}
-        >
-          {members.map((member) => (
-            <MenuItem key={member.id} value={member.id}>
-              {member.name}
-            </MenuItem>
-          ))}
-        </TextField>
-        <Button
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={handleSubmit}
-          disabled={!isFormValid}
-        >
-          Créer
-        </Button>
-      </FormControl>
+          <InputLabel id="album-label">Album lié</InputLabel>
+          <Select
+            labelId="album-label"
+            id="album"
+            name="album"
+            value={formData.album}
+            className={styles.TextField}
+            onChange={handleAlbumChange}
+            label="Album lié"
+            fullWidth
+          >
+            {albums.map((album) => (
+              <MenuItem key={album.id} value={album.id}>
+                {album.name}
+              </MenuItem>
+            ))}
+          </Select>
+          <TextField
+            id="name"
+            name="name"
+            label="Nom de l'inclusion"
+            variant="outlined"
+            fullWidth
+            onChange={handleInputChange}
+            value={formData.name}
+            className={styles.TextField}
+          />
+          <TextField
+            id="type"
+            name="type"
+            label="Type d'inclusion"
+            variant="outlined"
+            fullWidth
+            select
+            className={styles.TextField}
+            value={formData.type}
+            onChange={handleInputChange}
+          >
+            {Object.values(InclusionEnum).map((type) => (
+              <MenuItem key={type} value={type}>
+                {type}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            id="member"
+            name="member"
+            label="Membre lié"
+            variant="outlined"
+            fullWidth
+            select
+            className={styles.TextField}
+            disabled={!selectedAlbum}
+            value={formData.member}
+            onChange={handleInputChange}
+          >
+            {members.map((member) => (
+              <MenuItem key={member.id} value={member.id}>
+                {member.name}
+              </MenuItem>
+            ))}
+          </TextField>
+          <div className={styles.FileInputContainer}>
+            <input
+              type="file"
+              accept="image/*"
+              id="imageFile"
+              onChange={handleFileChange}
+              className={styles.InputFile}
+            />
+            <label htmlFor="imageFile">
+              <Button
+                variant="contained"
+                component="span"
+                color="primary"
+                className={styles.FileInputButton}
+              >
+                Sélectionner une image
+              </Button>
+              {imageName && (
+                <Typography>
+                  <AttachFileIcon className={styles.FileIcon} /> {imageName}
+                  <CancelIcon
+                    className={styles.CancelIcon}
+                    onClick={handleRemoveImage}
+                  />
+                </Typography>
+              )}
+            </label>
+          </div>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            className={styles.SubmitButton}
+            disabled={!isFormValid}
+          >
+            Créer
+          </Button>
+        </FormControl>
+      </form>
     </Paper>
   );
 }

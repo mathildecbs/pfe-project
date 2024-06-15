@@ -35,7 +35,10 @@ export default function AppCommunity() {
           const response = await postService.getPosts(authToken);
           setPosts(response);
         } else if (selectedTab === 1 && user) {
-          const response = await postService.getFollowingPosts(user.username, authToken);
+          const response = await postService.getFollowingPosts(
+            user.username,
+            authToken
+          );
           setFollowingPosts(response);
         } else if (selectedTab === 2 && user) {
           const posts = await postService.getTrendingPosts(authToken);
@@ -82,11 +85,21 @@ export default function AppCommunity() {
         </Tabs>
       </Paper>
       <div className={styles.PostsContainer}>
-        <div className={styles.Posts}>
-          {displayedPosts.map((postReceived) => (
-            <AppPost key={postReceived.id} post={postReceived} repost={false} />
-          ))}
-        </div>
+        {displayedPosts.length ? (
+          <div className={styles.Posts}>
+            {displayedPosts.map((postReceived) => (
+              <AppPost
+                key={postReceived.id}
+                post={postReceived}
+                repost={false}
+              />
+            ))}
+          </div>
+        ) : (
+          <Typography variant="h6">
+            Pas de posts disponibles
+          </Typography>
+        )}
         {selectedTab === 2 && (
           <div className={styles.TrendingTags}>
             <Paper className={styles.TagsContainer}>

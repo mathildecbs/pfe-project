@@ -42,8 +42,8 @@ export default function AppExploOneGroup() {
     }
   }
 
-  function navigateTo(artistId: string) {
-    navigate(`/exploOneArtist/${artistId}`);
+  function navigateTo(root: string, artistId: string) {
+    navigate(`/${root}/${artistId}`);
   }
 
   if (!thisGroup) {
@@ -54,7 +54,7 @@ export default function AppExploOneGroup() {
     <Paper className={styles.Container}>
       <div className={styles.ImageContainer}>
         <img
-          src={thisGroup.image || "/path/to/default/image.jpg"}
+          src={thisGroup.image}
           alt={thisGroup.name}
           className={styles.GroupImage}
         />
@@ -81,7 +81,7 @@ export default function AppExploOneGroup() {
                 <Typography
                   key={member.id}
                   variant="body1"
-                  onClick={() => navigateTo(member.id)}
+                  onClick={() => navigateTo("exploOneArtist", member.id)}
                   className={styles.MemberName}
                 >
                   {member.name}
@@ -101,7 +101,11 @@ export default function AppExploOneGroup() {
           {thisGroup.albums.length ? (
             <div className={styles.AlbumsContainer}>
               {thisGroup.albums.map((album) => (
-                <div key={album.id} className={styles.AlbumCard}>
+                <div
+                  key={album.id}
+                  className={styles.AlbumCard}
+                  onClick={() => navigateTo("exploOneAlbum", album.id)}
+                >
                   <img
                     src={album.image}
                     alt={album.name}

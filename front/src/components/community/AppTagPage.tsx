@@ -4,7 +4,6 @@ import { useAuth } from "../../contexts/AuthProvider";
 import AppPost from "./AppPost";
 import ToastUtils from "../../utils/ToastUtils";
 import { Typography } from "@mui/material";
-import AppHeaderProfile from "./AppHeaderProfile";
 import styles from "../../css/AppTagPage.module.css";
 import { useParams } from "react-router-dom";
 import postService from "../../services/PostService";
@@ -16,7 +15,7 @@ export default function AppMyPage() {
 
   useEffect(() => {
     fetchTagPosts();
-  }, []);
+  }, [tagName]);
 
   async function fetchTagPosts() {
     try {

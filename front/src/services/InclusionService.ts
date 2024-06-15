@@ -1,5 +1,6 @@
 import { Inclusion } from "../types/InclusionType";
 import ApiUtils from "../utils/ApiUtils";
+import FirebaseStorageService from "./FirebaseStorageService";
 
 class InclusionService {
   async getInclusions(authToken: string): Promise<Inclusion[]> {
@@ -32,17 +33,29 @@ class InclusionService {
     albumId: string,
     memberId: string,
     type: string,
+    imageFile: File | null,
     authToken: string
   ): Promise<Inclusion> {
     try {
+      const inclusionData: any = {
+        name: inclusionName,
+        album: albumId,
+        member: memberId,
+        type: type,
+      };
+
+      if (imageFile) {
+        const filePath = `inclusions/${inclusionName}/${imageFile.name}`;
+        const imageUrl = await FirebaseStorageService.uploadFile(
+          filePath,
+          imageFile
+        );
+        inclusionData.image = imageUrl;
+      }
+
       const response = await ApiUtils.getApiInstanceJson(authToken).post(
         "/inclusion",
-        {
-          name: inclusionName,
-          album: albumId,
-          member: memberId,
-          type: type,
-        }
+        inclusionData
       );
       return response.data;
     } catch (error) {

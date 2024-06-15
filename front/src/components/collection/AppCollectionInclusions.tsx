@@ -19,7 +19,10 @@ export default function AppCollectionInclusions() {
   async function fetchOwnedInclusions() {
     try {
       if (user && authToken) {
-        const response = await ownedInclusionService.getOwnedInclusions(user.username, authToken);
+        const response = await ownedInclusionService.getOwnedInclusions(
+          user.username,
+          authToken
+        );
         setOwnedInclusions(response);
       }
     } catch (error) {
@@ -34,7 +37,9 @@ export default function AppCollectionInclusions() {
           <div
             key={ownedInclusion.id}
             className={styles.ItemCard}
-            onClick={() => navigate(`/exploOneInclusion/${ownedInclusion.inclusion.id}`)}
+            onClick={() =>
+              navigate(`/exploOneInclusion/${ownedInclusion.inclusion.id}`)
+            }
           >
             <img
               src={ownedInclusion.inclusion.image}
@@ -53,7 +58,13 @@ export default function AppCollectionInclusions() {
   return (
     <Paper className={styles.Section}>
       <Typography variant="h4">Inclusions possédés</Typography>
-      {renderInclusions()}
+      {ownedInclusions.length ? (
+        renderInclusions()
+      ) : (
+        <Typography variant="body1">
+          Pas d'inclusions dans votre collection
+        </Typography>
+      )}
     </Paper>
   );
 }
