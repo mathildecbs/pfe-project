@@ -1,10 +1,13 @@
 import { Album } from "../types/AlbumType";
 import ApiUtils from "../utils/ApiUtils";
+import FirebaseStorageService from "./FirebaseStorageService";
 
 class AlbumService {
   async getAlbums(authToken: string): Promise<Album[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson(authToken).get("/album");
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
+        "/album"
+      );
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des albums");
@@ -29,17 +32,36 @@ class AlbumService {
     versions: string[],
     artist: string,
     group: string,
+    imageFile: File | null,
     authToken: string
   ): Promise<Album> {
     try {
-      const response = await ApiUtils.getApiInstanceJson(authToken).post("/album", {
+      const albumData: any = {
         name: albumName,
         release_date: releaseDate,
         solo: solo,
-        version: versions,
+        versions: versions,
         artist: artist,
         group: group,
-      });
+      };
+
+      if (imageFile) {
+        const filePath = `${
+          process.env.REACT_APP_FIREBASE_STORAGE_DIR === undefined
+            ? ""
+            : process.env.REACT_APP_FIREBASE_STORAGE_DIR
+        }albums/${albumName}/${imageFile.name}`;
+        const imageUrl = await FirebaseStorageService.uploadFile(
+          filePath,
+          imageFile
+        );
+        albumData.image = imageUrl;
+      }
+
+      const response = await ApiUtils.getApiInstanceJson(authToken).post(
+        "/album",
+        albumData
+      );
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors du post album");
@@ -59,9 +81,12 @@ class AlbumService {
 
   async modifyAlbum(groups: string[], authToken: string): Promise<Album> {
     try {
-      const response = await ApiUtils.getApiInstanceJson(authToken).patch("/album", {
-        groups: groups,
-      });
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch(
+        "/album",
+        {
+          groups: groups,
+        }
+      );
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la modification de l'album");

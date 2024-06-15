@@ -19,7 +19,7 @@
   transform: scale(1.05);
 }
 
-.AlbumImage {
+.InclusionImage {
   width: 150px;
   height: 150px;
   object-fit: cover;

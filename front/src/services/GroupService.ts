@@ -1,5 +1,6 @@
 import { Group } from "../types/GroupType";
 import ApiUtils from "../utils/ApiUtils";
+import FirebaseStorageService from "../services/FirebaseStorageService";
 
 class GroupService {
   async getGroups(authToken: string): Promise<Group[]> {
@@ -28,16 +29,32 @@ class GroupService {
     groupName: string,
     company: string,
     parent: string,
+    imageFile: File | null,
     authToken: string
   ): Promise<Group> {
     try {
+      const groupData: any = {
+        name: groupName,
+        company: company,
+        parent: parent ? parent : "",
+      };
+
+      if (imageFile) {
+        const filePath = `${
+          process.env.REACT_APP_FIREBASE_STORAGE_DIR === undefined
+            ? ""
+            : process.env.REACT_APP_FIREBASE_STORAGE_DIR
+        }groups/${groupName}/${imageFile.name}`;
+        const imageUrl = await FirebaseStorageService.uploadFile(
+          filePath,
+          imageFile
+        );
+        groupData.image = imageUrl;
+      }
+
       const response = await ApiUtils.getApiInstanceJson(authToken).post(
         "/group",
-        {
-          name: groupName,
-          company: company,
-          parent: parent ? parent : "",
-        }
+        groupData
       );
       return response.data;
     } catch (error) {

@@ -1,10 +1,13 @@
 import { Artist } from "../types/ArtistType";
 import ApiUtils from "../utils/ApiUtils";
+import FirebaseStorageService from "./FirebaseStorageService";
 
 class ArtistService {
   async getArtists(authToken: string): Promise<Artist[]> {
     try {
-      const response = await ApiUtils.getApiInstanceJson(authToken).get("/artist");
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
+        "/artist"
+      );
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la récupération des artistes");
@@ -39,15 +42,34 @@ class ArtistService {
     birthday: string,
     mainGroup: string | null,
     groups: string[],
+    imageFile: File | null,
     authToken: string
   ): Promise<Artist> {
     try {
-      const response = await ApiUtils.getApiInstanceJson(authToken).post("/artist", {
+      const artistData: any = {
         name: artistName,
         birthday: birthday,
         main_group: mainGroup,
         groups: groups,
-      });
+      };
+
+      if (imageFile) {
+        const filePath = `${
+          process.env.REACT_APP_FIREBASE_STORAGE_DIR === undefined
+            ? ""
+            : process.env.REACT_APP_FIREBASE_STORAGE_DIR
+        }artists/${artistName}/${imageFile.name}`;
+        const imageUrl = await FirebaseStorageService.uploadFile(
+          filePath,
+          imageFile
+        );
+        artistData.image = imageUrl;
+      }
+
+      const response = await ApiUtils.getApiInstanceJson(authToken).post(
+        "/artist",
+        artistData
+      );
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors du post artiste");
@@ -67,9 +89,12 @@ class ArtistService {
 
   async modifyArtist(groups: string[], authToken: string): Promise<Artist> {
     try {
-      const response = await ApiUtils.getApiInstanceJson(authToken).patch("/artist", {
-        groups: groups,
-      });
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch(
+        "/artist",
+        {
+          groups: groups,
+        }
+      );
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors de la modification de l'artiste");

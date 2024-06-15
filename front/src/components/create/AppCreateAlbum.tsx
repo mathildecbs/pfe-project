@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Button,
   FormControl,
@@ -5,7 +6,6 @@ import {
   TextField,
   Typography,
   Checkbox,
-  Grid,
   FormControlLabel,
   Select,
   MenuItem,
@@ -15,16 +15,18 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  CircularProgress,
 } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
-import styles from "../../css/AppCreateNew.module.css";
-import { useEffect, useState } from "react";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import CancelIcon from "@mui/icons-material/Cancel";
+import styles from "../../css/AppCreateAlbum.module.css";
 import ToastUtils from "../../utils/ToastUtils";
+import albumService from "../../services/AlbumService";
 import artistService from "../../services/ArtistService";
 import groupService from "../../services/GroupService";
 import { Group } from "../../types/GroupType";
 import { Artist } from "../../types/ArtistType";
-import albumService from "../../services/AlbumService";
 import { useAuth } from "../../contexts/AuthProvider";
 
 export default function AppCreateAlbum() {
@@ -40,6 +42,9 @@ export default function AppCreateAlbum() {
   const [isFormValid, setIsFormValid] = useState(false);
   const [groups, setGroups] = useState<Group[]>([]);
   const [artists, setArtists] = useState<Artist[]>([]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageName, setImageName] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const { authToken } = useAuth();
 
   useEffect(() => {
@@ -47,8 +52,8 @@ export default function AppCreateAlbum() {
       formData.name !== "" &&
       formData.releaseDate !== "" &&
       (formData.artist !== "" || formData.group !== "");
-    setIsFormValid(isAllFieldsFilled);
-  }, [formData]);
+    setIsFormValid(isAllFieldsFilled && imageFile !== null);
+  }, [formData, imageFile]);
 
   useEffect(() => {
     fetchGroups();
@@ -140,7 +145,21 @@ export default function AppCreateAlbum() {
     }));
   }
 
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] || null;
+    if (file) {
+      setImageFile(file);
+      setImageName(file.name);
+    }
+  }
+
+  function handleRemoveImage() {
+    setImageFile(null);
+    setImageName("");
+  }
+
   async function createAlbum() {
+    setLoading(true);
     try {
       if (authToken) {
         const { name, releaseDate, solo, versions, artist, group } = formData;
@@ -151,6 +170,7 @@ export default function AppCreateAlbum() {
           versions,
           artist,
           group,
+          imageFile,
           authToken
         );
 
@@ -165,10 +185,14 @@ export default function AppCreateAlbum() {
             versions: [],
             version: "",
           });
+          setImageFile(null);
+          setImageName("");
         }
       }
     } catch (error) {
       ToastUtils.error("Problème lors de la création.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -181,66 +205,60 @@ export default function AppCreateAlbum() {
   }
 
   return (
-    <Paper>
+    <Paper className={styles.PaperContainer}>
       <Typography variant="h5">Créer un album</Typography>
-      <FormControl>
-        <Grid container spacing={2} alignItems="center">
-          <Grid item xs={6}>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={formData.solo}
-                  onChange={handleCheckboxChange}
-                  name="solo"
-                />
-              }
-              label="Soloiste"
+      <FormControl className={styles.FormControl} fullWidth variant="outlined">
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={formData.solo}
+              onChange={handleCheckboxChange}
+              name="solo"
             />
-          </Grid>
-          <Grid item xs={6}>
-            {formData.solo ? (
-              <Select
-                className={styles.InputText}
-                id="artist"
-                name="artist"
-                value={formData.artist}
-                onChange={handleArtistChange}
-                displayEmpty
-                fullWidth
-                variant="outlined"
-              >
-                <MenuItem value="">
-                  <em>Sélectionner un artiste</em>
-                </MenuItem>
-                {artists.map((artist) => (
-                  <MenuItem key={artist.id} value={artist.id}>
-                    {artist.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            ) : (
-              <Select
-                className={styles.InputText}
-                id="group"
-                name="group"
-                value={formData.group}
-                onChange={handleGroupChange}
-                displayEmpty
-                fullWidth
-                variant="outlined"
-              >
-                <MenuItem value="">
-                  <em>Sélectionner un groupe</em>
-                </MenuItem>
-                {groups.map((group) => (
-                  <MenuItem key={group.id} value={group.id}>
-                    {group.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          </Grid>
-        </Grid>
+          }
+          label="Soloiste"
+        />
+        {formData.solo ? (
+          <Select
+            className={styles.InputText}
+            id="artist"
+            name="artist"
+            value={formData.artist}
+            onChange={handleArtistChange}
+            displayEmpty
+            fullWidth
+            variant="outlined"
+          >
+            <MenuItem value="">
+              <em>Sélectionner un artiste</em>
+            </MenuItem>
+            {artists.map((artist) => (
+              <MenuItem key={artist.id} value={artist.id}>
+                {artist.name}
+              </MenuItem>
+            ))}
+          </Select>
+        ) : (
+          <Select
+            className={styles.InputText}
+            id="group"
+            name="group"
+            value={formData.group}
+            onChange={handleGroupChange}
+            displayEmpty
+            fullWidth
+            variant="outlined"
+          >
+            <MenuItem value="">
+              <em>Sélectionner un groupe</em>
+            </MenuItem>
+            {groups.map((group) => (
+              <MenuItem key={group.id} value={group.id}>
+                {group.name}
+              </MenuItem>
+            ))}
+          </Select>
+        )}
         <TextField
           className={styles.InputText}
           id="name"
@@ -263,25 +281,20 @@ export default function AppCreateAlbum() {
           onChange={handleInputChange}
           InputLabelProps={{ shrink: true }}
         />
-        <Grid container alignItems="center" spacing={2}>
-          <Grid item xs={10}>
-            <TextField
-              className={styles.InputText}
-              id="version"
-              name="version"
-              label="Version"
-              variant="outlined"
-              fullWidth
-              value={formData.version}
-              onChange={handleInputChange}
-            />
-          </Grid>
-          <Grid item xs={2}>
-            <IconButton color="primary" onClick={handleAddVersion}>
-              <Add />
-            </IconButton>
-          </Grid>
-        </Grid>
+        <div className={styles.Versions}>
+          <TextField
+            id="version"
+            name="version"
+            label="Version"
+            variant="outlined"
+            fullWidth
+            value={formData.version}
+            onChange={handleInputChange}
+          />
+          <IconButton color="primary" onClick={handleAddVersion}>
+            <Add />
+          </IconButton>
+        </div>
         <List>
           {formData.versions.map((version, index) => (
             <ListItem key={index}>
@@ -298,14 +311,40 @@ export default function AppCreateAlbum() {
             </ListItem>
           ))}
         </List>
+        <input
+          type="file"
+          accept="image/*"
+          id="imageFile"
+          onChange={handleFileChange}
+          className={styles.InputFile}
+        />
+        <label htmlFor="imageFile">
+          <Button
+            variant="contained"
+            component="span"
+            color="primary"
+            className={styles.FileInputButton}
+          >
+            Sélectionner une image
+          </Button>
+          {imageName && (
+            <Typography className={styles.FileName}>
+              <AttachFileIcon className={styles.FileIcon} /> {imageName}
+              <CancelIcon
+                className={styles.CancelIcon}
+                onClick={handleRemoveImage}
+              />
+            </Typography>
+          )}
+        </label>
         <Button
           variant="contained"
           color="primary"
           fullWidth
           onClick={handleSubmit}
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
         >
-          Créer
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Créer"}
         </Button>
       </FormControl>
     </Paper>

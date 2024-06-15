@@ -1,17 +1,20 @@
-import React, { useState } from 'react';
-import { Button, Typography } from '@mui/material';
-import { User } from '../../types/UserType';
-import userService from '../../services/UserService';
-import ToastUtils from '../../utils/ToastUtils';
-import styles from '../../css/AppHeaderProfile.module.css';
-import { useAuth } from '../../contexts/AuthProvider';
+import React, { useState } from "react";
+import { Button, Typography, Avatar } from "@mui/material";
+import { User } from "../../types/UserType";
+import userService from "../../services/UserService";
+import ToastUtils from "../../utils/ToastUtils";
+import styles from "../../css/AppHeaderProfile.module.css";
+import { useAuth } from "../../contexts/AuthProvider";
 
 interface AppHeaderProfileProps {
   userProfile: User;
   currentUser: User;
 }
 
-const AppHeaderProfile: React.FC<AppHeaderProfileProps> = ({ userProfile, currentUser }) => {
+export default function AppHeaderProfile({
+  userProfile,
+  currentUser,
+}: AppHeaderProfileProps) {
   const [isFollowing, setIsFollowing] = useState<boolean>(
     currentUser?.following.some((user) => user.id === userProfile.id) ?? false
   );
@@ -20,24 +23,32 @@ const AppHeaderProfile: React.FC<AppHeaderProfileProps> = ({ userProfile, curren
   async function handleFollow() {
     try {
       if (currentUser && authToken) {
-        await userService.followUser(currentUser.username, userProfile.username, authToken);
+        await userService.followUser(
+          currentUser.username,
+          userProfile.username,
+          authToken
+        );
         setIsFollowing(true);
         ToastUtils.success(`Vous suivez maintenant ${userProfile.username}`);
       }
     } catch (error) {
-      ToastUtils.error('Erreur lors du suivi');
+      ToastUtils.error("Erreur lors du suivi");
     }
   }
 
   async function handleUnfollow() {
     try {
       if (currentUser && authToken) {
-        await userService.unfollowUser(currentUser.username, userProfile.username, authToken);
+        await userService.unfollowUser(
+          currentUser.username,
+          userProfile.username,
+          authToken
+        );
         setIsFollowing(false);
         ToastUtils.success(`Vous ne suivez plus ${userProfile.username}`);
       }
     } catch (error) {
-      ToastUtils.error('Erreur lors du désabonnement');
+      ToastUtils.error("Erreur lors du désabonnement");
     }
   }
 
@@ -46,25 +57,44 @@ const AppHeaderProfile: React.FC<AppHeaderProfileProps> = ({ userProfile, curren
       return (
         <Button
           variant="outlined"
-          color={isFollowing ? 'inherit' : 'primary'}
+          color={isFollowing ? "inherit" : "primary"}
           onClick={isFollowing ? handleUnfollow : handleFollow}
           className={styles.FollowButton}
         >
-          {isFollowing ? 'Suivi' : 'Suivre'}
+          {isFollowing ? "Suivi" : "Suivre"}
         </Button>
       );
     }
     return null;
   }
 
-  return (
-    <div className={styles.Header}>
-      <Typography variant="h5">{userProfile.username}</Typography>
+  const renderProfileInfo = () => (
+    <div className={styles.ProfileInfo}>
       <Typography variant="body1">{userProfile.name}</Typography>
       <Typography variant="body2">{userProfile.description}</Typography>
       {renderFollowButton()}
     </div>
   );
-};
 
-export default AppHeaderProfile;
+  return (
+    <div className={styles.Header}>
+      {userProfile.image ? (
+        <div className={styles.UserPhoto}>
+          <img
+            src={userProfile.image}
+            alt={userProfile.username}
+            className={styles.ProfilePhoto}
+          />
+        </div>
+      ) : (
+        <Avatar className={`${styles.DefaultAvatar} ${styles.UserDefault}`}>
+          {userProfile.name.charAt(0).toUpperCase()}
+        </Avatar>
+      )}
+      <div className={styles.UserInfo}>
+        <Typography variant="h5">{userProfile.username}</Typography>
+        {renderProfileInfo()}
+      </div>
+    </div>
+  );
+}

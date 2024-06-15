@@ -10,6 +10,8 @@ import { useEffect, useState } from "react";
 import { hashPassword } from "../../utils/HashUtils";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthProvider";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import CancelIcon from "@mui/icons-material/Cancel";
 import ToastUtils from "../../utils/ToastUtils";
 import userService from "../../services/UserService";
 
@@ -21,6 +23,8 @@ export default function AppRegister() {
     description: "",
   });
   const [isFormValid, setIsFormValid] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageName, setImageName] = useState<string>("");
   const navigate = useNavigate();
   const { user, login } = useAuth();
 
@@ -34,7 +38,7 @@ export default function AppRegister() {
     const { username, name, password } = formData;
     const isAllFieldsFilled = username !== "" && name !== "" && password !== "";
     setIsFormValid(isAllFieldsFilled);
-  }, [formData]);
+  }, [formData, imageFile]);
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -52,7 +56,8 @@ export default function AppRegister() {
         username,
         hashedPassword,
         name,
-        description || null
+        description || null,
+        imageFile
       );
       const newUser = tokenAndUser.user;
       const token = tokenAndUser.access_token;
@@ -64,6 +69,19 @@ export default function AppRegister() {
         "Inscription impossible. Veuillez utiliser un autre pseudo."
       );
     }
+  }
+
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] || null;
+    if (file) {
+      setImageFile(file);
+      setImageName(file.name);
+    }
+  }
+
+  function handleRemoveImage() {
+    setImageFile(null);
+    setImageName("");
   }
 
   function handleSubmit() {
@@ -112,6 +130,32 @@ export default function AppRegister() {
             fullWidth
             onChange={handleInputChange}
           />
+          <input
+            type="file"
+            accept="image/*"
+            id="imageFile"
+            onChange={handleFileChange}
+            className={styles.InputFile}
+          />
+          <label htmlFor="imageFile">
+            <Button
+              variant="contained"
+              component="span"
+              color="primary"
+              className={styles.FileInputButton}
+            >
+              Sélectionner une image
+            </Button>
+            {imageName && (
+              <Typography className={styles.FileName}>
+                <AttachFileIcon className={styles.FileIcon} /> {imageName}
+                <CancelIcon
+                  className={styles.CancelIcon}
+                  onClick={handleRemoveImage}
+                />
+              </Typography>
+            )}
+          </label>
           <Button
             variant="contained"
             color="primary"

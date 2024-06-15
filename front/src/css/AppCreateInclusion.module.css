@@ -1,15 +1,15 @@
-.InscriptionContainer {
-  padding: 2em;
-  text-align: center;
-
-  Button,
-  .InputText {
-    margin: 0.5em;
-  }
+.PaperContainer {
+  padding: 20px;
 }
 
 .InputFile {
   display: none;
+}
+
+.FormControl,
+.TextField,
+.FileInputContainer {
+  margin-bottom: 10px !important;
 }
 
 .FileInputButton {

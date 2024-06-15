@@ -7,11 +7,13 @@ import {
   Select,
   MenuItem,
   SelectChangeEvent,
+  CircularProgress,
 } from "@mui/material";
-import styles from "../../css/AppCreateNew.module.css";
-import { useEffect, useState } from "react";
+import styles from "../../css/AppCreateGroup.module.css";
+import { useEffect, useState, useRef } from "react";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
+import CancelIcon from "@mui/icons-material/Cancel";
 import ToastUtils from "../../utils/ToastUtils";
-import ApiUtils from "../../utils/ApiUtils";
 import groupService from "../../services/GroupService";
 import { Group } from "../../types/GroupType";
 import { useAuth } from "../../contexts/AuthProvider";
@@ -22,14 +24,18 @@ export default function AppCreateGroup() {
     company: "",
     parentGroup: "",
   });
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageName, setImageName] = useState<string>("");
   const [groups, setGroups] = useState<Group[]>([]);
   const [isFormValid, setIsFormValid] = useState(false);
   const { authToken } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const isAllFieldsFilled = formData.name !== "" && formData.company !== "";
-    setIsFormValid(isAllFieldsFilled);
-  }, [formData]);
+    setIsFormValid(isAllFieldsFilled && imageFile !== null);
+  }, [formData, imageFile]);
 
   useEffect(() => {
     fetchGroups();
@@ -48,12 +54,14 @@ export default function AppCreateGroup() {
 
   async function createGroup() {
     try {
+      setLoading(true);
       if (authToken) {
         const { name, company, parentGroup } = formData;
         const response = await groupService.createGroup(
           name,
           company,
           parentGroup || "",
+          imageFile,
           authToken
         );
         if (response) {
@@ -63,10 +71,17 @@ export default function AppCreateGroup() {
             company: "",
             parentGroup: "",
           });
+          setImageFile(null);
+          setImageName("");
+          if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+          }
         }
       }
     } catch (error) {
       ToastUtils.error("Problème lors de la création.");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -86,6 +101,19 @@ export default function AppCreateGroup() {
     }));
   }
 
+  function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] || null;
+    if (file) {
+      setImageFile(file);
+      setImageName(file.name);
+    }
+  }
+
+  function handleRemoveImage() {
+    setImageFile(null);
+    setImageName("");
+  }
+
   function handleSubmit() {
     if (formData.name.trim() === "" || formData.company.trim() === "") {
       ToastUtils.error("Veuillez entrer des valeurs valides.");
@@ -95,11 +123,11 @@ export default function AppCreateGroup() {
   }
 
   return (
-    <Paper className={styles.createNewContainer}>
+    <Paper className={styles.PaperContainer}>
       <Typography variant="h5">Créer un groupe</Typography>
-      <FormControl className={styles.formControl}>
+      <FormControl className={styles.FormControl} fullWidth variant="outlined">
         <TextField
-          className={styles.inputText}
+          className={styles.InputText}
           id="name"
           name="name"
           label="Nom du groupe"
@@ -109,7 +137,7 @@ export default function AppCreateGroup() {
           onChange={handleInputChange}
         />
         <TextField
-          className={styles.inputText}
+          className={styles.InputText}
           id="company"
           name="company"
           label="Agence/Compagnie"
@@ -119,7 +147,7 @@ export default function AppCreateGroup() {
           onChange={handleInputChange}
         />
         <Select
-          className={styles.inputText}
+          className={styles.InputText}
           id="parentGroup"
           name="parentGroup"
           value={formData.parentGroup}
@@ -138,14 +166,41 @@ export default function AppCreateGroup() {
               </MenuItem>
             ))}
         </Select>
+        <input
+          id="imageFile"
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className={styles.InputFile}
+          ref={fileInputRef}
+        />
+        <label htmlFor="imageFile">
+          <Button
+            variant="contained"
+            component="span"
+            color="primary"
+            className={styles.FileInputButton}
+          >
+            Sélectionner une image
+          </Button>
+          {imageName && (
+            <Typography className={styles.FileName}>
+              <AttachFileIcon className={styles.FileIcon} /> {imageName}
+              <CancelIcon
+                className={styles.CancelIcon}
+                onClick={handleRemoveImage}
+              />
+            </Typography>
+          )}
+        </label>
         <Button
           variant="contained"
           color="primary"
           fullWidth
           onClick={handleSubmit}
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
         >
-          Créer
+          {loading ? <CircularProgress size={24} color="inherit" /> : "Créer"}
         </Button>
       </FormControl>
     </Paper>

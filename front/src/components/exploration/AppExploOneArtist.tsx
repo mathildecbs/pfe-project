@@ -105,15 +105,21 @@ export default function AppExploOneArtist() {
             Albums
           </Typography>
           {thisArtist.albums.length ? (
-            <div className={styles.AlbumsContainer}>
+            <div className={styles.ItemsContainer}>
               {thisArtist.albums.map((album) => (
-                <div key={album.id} className={styles.AlbumCard}>
+                <div
+                  key={album.id}
+                  className={styles.ItemCard}
+                  onClick={() =>
+                    navigateTo("exploOneAlbum", album.id.toString())
+                  }
+                >
                   <img
                     src={album.image}
                     alt={album.name}
                     className={styles.AlbumImage}
                   />
-                  <Typography variant="body2" className={styles.AlbumName}>
+                  <Typography variant="body2" className={styles.ItemName}>
                     {album.name}
                   </Typography>
                 </div>
@@ -130,18 +136,21 @@ export default function AppExploOneArtist() {
             Inclusions
           </Typography>
           {thisArtist.inclusions.length ? (
-            <div className={styles.AlbumsContainer}>
+            <div className={styles.ItemsContainer}>
               {thisArtist.inclusions.map((inclusion) => (
-                <div key={inclusion.id} className={styles.AlbumCard}>
+                <div
+                  key={inclusion.id}
+                  className={styles.ItemCard}
+                  onClick={() =>
+                    navigateTo("exploOneInclusion", inclusion.id.toString())
+                  }
+                >
                   <img
                     src={inclusion.image}
                     alt={inclusion.name}
-                    className={styles.AlbumImage}
-                    onClick={() =>
-                      navigateTo("exploOneInclusion", inclusion.id.toString())
-                    }
+                    className={styles.ItemImage}
                   />
-                  <Typography variant="body2" className={styles.AlbumName}>
+                  <Typography variant="body2" className={styles.ItemName}>
                     {inclusion.name}
                   </Typography>
                 </div>

@@ -1,7 +1,5 @@
 import {
-  Button,
   MenuItem,
-  Paper,
   TextField,
   Typography,
 } from "@mui/material";
@@ -39,10 +37,10 @@ export default function AppCreateNew() {
   }
 
   return (
-    <Paper className={styles.CreateNewContainer}>
+    <div className={styles.CreateNewContainer}>
       <Typography variant="h4">Création d'éléments</Typography>
       <TextField
-        className={styles.languageSelect}
+        className={styles.CreationSelect}
         id="select-create"
         select
         label="Créer..."
@@ -58,6 +56,6 @@ export default function AppCreateNew() {
         ))}
       </TextField>
       {renderCreationComponent()}
-    </Paper>
+    </div>
   );
 }

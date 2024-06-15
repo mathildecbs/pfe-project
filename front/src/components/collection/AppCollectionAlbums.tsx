@@ -19,7 +19,10 @@ export default function AppExploAlbums() {
   async function fetchOwnedAlbums() {
     try {
       if (user && authToken) {
-        const response = await ownedAlbumService.getOwnedAlbums(user.username, authToken);
+        const response = await ownedAlbumService.getOwnedAlbums(
+          user.username,
+          authToken
+        );
         setOwnedAlbums(response);
       }
     } catch (error) {
@@ -44,9 +47,11 @@ export default function AppExploAlbums() {
             <Typography variant="h6" className={styles.ItemText}>
               {ownedAlbum.album.name}
             </Typography>
-            <Typography variant="body2" className={styles.VersionText}>
-              Versions: {ownedAlbum.version}
-            </Typography>
+            {ownedAlbum.version && (
+              <Typography variant="body2" className={styles.VersionText}>
+                Version: {ownedAlbum.version}
+              </Typography>
+            )}
           </div>
         ))}
       </div>
@@ -56,7 +61,13 @@ export default function AppExploAlbums() {
   return (
     <Paper className={styles.Section}>
       <Typography variant="h4">Albums possédés</Typography>
-      {renderAlbums()}
+      {ownedAlbums.length ? (
+        renderAlbums()
+      ) : (
+        <Typography variant="body1">
+          Pas d'albums dans votre collection
+        </Typography>
+      )}
     </Paper>
   );
 }

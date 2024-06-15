@@ -1,0 +1,44 @@
+.PaperContainer {
+  padding: 20px;
+}
+
+.InputFile {
+  display: none;
+}
+
+.FormControl,
+.TextField,
+.InputText,
+.FileInputContainer {
+  margin-bottom: 10px !important;
+  width: 100%;
+}
+
+.FileInputButton {
+  margin-right: 10px;
+  margin: 0 1em 1em 1em !important;
+}
+
+.FileIcon {
+  margin-left: 1em;
+  vertical-align: middle;
+}
+
+.CancelIcon {
+  cursor: pointer;
+  margin-left: 5px;
+  vertical-align: middle;
+}
+
+.CancelIcon:hover {
+  color: #ce0000;
+}
+
+.Versions {
+  display: flex;
+  flex-direction: row;
+}
+
+.FileName {
+  margin-bottom: 1em !important;
+}
