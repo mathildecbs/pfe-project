@@ -265,7 +265,7 @@ export default function AppExploOneAlbum() {
             {thisAlbum.solo ? thisAlbum.artist.name : thisAlbum.group.name}
           </Typography>
 
-          {thisAlbum.versions ? (
+          {thisAlbum.versions && thisAlbum.versions.length ? (
             <FormControl fullWidth className={styles.FormControl}>
               <InputLabel>Version</InputLabel>
               <Select value={selectedVersion} onChange={handleVersionChange}>

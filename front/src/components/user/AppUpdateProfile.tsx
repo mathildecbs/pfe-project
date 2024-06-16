@@ -20,18 +20,18 @@ export default function AppUpdateProfile() {
   const [profileData, setProfileData] = useState<User | null>(null);
   const [initialFormData, setInitialFormData] = useState({
     name: "",
-    description: ""
+    description: "",
   });
   const [formData, setFormData] = useState({
     name: "",
-    description: ""
+    description: "",
   });
   const [passwordData, setPasswordData] = useState({
-    password: ""
+    password: "",
   });
   const [editMode, setEditMode] = useState({
     name: false,
-    description: false
+    description: false,
   });
   const [changePassword, setChangePassword] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -42,11 +42,11 @@ export default function AppUpdateProfile() {
       setProfileData(user);
       setInitialFormData({
         name: user.name,
-        description: user.description || ""
+        description: user.description || "",
       });
       setFormData({
         name: user.name,
-        description: user.description || ""
+        description: user.description || "",
       });
       setImagePreview(user.image || null);
     }
@@ -94,7 +94,11 @@ export default function AppUpdateProfile() {
     if (changePassword && passwordData.password && authToken) {
       try {
         const hashedPassword = hashPassword(passwordData.password);
-        await userService.updatePassword(user!.username, hashedPassword, authToken);
+        await userService.updatePassword(
+          user!.username,
+          hashedPassword,
+          authToken
+        );
         ToastUtils.success("Mot de passe modifié !");
       } catch (error) {
         ToastUtils.error("Erreur lors de la modification du mot de passe");
@@ -116,19 +120,19 @@ export default function AppUpdateProfile() {
   return (
     <div className={styles.Container}>
       <div className={styles.Header}>
-        <div className={styles.UserPhoto}>
-          {imagePreview ? (
+        {imagePreview ? (
+          <div className={styles.UserPhoto}>
             <img
               src={imagePreview}
               alt={profileData.username}
               className={styles.ProfilePhoto}
             />
-          ) : (
-            <Avatar className={`${styles.DefaultAvatar} ${styles.UserDefault}`}>
-              {profileData.username.charAt(0).toUpperCase()}
-            </Avatar>
-          )}
-        </div>
+          </div>
+        ) : (
+          <Avatar className={`${styles.DefaultAvatar} ${styles.UserDefault}`}>
+            {profileData.username.charAt(0).toUpperCase()}
+          </Avatar>
+        )}
         <div className={styles.UserInfo}>
           <input
             accept="image/*"
@@ -152,7 +156,9 @@ export default function AppUpdateProfile() {
       </div>
       <form onSubmit={handleSubmit} className={styles.Form}>
         <div className={styles.FormField}>
-          <Typography className={styles.HeadersTitle} variant="h5">Nom</Typography>
+          <Typography className={styles.HeadersTitle} variant="h5">
+            Nom
+          </Typography>
           {editMode.name ? (
             <TextField
               name="name"
@@ -164,12 +170,16 @@ export default function AppUpdateProfile() {
           ) : (
             <Typography variant="body1">{formData.name}</Typography>
           )}
-          <IconButton onClick={() => setEditMode({ ...editMode, name: !editMode.name })}>
+          <IconButton
+            onClick={() => setEditMode({ ...editMode, name: !editMode.name })}
+          >
             <EditIcon />
           </IconButton>
         </div>
         <div className={styles.FormField}>
-          <Typography className={styles.HeadersTitle} variant="h5">Description </Typography>
+          <Typography className={styles.HeadersTitle} variant="h5">
+            Description{" "}
+          </Typography>
           {editMode.description ? (
             <TextField
               name="description"
@@ -183,7 +193,11 @@ export default function AppUpdateProfile() {
           ) : (
             <Typography variant="body1">{formData.description}</Typography>
           )}
-          <IconButton onClick={() => setEditMode({ ...editMode, description: !editMode.description })}>
+          <IconButton
+            onClick={() =>
+              setEditMode({ ...editMode, description: !editMode.description })
+            }
+          >
             <EditIcon />
           </IconButton>
         </div>
@@ -199,10 +213,17 @@ export default function AppUpdateProfile() {
               type="password"
             />
           ) : (
-            <Button onClick={() => setChangePassword(true)}>Changer de mot de passe</Button>
+            <Button onClick={() => setChangePassword(true)}>
+              Changer de mot de passe
+            </Button>
           )}
         </div>
-        <Button type="submit" variant="contained" color="primary" disabled={!isFormChanged()}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={!isFormChanged()}
+        >
           Mettre à jour le profil
         </Button>
       </form>

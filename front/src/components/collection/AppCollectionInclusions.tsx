@@ -49,6 +49,12 @@ export default function AppCollectionInclusions() {
             <Typography variant="h6" className={styles.ItemText}>
               {ownedInclusion.inclusion.name}
             </Typography>
+            <Typography variant="body1" className={styles.ItemText}>
+              {ownedInclusion.inclusion.member.name}
+            </Typography>
+            <Typography variant="body1" className={styles.ItemText}>
+              {ownedInclusion.inclusion.album.name}
+            </Typography>
           </div>
         ))}
       </div>

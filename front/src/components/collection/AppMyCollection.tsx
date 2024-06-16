@@ -56,7 +56,7 @@ export default function AppMyCollection() {
           <div
             key={inclusion.id}
             className={styles.ItemCard}
-            onClick={() => navigate(`/exploOneInclusion/${inclusion.id}`)}
+            onClick={() => navigate(`/exploOneInclusion/${inclusion.inclusion.id}`)}
           >
             <Typography variant="h6" className={styles.ItemText}>
               {inclusion.inclusion.name}
