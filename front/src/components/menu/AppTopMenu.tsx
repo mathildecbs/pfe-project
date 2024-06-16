@@ -14,11 +14,13 @@ import styles from "../../css/AppTopMenu.module.css";
 import { Search } from "@mui/icons-material";
 import { useAuth } from "../../contexts/AuthProvider";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function AppTopMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
 
   function handleMenuOpen(event: React.MouseEvent<HTMLElement>) {
     setAnchorEl(event.currentTarget);
@@ -33,6 +35,19 @@ export default function AppTopMenu() {
     setAnchorEl(null);
   }
 
+  function handleSearchSubmit() {
+    if (searchQuery.trim()) {
+      navigate(`/exploSearch/${searchQuery.trim()}`);
+      setSearchQuery("");
+    }
+  }
+
+  function handleKeyDown(event: React.KeyboardEvent<HTMLElement>) {
+    if (event.key === "Enter") {
+      handleSearchSubmit();
+    }
+  }
+
   return (
     <AppBar className={styles.TopMenu}>
       <Toolbar>
@@ -45,8 +60,11 @@ export default function AppTopMenu() {
               <InputBase
                 className={styles.SearchBar}
                 placeholder="Rechercher…"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
-              <IconButton type="submit" aria-label="search">
+              <IconButton type="submit" aria-label="search" onClick={handleSearchSubmit}>
                 <Search />
               </IconButton>
             </>

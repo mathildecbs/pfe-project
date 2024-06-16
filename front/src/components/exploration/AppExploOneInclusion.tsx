@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Button,
   Paper,
@@ -21,7 +21,10 @@ export default function AppExploOneInclusion() {
   const { user, authToken } = useAuth();
   const [thisInclusion, setThisInclusion] = useState<Inclusion>();
   const [quantity, setQuantity] = useState<number>(1);
-  const [ownInclusion, setOwnInclusion] = useState<OwnedInclusion | undefined>(undefined);
+  const [ownInclusion, setOwnInclusion] = useState<OwnedInclusion | undefined>(
+    undefined
+  );
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchInclusion();
@@ -31,7 +34,10 @@ export default function AppExploOneInclusion() {
   async function fetchInclusion() {
     try {
       if (idInclusion && authToken) {
-        const response = await inclusionService.getOneInclusion(idInclusion, authToken);
+        const response = await inclusionService.getOneInclusion(
+          idInclusion,
+          authToken
+        );
         setThisInclusion(response);
       }
     } catch (error) {
@@ -42,10 +48,14 @@ export default function AppExploOneInclusion() {
   async function fetchOwnInclusions() {
     try {
       if (user && authToken) {
-        const ownedInclusions = await ownedInclusionService.getOwnedInclusions(user.username, authToken);
+        const ownedInclusions = await ownedInclusionService.getOwnedInclusions(
+          user.username,
+          authToken
+        );
 
         const owned = ownedInclusions.find(
-          (ownedInclusion) => ownedInclusion.inclusion.id.toString() === idInclusion
+          (ownedInclusion) =>
+            ownedInclusion.inclusion.id.toString() === idInclusion
         );
         setOwnInclusion(owned);
       }
@@ -86,12 +96,6 @@ export default function AppExploOneInclusion() {
     }
   }
 
-  function handleQuantityChange(increment: boolean) {
-    setQuantity((prevQuantity) =>
-      increment ? prevQuantity + 1 : Math.max(ownInclusion ? -ownInclusion.quantity + 1 : 1, prevQuantity - 1)
-    );
-  }
-
   async function deleteOwnedInclusion() {
     try {
       if (idInclusion && user && authToken) {
@@ -113,6 +117,31 @@ export default function AppExploOneInclusion() {
         "Erreur lors de la suppression de l'inclusion possédée"
       );
     }
+  }
+
+  async function deleteInclusion() {
+    try {
+      if (idInclusion && authToken) {
+        const response = await inclusionService.deleteInclusion(idInclusion, authToken);
+        if (response) {
+          ToastUtils.success("Suppression de l'inclusions");
+          navigate(`/exploGroups`);
+        }
+      }
+    } catch (error) {
+      ToastUtils.error(error, "Erreur lors de la suppression de l'inclusion");
+    }
+  }
+
+  function handleQuantityChange(increment: boolean) {
+    setQuantity((prevQuantity) =>
+      increment
+        ? prevQuantity + 1
+        : Math.max(
+            ownInclusion ? -ownInclusion.quantity + 1 : 1,
+            prevQuantity - 1
+          )
+    );
   }
 
   if (!thisInclusion) {
@@ -177,6 +206,11 @@ export default function AppExploOneInclusion() {
           </Button>
         )}
       </div>
+      {user?.isAdmin && (
+          <Button color="error" variant="contained" onClick={deleteInclusion}>
+            Supprimer l'inclusion définitivement
+          </Button>
+        )}
     </Paper>
   );
 }

@@ -23,6 +23,20 @@ class TagService {
     }
   }
 
+  async getSearchTags(searchQuery: string, authToken: string): Promise<Tag[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
+        "/tag",
+        {
+          params: { search: searchQuery },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des tags");
+    }
+  } 
+
   async createTag(tagName: string, authToken: string): Promise<Tag> {
     try {
       const response = await ApiUtils.getApiInstanceJson(authToken).post("/tag", {

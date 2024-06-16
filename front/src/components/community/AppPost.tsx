@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { Paper, Typography, IconButton, Avatar } from "@mui/material";
+import { Paper, Typography, IconButton, Avatar, Box, Menu, MenuItem } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
 import RepeatIcon from "@mui/icons-material/Repeat";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import styles from "../../css/AppPost.module.css";
 import { Post } from "../../types/PostType";
 import { DateUtils } from "../../utils/DateUtils";
@@ -16,11 +17,18 @@ import { usePosts } from "../../contexts/PostsProvider";
 interface AppPostProps {
   post: Post;
   repost: boolean;
+  tag?: string;
 }
 
-export default function AppPost({ post, repost }: AppPostProps) {
-  const { user } = useAuth();
-  const { setPosts } = usePosts();
+export default function AppPost({ post, repost, tag }: AppPostProps) {
+  const { user, authToken } = useAuth();
+  const {
+    setPosts,
+    setTrendingPosts,
+    setFollowingPosts,
+    setTagPosts,
+    setMyFeed,
+  } = usePosts();
   const [likes, setLikes] = useState(post.nb_likes ? post.nb_likes : 0);
   const [reposts, setReposts] = useState(post.nb_reposts ? post.nb_reposts : 0);
   const [hasLiked, setHasLiked] = useState(
@@ -33,8 +41,16 @@ export default function AppPost({ post, repost }: AppPostProps) {
       ? post.reposts.some((repost) => repost.username === user?.username)
       : false
   );
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
-  const { authToken } = useAuth();
+
+  const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
 
   async function actionPost(actionType: string) {
     try {
@@ -84,12 +100,39 @@ export default function AppPost({ post, repost }: AppPostProps) {
 
   async function fetchPosts() {
     try {
-      if (authToken) {
-        const response = await postService.getPosts(authToken);
-        setPosts(response);
+      if (authToken && user?.username) {
+        const posts = await postService.getPosts(authToken);
+        setPosts(posts);
+        const followingPosts = await postService.getFollowingPosts(
+          user.username,
+          authToken
+        );
+        setFollowingPosts(followingPosts);
+        const myFeed = await postService.getFeed(user.username, authToken);
+        setMyFeed(myFeed);
+        const trendings = await postService.getTrendingPosts(authToken);
+        setTrendingPosts(trendings);
+        if (tag) {
+          const tagPosts = await postService.getOneTagPosts(tag, authToken);
+          setTagPosts(tagPosts);
+        }
       }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des posts");
+    }
+  }
+
+  async function handleDeletePost() {
+    try {
+      if (authToken) {
+        await postService.deletePost(post.id, authToken);
+        ToastUtils.success("Post supprimé avec succès");
+        fetchPosts();
+      }
+    } catch (error) {
+      ToastUtils.error(error, "Erreur lors de la suppression du post");
+    } finally {
+      handleCloseMenu();
     }
   }
 
@@ -131,11 +174,35 @@ export default function AppPost({ post, repost }: AppPostProps) {
         </div>
         <Typography variant="body2" className={styles.Time}>
           {DateUtils.formatReadableDate(post.create_date)}
+          {user?.username === post.user.username && (
+            <IconButton
+              aria-label="options"
+              aria-controls="post-menu"
+              aria-haspopup="true"
+              onClick={handleClickMenu}
+              className={styles.OptionsButton}
+            >
+              <MoreVertIcon />
+            </IconButton>
+          )}
         </Typography>
+        <Menu
+          id="post-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleCloseMenu}
+        >
+          <MenuItem onClick={handleDeletePost}>Supprimer le post</MenuItem>
+        </Menu>
       </div>
       <Typography variant="body1" className={styles.Message}>
         {post.content}
       </Typography>
+      {post.image && (
+        <Box display="flex" justifyContent="center" mt={2}>
+          <img src={post.image} alt="Post image" className={styles.PostImage} />
+        </Box>
+      )}
       <div className={styles.Tags}>
         {post.tags.map((tag, index) => (
           <Typography

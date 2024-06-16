@@ -36,7 +36,6 @@
     text-decoration: underline;
   }
   .Username {
-    text-decoration: underline;
     color: rgb(85, 85, 85);
   }
 }
@@ -56,6 +55,13 @@
 
 .Message {
   margin-bottom: 0.5em;
+}
+
+.PostImage {
+  max-width: 75%;
+  height: auto;
+  border-radius: 8px;
+  margin-bottom: 0.75em;
 }
 
 .Tags {

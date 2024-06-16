@@ -11,16 +11,21 @@
 }
 
 .ItemCard {
-  flex: 1 1 calc(15% - 16px);
+  flex: 1 1 calc(20% - 16px);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #d0e4f5;
+  background-color: #f9f1f1;
   padding: 16px;
-  margin: 8px;
+  margin-bottom: 16px;
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.2s;
+}
+
+.AlbumImage {
+  height: 150px;
 }
 
 .ItemCard:hover {
@@ -29,6 +34,12 @@
 
 .ItemText {
   text-align: center;
+  margin-top: 8px;
+}
+
+.Artist {
+  text-align: center;
+  color: #666;
 }
 
 .Section {

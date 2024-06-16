@@ -37,6 +37,20 @@ class ArtistService {
     }
   }
 
+  async getSearchArtists(searchQuery: string, authToken: string): Promise<Artist[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
+        "/artist",
+        {
+          params: { search: searchQuery },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des artistes");
+    }
+  } 
+
   async createArtist(
     artistName: string,
     birthday: string,

@@ -61,7 +61,7 @@ export default function AppCollectionInclusions() {
       {ownedInclusions.length ? (
         renderInclusions()
       ) : (
-        <Typography variant="body1">
+        <Typography variant="h5" className={styles.NoInclusions}>
           Pas d'inclusions dans votre collection
         </Typography>
       )}

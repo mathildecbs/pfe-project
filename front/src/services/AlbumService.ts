@@ -25,6 +25,20 @@ class AlbumService {
     }
   }
 
+  async getSearchAlbums(searchQuery: string, authToken: string): Promise<Album[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
+        "/album",
+        {
+          params: { search: searchQuery },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des albums");
+    }
+  } 
+
   async createAlbum(
     albumName: string,
     releaseDate: string,

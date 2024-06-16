@@ -64,7 +64,7 @@ export default function AppExploAlbums() {
       {ownedAlbums.length ? (
         renderAlbums()
       ) : (
-        <Typography variant="body1">
+        <Typography variant="h5" className={styles.NoAlbums}>
           Pas d'albums dans votre collection
         </Typography>
       )}

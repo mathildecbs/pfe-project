@@ -1,30 +1,35 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Button, Typography, Avatar } from "@mui/material";
 import { User } from "../../types/UserType";
 import userService from "../../services/UserService";
 import ToastUtils from "../../utils/ToastUtils";
-import styles from "../../css/AppHeaderProfile.module.css";
+import styles from "../../css/AppShortProfile.module.css";
 import { useAuth } from "../../contexts/AuthProvider";
+import { useNavigate } from "react-router-dom";
 
-interface AppHeaderProfileProps {
+interface AppShortProfileProps {
   userProfile: User;
   currentUser: User;
 }
 
-export default function AppHeaderProfile({
+export default function AppShortProfile({
   userProfile,
   currentUser,
-}: AppHeaderProfileProps) {
+}: AppShortProfileProps) {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const navigate = useNavigate();
   const { authToken } = useAuth();
 
   useEffect(() => {
     if (currentUser?.following) {
-      setIsFollowing(currentUser.following.some((user) => user.id === userProfile.id));
+      setIsFollowing(
+        currentUser.following.some((user) => user.id === userProfile.id)
+      );
     }
   }, [currentUser, userProfile]);
 
-  async function handleFollow() {
+  async function handleFollow(e: React.MouseEvent) {
+    e.stopPropagation();
     try {
       if (currentUser && authToken) {
         await userService.followUser(
@@ -40,7 +45,8 @@ export default function AppHeaderProfile({
     }
   }
 
-  async function handleUnfollow() {
+  async function handleUnfollow(e: React.MouseEvent) {
+    e.stopPropagation();
     try {
       if (currentUser && authToken) {
         await userService.unfollowUser(
@@ -72,16 +78,31 @@ export default function AppHeaderProfile({
     return null;
   }
 
+  function navigateTo(root: string, specification?: string) {
+    if (specification) {
+      navigate(`/${root}/${specification}`);
+      return;
+    }
+    navigate(`/${root}`);
+  }
+
   const renderProfileInfo = () => (
     <div className={styles.ProfileInfo}>
-      <Typography variant="body1" className={styles.Username}>@{userProfile.username}</Typography>
-      <Typography variant="body2" className={styles.Description}>{userProfile.description}</Typography>
+      <Typography variant="body2" className={styles.Username}>
+        @{userProfile.username}
+      </Typography>
+      <Typography variant="body2" className={styles.Description}>
+        {userProfile.description}
+      </Typography>
       {renderFollowButton()}
     </div>
   );
 
   return (
-    <div className={styles.Header}>
+    <div
+      className={styles.Container}
+      onClick={() => navigateTo("user", userProfile.id)}
+    >
       {userProfile.image ? (
         <div className={styles.UserPhoto}>
           <img
@@ -96,7 +117,7 @@ export default function AppHeaderProfile({
         </Avatar>
       )}
       <div className={styles.UserInfo}>
-        <Typography variant="h5">{userProfile.name}</Typography>
+        <Typography variant="body1">{userProfile.name}</Typography>
         {renderProfileInfo()}
       </div>
     </div>

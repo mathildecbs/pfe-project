@@ -22,6 +22,8 @@ import AppUserPage from "../community/AppUserPage";
 import AppCreateNew from "../create/AppCreateNew";
 import AppTagPage from "../community/AppTagPage";
 import AppExploOneInclusion from "../exploration/AppExploOneInclusion";
+import AppRoutesAdmin from "./AppRoutesAdmin";
+import AppExploSearch from "../exploration/AppExploSearch";
 
 function AppRouter() {
   return (
@@ -36,15 +38,21 @@ function AppRouter() {
         <Route path="/post/:idPost" element={<AppPostPage />} />
         <Route path="/explorer" element={<AppExplorer />} />
         <Route path="/exploArtists" element={<AppExploArtists />} />
-        <Route path="/exploOneArtist/:idArtist" element={<AppExploOneArtist />} />
+        <Route
+          path="/exploOneArtist/:idArtist"
+          element={<AppExploOneArtist />}
+        />
         <Route path="/exploGroups" element={<AppExploGroups />} />
         <Route path="/exploOneGroup/:idGroup" element={<AppExploOneGroup />} />
         <Route path="/exploAlbums" element={<AppExploAlbums />} />
         <Route path="/exploOneAlbum/:idAlbum" element={<AppExploOneAlbum />} />
-        <Route path="/exploOneInclusion/:idInclusion" element={<AppExploOneInclusion />} />
+        <Route
+          path="/exploOneInclusion/:idInclusion"
+          element={<AppExploOneInclusion />}
+        />
+        <Route path="/exploSearch/:searchQuery" element={<AppExploSearch />} />
         <Route path="/myCollection" element={<AppMyCollection />} />
         <Route path="/tagPage/:tagName" element={<AppTagPage />} />
-        <Route path="/createNew" element={<AppCreateNew />} />
         <Route path="/collectionAlbums" element={<AppCollectionAlbums />} />
         <Route
           path="/collectionInclusions"
@@ -52,6 +60,9 @@ function AppRouter() {
         />
         <Route path="/myPage" element={<AppMyPage />} />
         <Route path="/user/:username" element={<AppUserPage />} />
+        <Route element={<AppRoutesAdmin />}>
+          <Route path="/createNew" element={<AppCreateNew />} />
+        </Route>
       </Route>
       <Route path="*" element={<AppError404 />} />
     </Routes>

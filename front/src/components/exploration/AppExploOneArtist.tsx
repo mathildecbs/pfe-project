@@ -9,7 +9,7 @@ import styles from "../../css/AppExploOneArtist.module.css";
 
 export default function AppExploOneArtist() {
   const { idArtist } = useParams();
-  const { authToken } = useAuth();
+  const { authToken, user } = useAuth();
   const [thisArtist, setThisArtist] = useState<Artist>();
   const navigate = useNavigate();
 
@@ -162,9 +162,11 @@ export default function AppExploOneArtist() {
             </Typography>
           )}
         </div>
-        <Button color="error" variant="contained" onClick={deleteArtist}>
-          Supprimer l'artiste
-        </Button>
+        {user?.isAdmin && (
+          <Button color="error" variant="contained" onClick={deleteArtist}>
+            Supprimer l'artiste
+          </Button>
+        )}
       </div>
     </Paper>
   );

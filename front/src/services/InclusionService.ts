@@ -28,6 +28,20 @@ class InclusionService {
     }
   }
 
+  async getSearchInclusions(searchQuery: string, authToken: string): Promise<Inclusion[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
+        "/inclusion",
+        {
+          params: { search: searchQuery },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des inclusions");
+    }
+  } 
+
   async createInclusion(
     inclusionName: string,
     albumId: string,

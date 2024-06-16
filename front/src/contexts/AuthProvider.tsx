@@ -4,12 +4,14 @@ import { User } from "../types/UserType";
 interface AuthContextType {
   authToken: string | null;
   user: User | null;
+  updateUser: (user: User) => void;
   login: (user: User, token: string) => void;
   logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
   authToken: null,
+  updateUser: () => {},
   user: null,
   login: () => {},
   logout: () => {},
@@ -33,6 +35,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(user);
   }
 
+  function updateUser(user: User) {
+    localStorage.setItem("user", JSON.stringify(user));
+    setUser(user);
+  }
+
   function logout() {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
@@ -41,7 +48,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ user, authToken, login, logout }}>
+    <AuthContext.Provider value={{ user, updateUser, authToken, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

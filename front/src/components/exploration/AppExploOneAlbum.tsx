@@ -149,6 +149,20 @@ export default function AppExploOneAlbum() {
     }
   }
 
+  async function deleteAlbum() {
+    try {
+      if (idAlbum && authToken) {
+        const response = await albumService.deleteAlbum(idAlbum, authToken);
+        if (response) {
+          ToastUtils.success("Suppression de l'album");
+        }
+        navigateTo("exploAlbums");
+      }
+    } catch (error) {
+      ToastUtils.error(error, "Erreur lors de la suppression de l'album");
+    }
+  }
+
   async function handleAddInclusionToCollection(inclusionId: string) {
     try {
       if (user && authToken) {
@@ -204,8 +218,12 @@ export default function AppExploOneAlbum() {
     }
   }
 
-  function navigateTo(root: string, specification: string) {
-    navigate(`/${root}/${specification}`);
+  function navigateTo(root: string, specification?: string) {
+    if (specification) {
+      navigate(`/${root}/${specification}`);
+      return;
+    }
+    navigate(`/${root}`);
   }
 
   function groupInclusionsByMember(inclusions: any[]) {
@@ -352,6 +370,15 @@ export default function AppExploOneAlbum() {
               </div>
             ))}
           </div>
+        )}
+        {user?.isAdmin && (
+          <Button
+            color="error"
+            variant="contained"
+            onClick={() => deleteAlbum()}
+          >
+            Supprimer l'album au complet définitivement
+          </Button>
         )}
       </div>
     </Paper>

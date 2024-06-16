@@ -20,34 +20,13 @@
 }
 
 .InclusionImage {
-  width: 150px;
+  width: 100px;
   height: 150px;
   object-fit: cover;
   border-radius: 8px;
 }
 
 .ItemText {
-  margin-top: 8px;
+  margin-top: 2px;
   text-align: center;
-}
-
-.VersionText {
-  margin-top: 4px;
-  text-align: center;
-  color: #555;
-}
-
-.Section {
-  padding: 16px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.NoInclusions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: grey;
-  height: 200px; 
 }

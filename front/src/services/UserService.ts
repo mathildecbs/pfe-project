@@ -26,6 +26,20 @@ class UserService {
     }
   }
 
+  async getSearchUsers(searchQuery: string, authToken: string): Promise<User[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
+        "/user",
+        {
+          params: { search: searchQuery },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des users");
+    }
+  } 
+
   async createUser(
     username: string,
     hashedPassword: string,

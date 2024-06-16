@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Post } from "../../types/PostType";
 import { useAuth } from "../../contexts/AuthProvider";
@@ -9,11 +9,14 @@ import { Typography } from "@mui/material";
 import AppHeaderProfile from "./AppHeaderProfile";
 import userService from "../../services/UserService";
 import { User } from "../../types/UserType";
+import styles from "../../css/AppUserPage.module.css";
 
 export default function AppUserPage() {
   const [userProfile, setUserProfile] = useState<User>();
   const [userPosts, setUserPosts] = useState<Post[]>([]);
-  const [repostStatus, setRepostStatus] = useState<Map<number, boolean>>(new Map());
+  const [repostStatus, setRepostStatus] = useState<Map<string, boolean>>(
+    new Map()
+  );
   const { user, authToken } = useAuth();
   const { username } = useParams();
 
@@ -55,44 +58,52 @@ export default function AppUserPage() {
   }
 
   function getPostRepostStatus(posts: Post[]) {
-    const repostStatus = new Map<number, boolean>();
+    const repostStatus = new Map<string, boolean>();
 
     posts.forEach((post) => {
-      const isRepost = userProfile?.reposts.some((repost) => repost.id === post.id);
-      repostStatus.set(post.id, isRepost || false);
+      if (userProfile?.reposts.length) {
+        const isRepost = userProfile?.reposts.some(
+          (repost) => repost.id === post.id
+        );
+        repostStatus.set(post.id, isRepost || false);
+      } else {
+        repostStatus.set(post.id, false);
+      }
     });
 
     return repostStatus;
   }
 
   return (
-    <>
+    <div className={styles.Container}>
       {userProfile ? (
         <>
           {user && (
             <AppHeaderProfile userProfile={userProfile} currentUser={user} />
           )}
-          {userPosts.length ? (
-            userPosts.map((userPost, index) => (
-              <AppPost
-                key={`${userPost.id}${
-                  !!repostStatus.get(userPost.id) &&
-                  index ===
-                    userPosts.findIndex((post) => post.id === userPost.id)
-                }}`}
-                post={userPost}
-                repost={!!repostStatus.get(userPost.id)}
-              />
-            ))
-          ) : (
-            <Typography variant="h6">
-              Cet utilisateur n'a pas encore publié de post.
-            </Typography>
-          )}
+          <div className={styles.ContainerPosts}>
+            {userPosts.length ? (
+              userPosts.map((userPost, index) => (
+                <AppPost
+                  key={`${userPost.id}${
+                    !!repostStatus.get(userPost.id) &&
+                    index ===
+                      userPosts.findIndex((post) => post.id === userPost.id)
+                  }}`}
+                  post={userPost}
+                  repost={!!repostStatus.get(userPost.id)}
+                />
+              ))
+            ) : (
+              <Typography variant="h6">
+                Cet utilisateur n'a pas encore publié de post.
+              </Typography>
+            )}
+          </div>
         </>
       ) : (
         <Typography variant="h6">Chargement du profil...</Typography>
       )}
-    </>
+    </div>
   );
 }

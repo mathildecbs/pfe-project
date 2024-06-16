@@ -1,0 +1,52 @@
+.Container {
+  display: flex;
+  flex-direction: column;
+}
+
+.Tabs {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 999;
+}
+
+.Tab {
+  color: #539ddf !important;
+}
+
+.ResultsContainer {
+  flex: 1;
+  padding: 16px;
+}
+
+.ResultItem {
+  padding: 16px;
+  margin: 8px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+.ResultItem:hover {
+  background-color: #f1f7fd;
+  color: rgb(27, 172, 217);
+  cursor: pointer;
+}
+
+.Unavailable {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  font-size: 18px;
+  color: grey;
+}
+
+.Result {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  color: #3a3a3a;
+  margin-bottom: 1em !important;
+}

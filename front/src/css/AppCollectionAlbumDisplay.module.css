@@ -19,7 +19,7 @@
   transform: scale(1.05);
 }
 
-.InclusionImage {
+.AlbumImage {
   width: 150px;
   height: 150px;
   object-fit: cover;
@@ -29,25 +29,4 @@
 .ItemText {
   margin-top: 8px;
   text-align: center;
-}
-
-.VersionText {
-  margin-top: 4px;
-  text-align: center;
-  color: #555;
-}
-
-.Section {
-  padding: 16px;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.NoInclusions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: grey;
-  height: 200px; 
 }

@@ -28,7 +28,7 @@ export default function AppExploOneGroup() {
     }
   }
 
-  async function deleteOwnedGroup() {
+  async function deleteGroup() {
     try {
       if (idGroup && authToken) {
         const response = await groupService.deleteGroup(idGroup, authToken);
@@ -123,9 +123,11 @@ export default function AppExploOneGroup() {
             </Typography>
           )}
         </div>
-        <Button color="error" variant="contained" onClick={deleteOwnedGroup}>
-          Supprimer le groupe
-        </Button>
+        {user?.isAdmin && (
+          <Button color="error" variant="contained" onClick={deleteGroup}>
+            Supprimer le groupe au complet définitivement
+          </Button>
+        )}
       </div>
     </Paper>
   );

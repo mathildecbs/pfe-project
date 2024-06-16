@@ -29,8 +29,8 @@ export default function AppMyPage() {
   }
 
   function getPostRepostStatus(posts: Post[]) {
-    const occurrences = new Map<number, number>();
-    const repostStatus = new Map<number, boolean>();
+    const occurrences = new Map<string, number>();
+    const repostStatus = new Map<string, boolean>();
 
     posts.forEach((post) => {
       const count = (occurrences.get(post.id) || 0) + 1;
@@ -52,9 +52,9 @@ export default function AppMyPage() {
         <>
           <AppHeaderProfile userProfile={user} currentUser={user} />
 
-          {myFeed.length ? (
-            <div className={styles.ContainerPosts}>
-              {myFeed.map((myPost, index) => (
+          <div className={styles.ContainerPosts}>
+            {myFeed.length ? (
+              myFeed.map((myPost, index) => (
                 <AppPost
                   key={`${myPost.id}${
                     !!repostStatus.get(myPost.id) &&
@@ -66,13 +66,13 @@ export default function AppMyPage() {
                     index === myFeed.findIndex((post) => post.id === myPost.id)
                   }
                 />
-              ))}
-            </div>
-          ) : (
-            <Typography variant="h6">
-              Commencez à liker, reposter et écrire des posts !
-            </Typography>
-          )}
+              ))
+            ) : (
+              <Typography variant="h6">
+                Commencez à liker, reposter et écrire des posts !
+              </Typography>
+            )}
+          </div>
         </>
       ) : (
         <Typography variant="h6">Chargement du profil...</Typography>

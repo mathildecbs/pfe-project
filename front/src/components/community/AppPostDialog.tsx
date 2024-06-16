@@ -8,8 +8,10 @@ import {
   TextField,
   Box,
   Chip,
+  IconButton,
 } from "@mui/material";
 import Autocomplete from "@mui/material/Autocomplete";
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import styles from "../../css/AppPostDialog.module.css";
 import { Tag } from "../../types/TagType";
 import { useAuth } from "../../contexts/AuthProvider";
@@ -28,6 +30,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [postContent, setPostContent] = useState("");
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const { user, authToken } = useAuth();
   const { addPost, addPostMyFeed } = usePosts();
 
@@ -79,6 +82,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
         user.username,
         postContent,
         tagsToSend,
+        selectedImage,
         authToken
       );
 
@@ -102,10 +106,18 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
     setInputValue("");
   }
 
+  function handleImageChange(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0] || null;
+    if (file) {
+      setSelectedImage(file);
+    }
+  }
+
   function resetForm() {
     setPostContent("");
     setSelectedTags([]);
     setInputValue("");
+    setSelectedImage(null);
   }
 
   const availableTags = tags.filter(
@@ -160,6 +172,27 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
               className={styles.TagChip}
             />
           ))}
+        </Box>
+        <Box mt={2} display="flex" alignItems="center">
+          <input
+            accept="image/*"
+            style={{ display: "none" }}
+            id="icon-button-file"
+            type="file"
+            onChange={handleImageChange}
+          />
+          <label htmlFor="icon-button-file">
+            <IconButton color="primary" aria-label="upload picture" component="span">
+              <AddPhotoAlternateIcon />
+            </IconButton>
+          </label>
+          {selectedImage && (
+            <Chip
+              label={selectedImage.name}
+              onDelete={() => setSelectedImage(null)}
+              className={styles.TagChip}
+            />
+          )}
         </Box>
       </DialogContent>
       <DialogActions>

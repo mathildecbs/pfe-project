@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Paper, Typography, Button } from "@mui/material";
+import { Paper, Typography, Button, Avatar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ToastUtils from "../../utils/ToastUtils";
 import styles from "../../css/AppHome.module.css";
@@ -70,8 +70,18 @@ export default function AppHome() {
             className={styles.ItemCard}
             onClick={() => navigate(`/exploOneAlbum/${album.id}`)}
           >
-            <Typography variant="h6" className={styles.ItemText}>
+            {album.image ? (
+              <img src={album.image} alt={album.name} className={styles.AlbumImage} />
+            ) : (
+              <Avatar className={styles.DefaultAvatar}>
+                {album.name.charAt(0).toUpperCase()}
+              </Avatar>
+            )}
+            <Typography variant="body1" className={styles.ItemText}>
               {album.name}
+            </Typography>
+            <Typography variant="body2" className={styles.Artist}>
+              {album.solo ? album.artist.name : album.group.name}
             </Typography>
           </div>
         ))}
