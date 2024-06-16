@@ -3,7 +3,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import {  Like, MoreThanOrEqual, Repository } from 'typeorm';
+import { Like, MoreThanOrEqual, Repository } from 'typeorm';
 import { UtilsServiceService } from '../utils/utils_service/utils_service.service';
 import { UserQP } from './dto/query-params.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -17,6 +17,7 @@ import { InclusionService } from '../inclusion/inclusion.service';
 import { CreateOwnedInclusionDto } from '../inclusion/dto/create-owned-inclusion.dto';
 import { UpdateOwnedInclusionDto } from '../inclusion/dto/update-owned-inclusion.dto';
 import { UpdateOwnedAlbumDto } from '../album/dto/update-owned-album.dto';
+import { Repost } from "../post/entities/repost.entity";
 
 @Injectable()
 export class UserService {
@@ -27,14 +28,14 @@ export class UserService {
     private utilsService: UtilsServiceService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-
     @InjectRepository(OwnedAlbum)
     private albumRepository: Repository<OwnedAlbum>,
-  
     @InjectRepository(OwnedInclusion)
     private inclusionRepository: Repository<OwnedInclusion>,
     private albumService: AlbumService,
     private inclusionService: InclusionService,
+    @InjectRepository(Repost)
+    private repostRepository: Repository<Repost>
   
   ) {
   }
@@ -105,7 +106,11 @@ export class UserService {
       ...res,
       followers: [],
       following: [],
-      reposts: this.utilsService.transform_reposts_post(res.reposts)
+      reposts: this.utilsService.transform_reposts_post(res.reposts),
+    }
+
+    for(const post of user.posts) {
+      post.user = this.utilsService.format_user_simplify(post.user)
     }
     user.followers = this.utilsService.user_to_username(res.followers)
     user.following = this.utilsService.user_to_username(res.following)
@@ -132,7 +137,7 @@ export class UserService {
     if (!updateResult ){
       throw new HttpException('User update failed', HttpStatus.BAD_REQUEST);
     }
-    return this.findOne(new_user.username);
+    return await this.findOne(new_user.username);
   }
 
   async update_admin(username: string) {
@@ -154,7 +159,7 @@ export class UserService {
     if (!updateResult ){
       throw new HttpException('User update failed', HttpStatus.BAD_REQUEST);
     }
-    return this.findOne(user.username);
+    return await this.findOne(user.username);
   }
 
   async remove(username: string) {
@@ -171,6 +176,14 @@ export class UserService {
 
     for (const inclusion of collection.inclusions) {
       await this.inclusionRepository.delete(inclusion.id)
+    }
+
+    const reposts = await this.repostRepository.find({
+      where: {user: {id:user.id}}
+    })
+
+    for(const repost of reposts) {
+      await this.repostRepository.delete(repost.id)
     }
 
     await this.usersRepository.save(user)
