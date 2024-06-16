@@ -3,6 +3,7 @@
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 16px;
+  padding: 1em;
 }
 
 .ContainerPosts {
@@ -16,8 +17,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f9f1f1;
-  padding: 16px;
+  background-color: #f9f1f1; /* light pink*/
+  padding: 16px 10px;
   margin-bottom: 16px;
   border-radius: 8px;
   cursor: pointer;
@@ -39,7 +40,7 @@
 
 .Artist {
   text-align: center;
-  color: #666;
+  color: gray;
 }
 
 .Section {

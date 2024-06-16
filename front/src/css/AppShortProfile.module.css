@@ -9,6 +9,7 @@
 
 .Container:hover {
   background-color: #f1f7fd;
+  /* light blue */
   cursor: pointer;
 }
 

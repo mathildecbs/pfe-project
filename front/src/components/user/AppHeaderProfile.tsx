@@ -1,23 +1,22 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Typography, Avatar } from "@mui/material";
 import { User } from "../../types/UserType";
 import userService from "../../services/UserService";
 import ToastUtils from "../../utils/ToastUtils";
-import styles from "../../css/AppShortProfile.module.css";
+import styles from "../../css/AppHeaderProfile.module.css";
 import { useAuth } from "../../contexts/AuthProvider";
-import { useNavigate } from "react-router-dom";
 
-interface AppShortProfileProps {
+interface AppHeaderProfileProps {
   userProfile: User;
   currentUser: User;
 }
 
-export default function AppShortProfile({
+export default function AppHeaderProfile({
   userProfile,
   currentUser,
-}: AppShortProfileProps) {
+}: AppHeaderProfileProps) {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const [isAdmin, setIsAdmin] = useState<boolean>(userProfile.isAdmin);
   const { authToken } = useAuth();
 
   useEffect(() => {
@@ -28,8 +27,7 @@ export default function AppShortProfile({
     }
   }, [currentUser, userProfile]);
 
-  async function handleFollow(e: React.MouseEvent) {
-    e.stopPropagation();
+  async function handleFollow() {
     try {
       if (currentUser && authToken) {
         await userService.followUser(
@@ -45,8 +43,7 @@ export default function AppShortProfile({
     }
   }
 
-  async function handleUnfollow(e: React.MouseEvent) {
-    e.stopPropagation();
+  async function handleUnfollow() {
     try {
       if (currentUser && authToken) {
         await userService.unfollowUser(
@@ -59,6 +56,36 @@ export default function AppShortProfile({
       }
     } catch (error) {
       ToastUtils.error("Erreur lors du désabonnement");
+    }
+  }
+
+  async function handleToAdmin() {
+    try {
+      if (authToken) {
+        await userService.toAdmin(
+          userProfile.username,
+          authToken
+        );
+        setIsAdmin(true);
+        ToastUtils.success(`L'utilisateur ${userProfile.username} est maintenant admin`);
+      }
+    } catch (error) {
+      ToastUtils.error("Erreur lors du passage à admin");
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      if (authToken) {
+        await userService.toAdmin(
+          userProfile.username,
+          authToken
+        );
+        setIsAdmin(true);
+        ToastUtils.success(`L'utilisateur ${userProfile.username} est maintenant admin`);
+      }
+    } catch (error) {
+      ToastUtils.error("Erreur lors du passage à admin");
     }
   }
 
@@ -78,17 +105,9 @@ export default function AppShortProfile({
     return null;
   }
 
-  function navigateTo(root: string, specification?: string) {
-    if (specification) {
-      navigate(`/${root}/${specification}`);
-      return;
-    }
-    navigate(`/${root}`);
-  }
-
   const renderProfileInfo = () => (
     <div className={styles.ProfileInfo}>
-      <Typography variant="body2" className={styles.Username}>
+      <Typography variant="body1" className={styles.Username}>
         @{userProfile.username}
       </Typography>
       <Typography variant="body2" className={styles.Description}>
@@ -99,10 +118,7 @@ export default function AppShortProfile({
   );
 
   return (
-    <div
-      className={styles.Container}
-      onClick={() => navigateTo("user", userProfile.id)}
-    >
+    <div className={styles.Header}>
       {userProfile.image ? (
         <div className={styles.UserPhoto}>
           <img
@@ -117,8 +133,19 @@ export default function AppShortProfile({
         </Avatar>
       )}
       <div className={styles.UserInfo}>
-        <Typography variant="body1">{userProfile.name}</Typography>
+        <Typography variant="h5">{userProfile.name}</Typography>
         {renderProfileInfo()}
+        {currentUser.isAdmin && (
+          <Button
+            variant="outlined"
+            color={isAdmin ? "inherit" : "primary"}
+            onClick={isAdmin ? () => {} : handleToAdmin}
+            className={styles.FollowButton}
+            disabled={isAdmin}
+          >
+            {isAdmin ? "Admin" : "Passer admin"}
+          </Button>
+        )}
       </div>
     </div>
   );

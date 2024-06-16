@@ -90,8 +90,8 @@ export default function AppTopMenu() {
               onClose={handleMenuClose}
               MenuListProps={{ onMouseLeave: handleMenuClose }}
             >
-              <MenuItem onClick={handleMenuClose} component={Link} to="/myPage">
-                Profil
+              <MenuItem onClick={handleMenuClose} component={Link} to="/myPage/update">
+                Modifier profil
               </MenuItem>
               <MenuItem onClick={handleLogoutClick}>Déconnexion</MenuItem>
             </Menu>

@@ -26,7 +26,10 @@ class UserService {
     }
   }
 
-  async getSearchUsers(searchQuery: string, authToken: string): Promise<User[]> {
+  async getSearchUsers(
+    searchQuery: string,
+    authToken: string
+  ): Promise<User[]> {
     try {
       const response = await ApiUtils.getApiInstanceJson(authToken).get(
         "/user",
@@ -38,7 +41,7 @@ class UserService {
     } catch (error) {
       throw new Error("Erreur lors de la récupération des users");
     }
-  } 
+  }
 
   async createUser(
     username: string,
@@ -60,7 +63,7 @@ class UserService {
           process.env.REACT_APP_FIREBASE_STORAGE_DIR === undefined
             ? ""
             : process.env.REACT_APP_FIREBASE_STORAGE_DIR
-        }user/${username}/${imageFile.name}`;
+        }user/${username}/user`;
         const imageUrl = await FirebaseStorageService.uploadFile(
           filePath,
           imageFile
@@ -120,6 +123,81 @@ class UserService {
       return response.data;
     } catch (error) {
       throw new Error("Erreur lors du désabonnement de l'utilisateur");
+    }
+  }
+
+  async updateUser(
+    username: string,
+    name: string,
+    description: string | null,
+    imageFile: File | null,
+    authToken: string
+  ): Promise<User> {
+    try {
+      const userData: any = {
+        name: name,
+        description: description,
+      };
+
+      if (imageFile) {
+        const filePath = `${
+          process.env.REACT_APP_FIREBASE_STORAGE_DIR === undefined
+            ? ""
+            : process.env.REACT_APP_FIREBASE_STORAGE_DIR
+        }user/${username}/user`;
+        const imageUrl = await FirebaseStorageService.uploadFile(
+          filePath,
+          imageFile
+        );
+        userData.image = imageUrl;
+      }
+
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch(
+        `user/${username}`,
+        userData
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la modification de l'utilisateur");
+    }
+  }
+
+  async updatePassword(
+    username: string,
+    password: string,
+    authToken: string
+  ): Promise<User> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch(
+        `user/${username}`,
+        { password: password }
+      );
+      return response.data;
+    } catch {
+      throw new Error("Erreur lors de la modification du mot de passe");
+    }
+  }
+
+  async toAdmin(username: string, authToken: string): Promise<User> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch(
+        `user/${username}`,
+        { isAdmin: true }
+      );
+      return response.data;
+    } catch {
+      throw new Error("Erreur lors de la modification du mot de passe");
+    }
+  }
+
+  async deleteUser(username: string, authToken: string): Promise<boolean> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).delete(
+        `user/${username}`
+      );
+      return response.data;
+    } catch {
+      throw new Error("Erreur lors de la modification du mot de passe");
     }
   }
 }

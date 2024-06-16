@@ -74,79 +74,106 @@ export default function AppExplorer() {
     const combined = [...groups, ...soloArtists];
 
     return (
-      <div className={styles.Container}>
-        {combined.slice(0, 4).map((item) => (
-          <div
-            key={item.id}
-            className={styles.ItemCard}
-            onClick={() => {
-              if ("main_group" in item && item.main_group) {
-                navigate(`/exploOneArtist/${item.id}`);
-              } else {
-                navigate(`/exploOneGroup/${item.id}`);
-              }
-            }}
+      <>
+        <div className={styles.Container}>
+          {combined.slice(0, 4).map((item) => (
+            <div
+              key={item.id}
+              className={styles.ItemCard}
+              onClick={() => {
+                if ("main_group" in item && item.main_group) {
+                  navigate(`/exploOneArtist/${item.id}`);
+                } else {
+                  navigate(`/exploOneGroup/${item.id}`);
+                }
+              }}
+            >
+              <img
+                src={item.image}
+                alt={item.name}
+                className={styles.ItemImage}
+              />
+              <Typography variant="h6" className={styles.ItemText}>
+                {item.name}
+              </Typography>
+            </div>
+          ))}
+        </div>
+        <div className={styles.ButtonContainer}>
+          <Button
+            className={styles.MoreButton}
+            onClick={() => navigate("/exploGroups")}
           >
-            <Typography variant="h6" className={styles.ItemText}>
-              {item.name}
-            </Typography>
-          </div>
-        ))}
-        <Button
-          className={styles.MoreButton}
-          onClick={() => navigate("/exploGroups")}
-        >
-          Plus...
-        </Button>
-      </div>
+            Plus...
+          </Button>
+        </div>
+      </>
     );
   }
 
   function renderArtists() {
     return (
-      <div className={styles.Container}>
-        {artists.slice(0, 4).map((artist) => (
-          <div
-            key={artist.id}
-            className={styles.ItemCard}
-            onClick={() => navigate(`/exploOneArtist/${artist.id}`)}
+      <>
+        <div className={styles.Container}>
+          {artists.slice(0, 4).map((artist) => (
+            <div
+              key={artist.id}
+              className={styles.ItemCard}
+              onClick={() => navigate(`/exploOneArtist/${artist.id}`)}
+            >
+              <img
+                src={artist.image}
+                alt={artist.name}
+                className={styles.ItemImage}
+              />
+              <Typography variant="h6" className={styles.ItemText}>
+                {artist.name}
+              </Typography>
+            </div>
+          ))}
+        </div>
+        <div className={styles.ButtonContainer}>
+          <Button
+            className={styles.MoreButton}
+            onClick={() => navigate("/exploArtists")}
           >
-            <Typography variant="h6" className={styles.ItemText}>
-              {artist.name}
-            </Typography>
-          </div>
-        ))}
-        <Button
-          className={styles.MoreButton}
-          onClick={() => navigate("/exploArtists")}
-        >
-          Plus...
-        </Button>
-      </div>
+            Plus...
+          </Button>
+        </div>
+      </>
     );
   }
 
   function renderAlbums() {
     return (
-      <div className={styles.Container}>
-        {albums.slice(0, 4).map((album) => (
-          <div
-            key={album.id}
-            className={styles.ItemCard}
-            onClick={() => navigate(`/exploOneAlbum/${album.id}`)}
+      <>
+        <div className={styles.Container}>
+          {albums.slice(0, 4).map((album) => (
+            <div
+              key={album.id}
+              className={styles.ItemCard}
+              onClick={() => navigate(`/exploOneAlbum/${album.id}`)}
+            >
+              <img
+                src={album.image}
+                alt={album.name}
+                className={styles.ItemImage}
+              />
+              <Typography variant="h6" className={styles.ItemText}>
+                {album.name}
+              </Typography>
+            </div>
+          ))}
+        </div>
+        <div className={styles.ButtonContainer}>
+          <Button
+            className={styles.MoreButton}
+            onClick={() => navigate("/exploAlbums")}
           >
-            <Typography variant="h6" className={styles.ItemText}>
-              {album.name}
-            </Typography>
-          </div>
-        ))}
-        <Button
-          className={styles.MoreButton}
-          onClick={() => navigate("/exploAlbums")}
-        >
-          Plus...
-        </Button>
-      </div>
+            Plus...
+          </Button>
+        </div>
+      </>
     );
   }
 

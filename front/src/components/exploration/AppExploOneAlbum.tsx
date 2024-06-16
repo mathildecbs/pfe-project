@@ -265,7 +265,7 @@ export default function AppExploOneAlbum() {
             {thisAlbum.solo ? thisAlbum.artist.name : thisAlbum.group.name}
           </Typography>
 
-          {thisAlbum.versions ? (
+          {thisAlbum.versions && thisAlbum.versions.length ? (
             <FormControl fullWidth className={styles.FormControl}>
               <InputLabel>Version</InputLabel>
               <Select value={selectedVersion} onChange={handleVersionChange}>
@@ -333,17 +333,18 @@ export default function AppExploOneAlbum() {
                       key={inclusion.id}
                       className={styles.InclusionContainer}
                     >
-                      <img
-                        src={inclusion.image}
-                        alt={inclusion.name}
-                        onClick={() =>
-                          navigateTo(
-                            "exploOneInclusion",
-                            inclusion.id.toString()
-                          )
-                        }
-                      />
                       <div className={styles.InclusionItem}>
+                        <img
+                          src={inclusion.image}
+                          alt={inclusion.name}
+                          className={styles.InclusionImage}
+                          onClick={() =>
+                            navigateTo(
+                              "exploOneInclusion",
+                              inclusion.id.toString()
+                            )
+                          }
+                        />
                         <Typography variant="body1">
                           {inclusion.name}
                         </Typography>

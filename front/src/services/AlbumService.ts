@@ -64,7 +64,7 @@ class AlbumService {
           process.env.REACT_APP_FIREBASE_STORAGE_DIR === undefined
             ? ""
             : process.env.REACT_APP_FIREBASE_STORAGE_DIR
-        }albums/${albumName}/${imageFile.name}`;
+        }albums/${albumName}/${albumName}`;
         const imageUrl = await FirebaseStorageService.uploadFile(
           filePath,
           imageFile

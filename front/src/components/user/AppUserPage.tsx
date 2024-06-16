@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Post } from "../../types/PostType";
 import { useAuth } from "../../contexts/AuthProvider";
-import AppPost from "./AppPost";
+import AppPost from "../community/AppPost";
 import postService from "../../services/PostService";
 import ToastUtils from "../../utils/ToastUtils";
 import { Typography } from "@mui/material";

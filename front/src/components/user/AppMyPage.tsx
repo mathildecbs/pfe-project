@@ -1,20 +1,22 @@
 import { useEffect } from "react";
 import { Post } from "../../types/PostType";
 import { useAuth } from "../../contexts/AuthProvider";
-import AppPost from "./AppPost";
+import AppPost from "../community/AppPost";
 import postService from "../../services/PostService";
 import ToastUtils from "../../utils/ToastUtils";
 import { Typography } from "@mui/material";
 import AppHeaderProfile from "./AppHeaderProfile";
 import styles from "../../css/AppMyPage.module.css";
 import { usePosts } from "../../contexts/PostsProvider";
+import userService from "../../services/UserService";
 
 export default function AppMyPage() {
   const { myFeed, setMyFeed } = usePosts();
-  const { user, authToken } = useAuth();
+  const { user, authToken, updateUser } = useAuth();
 
   useEffect(() => {
     fetchFeed();
+    fetchUserProfile();
   }, []);
 
   async function fetchFeed() {
@@ -25,6 +27,20 @@ export default function AppMyPage() {
       }
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la récupération des posts");
+    }
+  }
+
+  async function fetchUserProfile() {
+    try {
+      if (user?.username) {
+        const response = await userService.getOneUser(user?.username);
+        updateUser(response);
+      }
+    } catch (error) {
+      ToastUtils.error(
+        error,
+        "Erreur lors de la récupération du profil utilisateur"
+      );
     }
   }
 
@@ -69,7 +85,7 @@ export default function AppMyPage() {
               ))
             ) : (
               <Typography variant="h6">
-                Commencez à liker, reposter et écrire des posts !
+                Commencez à reposter et écrire des posts !
               </Typography>
             )}
           </div>

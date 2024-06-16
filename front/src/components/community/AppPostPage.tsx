@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import AppPost from "./AppPost";
 import AppCommentWritingSection from "./AppCommentWritingSection";
 import { useAuth } from "../../contexts/AuthProvider";
+import styles from "../../css/AppPostPage.module.css";
 import ToastUtils from "../../utils/ToastUtils";
 
 export default function AppPostPage() {
@@ -37,7 +38,7 @@ export default function AppPostPage() {
   }
 
   return (
-    <>
+    <div className={styles.PostPageContainer}>
       {selectedPost && (
         <>
           <AppPost
@@ -61,6 +62,6 @@ export default function AppPostPage() {
           ))}
         </>
       )}
-    </>
+    </div>
   );
 }
