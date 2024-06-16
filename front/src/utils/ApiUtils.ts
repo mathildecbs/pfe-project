@@ -28,19 +28,6 @@ export default abstract class ApiUtils {
     });
   }
 
-  static getApiInstanceFormData(authToken?: string): AxiosInstance {
-    const headers: any = {
-      "Content-Type": "multipart/form-data",
-    };
-    if (authToken) {
-      headers["Authorization"] = `Bearer ${authToken}`;
-    }
-    return axios.create({
-      baseURL: ApiUtils.API_BASE_URL,
-      headers: headers,
-    });
-  }
-
   static async authentification(username: string, password: string, login: (token: string, userId: string) => void): Promise<string | null> {
     const hashedPassword = hashPassword(password);
     const requestBody: LoginRequestBody = {
