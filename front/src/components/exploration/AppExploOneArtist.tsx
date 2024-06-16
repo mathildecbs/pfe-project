@@ -82,13 +82,19 @@ export default function AppExploOneArtist() {
           {secondaryGroups.length ? (
             <div className={styles.AlbumsContainer}>
               {secondaryGroups.map((group) => (
-                <div key={group.id} className={styles.AlbumCard}>
+                <div
+                  key={group.id}
+                  className={styles.AlbumCard}
+                  onClick={() =>
+                    navigateTo("exploOneGroup", group.id.toString())
+                  }
+                >
                   <img
                     src={group.image}
                     alt={group.name}
                     className={styles.AlbumImage}
                   />
-                  <Typography variant="body2" className={styles.AlbumName}>
+                  <Typography variant="body2" className={styles.ItemName}>
                     {group.name}
                   </Typography>
                 </div>
