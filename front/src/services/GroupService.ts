@@ -58,7 +58,7 @@ class GroupService {
           process.env.REACT_APP_FIREBASE_STORAGE_DIR === undefined
             ? ""
             : process.env.REACT_APP_FIREBASE_STORAGE_DIR
-        }groups/${groupName}/${imageFile.name}`;
+        }groups/${groupName}/${groupName}`;
         const imageUrl = await FirebaseStorageService.uploadFile(
           filePath,
           imageFile

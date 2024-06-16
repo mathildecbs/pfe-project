@@ -147,6 +147,7 @@ export default function AppUpdateProfile() {
               <AddPhotoAlternateIcon className={styles.PhotoIcon} />
             </IconButton>
           </label>
+          <Typography variant="h5">@{profileData.username}</Typography>
         </div>
       </div>
       <form onSubmit={handleSubmit} className={styles.Form}>

@@ -72,7 +72,7 @@ class ArtistService {
           process.env.REACT_APP_FIREBASE_STORAGE_DIR === undefined
             ? ""
             : process.env.REACT_APP_FIREBASE_STORAGE_DIR
-        }artists/${artistName}/${imageFile.name}`;
+        }artists/${artistName}/${artistName}`;
         const imageUrl = await FirebaseStorageService.uploadFile(
           filePath,
           imageFile
