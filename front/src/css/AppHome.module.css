@@ -17,7 +17,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f9f1f1;
+  background-color: #f9f1f1; /* light pink*/
   padding: 16px 10px;
   margin-bottom: 16px;
   border-radius: 8px;
@@ -40,7 +40,7 @@
 
 .Artist {
   text-align: center;
-  color: #666;
+  color: gray;
 }
 
 .Section {

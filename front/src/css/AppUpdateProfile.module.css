@@ -48,14 +48,15 @@
 }
 
 .HeadersTitle {
-  background-color: #f5e5e5;
+  background-color: #f9f1f1; /* light pink*/
   padding: 5px;
   margin: 0.5em !important;
   border-radius: 0.5em;
 }
 
 .PhotoIcon {
-  color: #f09f9c;
+  color: #e18582;
+  /* darker pink */
 }
 
 .InputFile {

@@ -36,7 +36,7 @@
     text-decoration: underline;
   }
   .Username {
-    color: rgb(85, 85, 85);
+    color: gray;
   }
 }
 
@@ -85,6 +85,7 @@
   align-items: center;
   gap: 0.5em;
   color: grey;
+  margin-bottom: 0.5em !important;
 }
 
 .Tag:hover {

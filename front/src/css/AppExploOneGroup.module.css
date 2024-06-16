@@ -43,14 +43,14 @@
 }
 
 .MemberName {
-  background-color: #f0f0f0;
+  background-color: #d0e4f5;
   padding: 8px;
   border-radius: 4px;
   transition: 0.3s;
 }
 
 .MemberName:hover {
-  background-color: #fee4e4;
+  background-color: #b3cee5;
   cursor: pointer;
 }
 
