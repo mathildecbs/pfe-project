@@ -61,7 +61,22 @@ export default function AppHeaderProfile({
 
   async function handleToAdmin() {
     try {
-      if (currentUser && authToken) {
+      if (authToken) {
+        await userService.toAdmin(
+          userProfile.username,
+          authToken
+        );
+        setIsAdmin(true);
+        ToastUtils.success(`L'utilisateur ${userProfile.username} est maintenant admin`);
+      }
+    } catch (error) {
+      ToastUtils.error("Erreur lors du passage à admin");
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      if (authToken) {
         await userService.toAdmin(
           userProfile.username,
           authToken

@@ -333,17 +333,18 @@ export default function AppExploOneAlbum() {
                       key={inclusion.id}
                       className={styles.InclusionContainer}
                     >
-                      <img
-                        src={inclusion.image}
-                        alt={inclusion.name}
-                        onClick={() =>
-                          navigateTo(
-                            "exploOneInclusion",
-                            inclusion.id.toString()
-                          )
-                        }
-                      />
                       <div className={styles.InclusionItem}>
+                        <img
+                          src={inclusion.image}
+                          alt={inclusion.name}
+                          className={styles.InclusionContainer}
+                          onClick={() =>
+                            navigateTo(
+                              "exploOneInclusion",
+                              inclusion.id.toString()
+                            )
+                          }
+                        />
                         <Typography variant="body1">
                           {inclusion.name}
                         </Typography>
