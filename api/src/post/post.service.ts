@@ -69,6 +69,7 @@ export class PostService {
       post = this.utilsService.format_post(post)
       post['nb_comments'] = await this.get_nb_comments(post)
     }
+    if(query.search) return tree.filter(p => p.content.includes(query.search))
 
     return this.utilsService.sort_posts(tree)
   }
@@ -173,6 +174,9 @@ export class PostService {
 
   async remove(id: string) {
     const post = await this.findOne(id)
+    post.tags = []
+    const post_without_tag = await this.postRepository.save(post)
+
     try {
       const res = await this.postTreeRepository.delete(id)
 
@@ -195,7 +199,7 @@ export class PostService {
     const user = await this.userService.findOne(username)
 
     post.likes.push(user)
-
+    post['reposts'] = await this.find_post_repost(post_id)
     const res = await this.postTreeRepository.save(post)
 
     if(!res) {
@@ -212,6 +216,7 @@ export class PostService {
       if(item.id === user.id) post.likes.splice(index,1);
     });
 
+    post['reposts'] = await this.find_post_repost(post_id)
     const res = await this.postTreeRepository.save(post)
 
     if(!res) {
@@ -341,6 +346,17 @@ export class PostService {
     trending.tags = (await this.tagService.findAllAndCount()).sort((a, b) => (a['nb_posts']> b['nb_posts'] ? -1:1)).slice(0,10)
 
     return trending
+  }
+
+
+  async find_post_repost(post_id: string): Promise<any> {
+    return await this.repostRepository.find({
+      where: {
+        post: {
+          id: post_id
+        }
+      }
+    })
   }
 
 

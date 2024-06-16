@@ -17,7 +17,7 @@ export class Post extends BaseEntity{
   @Column({type:"boolean"})
   comment: boolean
 
-  @TreeParent()
+  @TreeParent({onDelete: "CASCADE"})
   parent: Post
 
   @TreeChildren()

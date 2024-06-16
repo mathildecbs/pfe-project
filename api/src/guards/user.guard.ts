@@ -35,7 +35,7 @@ export class UserGuard implements CanActivate {
         }
     }
 
-    private validateRequest(request: Request): boolean {
+    private async validateRequest(request: Request): Promise<boolean> {
         const header = request.headers['authorization'];
         
         if (!header) {
@@ -51,7 +51,7 @@ export class UserGuard implements CanActivate {
             const secretKey = this.configService.get<string>('JWT_SECRET');
             const decoded = this.jwtService.verify(token, {secret: secretKey});
 
-            const user = this.userService.findOne(decoded.username);
+            const user = await this.userService.findOne(decoded.username);
             if (!user) {
                 return false;
             }
@@ -77,7 +77,7 @@ export class UserGuard implements CanActivate {
             const secretKey = this.configService.get<string>('JWT_SECRET');
             const decoded = this.jwtService.verify(token, {secret: secretKey});
 
-            const user = this.userService.findOne(decoded.username);
+            const user = await this.userService.findOne(decoded.username);
             const isUserAdmin = await this.userService.is_user_admin(decoded.username);
 
             if (!user) {
