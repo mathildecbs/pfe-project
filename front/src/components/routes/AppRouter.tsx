@@ -4,7 +4,7 @@ import AppError404 from "../home/AppError404";
 import AppCommunity from "../community/AppCommunity";
 import AppExplorer from "../exploration/AppExplorer";
 import AppMyCollection from "../collection/AppMyCollection";
-import AppMyPage from "../community/AppMyPage";
+import AppMyPage from "../user/AppMyPage";
 import AppExploAlbums from "../exploration/AppExploAlbums";
 import AppCollectionAlbums from "../collection/AppCollectionAlbums";
 import AppCollectionInclusions from "../collection/AppCollectionInclusions";
@@ -18,12 +18,13 @@ import AppExploOneArtist from "../exploration/AppExploOneArtist";
 import AppExploOneAlbum from "../exploration/AppExploOneAlbum";
 import AppExploGroups from "../exploration/AppExploGroups";
 import AppExploOneGroup from "../exploration/AppExploOneGroup";
-import AppUserPage from "../community/AppUserPage";
+import AppUserPage from "../user/AppUserPage";
 import AppCreateNew from "../create/AppCreateNew";
 import AppTagPage from "../community/AppTagPage";
 import AppExploOneInclusion from "../exploration/AppExploOneInclusion";
 import AppRoutesAdmin from "./AppRoutesAdmin";
 import AppExploSearch from "../exploration/AppExploSearch";
+import AppUpdateProfile from "../user/AppUpdateProfile";
 
 function AppRouter() {
   return (
@@ -59,6 +60,7 @@ function AppRouter() {
           element={<AppCollectionInclusions />}
         />
         <Route path="/myPage" element={<AppMyPage />} />
+        <Route path="/myPage/update" element={<AppUpdateProfile />} />
         <Route path="/user/:username" element={<AppUserPage />} />
         <Route element={<AppRoutesAdmin />}>
           <Route path="/createNew" element={<AppCreateNew />} />

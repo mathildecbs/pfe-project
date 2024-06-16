@@ -19,7 +19,7 @@ import groupService from "../../services/GroupService";
 import artistService from "../../services/ArtistService";
 import albumService from "../../services/AlbumService";
 import inclusionService from "../../services/InclusionService";
-import AppShortProfile from "../community/AppShortProfile";
+import AppShortProfile from "../user/AppShortProfile";
 import AppCollectionAlbumDisplay from "../collection/AppCollectionAlbumDisplay";
 import AppCollectionInclusionDisplay from "../collection/AppCollectionInclusionDisplay";
 

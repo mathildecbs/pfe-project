@@ -46,3 +46,42 @@
 .Description {
   color: #646464;
 }
+
+.HeadersTitle {
+  background-color: #f1d1d0;
+  padding: 5px;
+  margin: 0.5em !important;
+  border-radius: 0.5em;
+}
+
+.PhotoIcon {
+  color: #f09f9c;
+}
+
+.InputFile {
+  display: none;
+}
+
+.IconButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background-color: white;
+}
+
+.UserInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.Form {
+  display: flex;
+  flex-direction: column;
+  margin: 0 4em;
+}
+
+.FormField {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
