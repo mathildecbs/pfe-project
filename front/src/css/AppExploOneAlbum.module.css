@@ -86,14 +86,13 @@
   align-items: center;
 }
 
-.InclusionItem img {
-  width: 100px;
-  height: 150px;
+.InclusionImage {
+  max-height: 150px;
   margin-right: 10px;
   border-radius: 5px;
   transition: 0.2s;
 }
 
-.InclusionItem img:hover {
+.InclusionImage {
   transform: scale(1.05);
 }

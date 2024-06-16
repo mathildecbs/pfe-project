@@ -337,7 +337,7 @@ export default function AppExploOneAlbum() {
                         <img
                           src={inclusion.image}
                           alt={inclusion.name}
-                          className={styles.InclusionContainer}
+                          className={styles.InclusionImage}
                           onClick={() =>
                             navigateTo(
                               "exploOneInclusion",
