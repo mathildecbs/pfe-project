@@ -173,6 +173,9 @@ export class PostService {
 
   async remove(id: string) {
     const post = await this.findOne(id)
+    post.tags = []
+    const post_without_tag = await this.postRepository.save(post)
+
     try {
       const res = await this.postTreeRepository.delete(id)
 
