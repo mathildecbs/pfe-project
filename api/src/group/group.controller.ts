@@ -25,6 +25,12 @@ export class GroupController {
     return await this.groupService.findOne(id);
   }
 
+  @Patch(':id')
+  @IsRouteAdmin()
+  async update(@Param('id') id: string, @Body() body: UpdateGroupDto) {
+    return await this.groupService.update(id, body)
+  }
+
 
   @Delete(':id')
   @IsRouteAdmin()

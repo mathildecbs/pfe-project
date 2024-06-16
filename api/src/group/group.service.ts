@@ -68,6 +68,18 @@ export class GroupService {
     return tree;
   }
 
+  async update(id: string, updateDto: UpdateGroupDto) {
+    const group = await this.findOne(id)
+
+    if(updateDto.image) group.image = updateDto.image
+
+    const res = await this.groupRepository.save(group)
+    if( !res ) {
+      throw new HttpException(`Update failed for group ${id}`, HttpStatus.BAD_REQUEST);
+    }
+    return await this.findOne(res.id);
+  }
+
   async remove(id: string) {
     const group = await this.findOne(id)
     try {

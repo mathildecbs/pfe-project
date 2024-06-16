@@ -80,10 +80,15 @@ export class ArtistService {
   async update(id: string, updateArtistDto: UpdateArtistDto) {
     const artist = await this.findOne(id)
 
-    for (const group of updateArtistDto.groups) {
-      const added_group = await this.groupService.findOne(group)
-      artist.groups.push(added_group)
+    if(updateArtistDto.groups) {
+      for (const group of updateArtistDto.groups) {
+        const added_group = await this.groupService.findOne(group)
+        artist.groups.push(added_group)
+      }
     }
+
+    if(updateArtistDto.image) artist.image = updateArtistDto.image
+
 
     const res = await this.artistRepository.save(artist)
 
