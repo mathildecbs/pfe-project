@@ -159,6 +159,21 @@ export class UserService {
 
   async remove(username: string) {
     const user = await this.findOne(username)
+
+    user.following = []
+    user.followers = []
+    user.likes= []
+
+    const collection = await this.get_collection(username)
+    for (const album of collection.albums) {
+      await this.albumRepository.delete(album.id)
+    }
+
+    for (const inclusion of collection.inclusions) {
+      await this.inclusionRepository.delete(inclusion.id)
+    }
+
+    await this.usersRepository.save(user)
     try {
       const res = await this.usersRepository.delete(user.id)
       return true;
