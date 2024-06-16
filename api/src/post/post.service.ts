@@ -69,6 +69,7 @@ export class PostService {
       post = this.utilsService.format_post(post)
       post['nb_comments'] = await this.get_nb_comments(post)
     }
+    if(query.search) return tree.filter(p => p.content.includes(query.search))
 
     return this.utilsService.sort_posts(tree)
   }

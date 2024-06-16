@@ -16,7 +16,7 @@ export class Group extends BaseEntity {
   @JoinTable()
   members: Artist[]
 
-  @TreeParent()
+  @TreeParent({onDelete: "CASCADE"})
   parent: Group
 
   @TreeChildren()
