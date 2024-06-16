@@ -198,7 +198,7 @@ export class PostService {
     const user = await this.userService.findOne(username)
 
     post.likes.push(user)
-
+    post['reposts'] = await this.find_post_repost(post_id)
     const res = await this.postTreeRepository.save(post)
 
     if(!res) {
@@ -215,6 +215,7 @@ export class PostService {
       if(item.id === user.id) post.likes.splice(index,1);
     });
 
+    post['reposts'] = await this.find_post_repost(post_id)
     const res = await this.postTreeRepository.save(post)
 
     if(!res) {
@@ -344,6 +345,17 @@ export class PostService {
     trending.tags = (await this.tagService.findAllAndCount()).sort((a, b) => (a['nb_posts']> b['nb_posts'] ? -1:1)).slice(0,10)
 
     return trending
+  }
+
+
+  async find_post_repost(post_id: string): Promise<any> {
+    return await this.repostRepository.find({
+      where: {
+        post: {
+          id: post_id
+        }
+      }
+    })
   }
 
 
