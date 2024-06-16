@@ -8,6 +8,7 @@ import { CreateOwnedInclusionDto } from '../inclusion/dto/create-owned-inclusion
 import { UpdateOwnedInclusionDto } from '../inclusion/dto/update-owned-inclusion.dto';
 import { UpdateOwnedAlbumDto } from '../album/dto/update-owned-album.dto';
 import { Public } from 'src/decorator/public.decorator';
+import { IsRouteAdmin } from 'src/decorator/admin.decorator';
 
 @Controller('user')
 export class UserController {
@@ -34,6 +35,12 @@ export class UserController {
   @Public()
   async connection(@Body() user: Object) {
     return await this.userService.connection(user);
+  }
+
+  @Patch('admin/:username')
+  @IsRouteAdmin()
+  async update_admin(@Param('username') username: string, @Body() updateUserDto: UpdateUserDto) {
+    return await this.userService.update_admin(username, updateUserDto);
   }
 
   @Patch(':username')
