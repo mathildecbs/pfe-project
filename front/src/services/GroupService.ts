@@ -25,6 +25,20 @@ class GroupService {
     }
   }
 
+  async getSearchGroups(searchQuery: string, authToken: string): Promise<Group[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
+        "/group",
+        {
+          params: { search: searchQuery },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des groupes");
+    }
+  } 
+
   async createGroup(
     groupName: string,
     company: string,

@@ -14,7 +14,9 @@ import styles from "../../css/AppUserPage.module.css";
 export default function AppUserPage() {
   const [userProfile, setUserProfile] = useState<User>();
   const [userPosts, setUserPosts] = useState<Post[]>([]);
-  const [repostStatus, setRepostStatus] = useState<Map<string, boolean>>(new Map());
+  const [repostStatus, setRepostStatus] = useState<Map<string, boolean>>(
+    new Map()
+  );
   const { user, authToken } = useAuth();
   const { username } = useParams();
 
@@ -59,8 +61,14 @@ export default function AppUserPage() {
     const repostStatus = new Map<string, boolean>();
 
     posts.forEach((post) => {
-      const isRepost = userProfile?.reposts.some((repost) => repost.id === post.id);
-      repostStatus.set(post.id, isRepost || false);
+      if (userProfile?.reposts.length) {
+        const isRepost = userProfile?.reposts.some(
+          (repost) => repost.id === post.id
+        );
+        repostStatus.set(post.id, isRepost || false);
+      } else {
+        repostStatus.set(post.id, false);
+      }
     });
 
     return repostStatus;

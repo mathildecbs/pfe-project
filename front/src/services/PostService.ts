@@ -27,6 +27,20 @@ class PostService {
     }
   }
 
+  async getSearchPosts(searchQuery: string, authToken: string): Promise<Post[]> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).get(
+        "/post",
+        {
+          params: { search: searchQuery },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      throw new Error("Erreur lors de la récupération des posts");
+    }
+  }  
+
   async getTrendingPosts(authToken: string): Promise<Post[]> {
     try {
       const response = await ApiUtils.getApiInstanceJson(authToken).get(

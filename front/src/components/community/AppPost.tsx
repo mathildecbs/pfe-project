@@ -4,7 +4,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CommentIcon from "@mui/icons-material/Comment";
 import RepeatIcon from "@mui/icons-material/Repeat";
-import MoreVertIcon from "@mui/icons-material/MoreVert"; // Nouvel icône pour le menu contextuel
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import styles from "../../css/AppPost.module.css";
 import { Post } from "../../types/PostType";
 import { DateUtils } from "../../utils/DateUtils";
@@ -21,7 +21,7 @@ interface AppPostProps {
 }
 
 export default function AppPost({ post, repost, tag }: AppPostProps) {
-  const { user, authToken, updateUser } = useAuth();
+  const { user, authToken } = useAuth();
   const {
     setPosts,
     setTrendingPosts,
@@ -41,15 +41,15 @@ export default function AppPost({ post, repost, tag }: AppPostProps) {
       ? post.reposts.some((repost) => repost.username === user?.username)
       : false
   );
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null); // État pour gérer l'ancrage du menu
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
 
   const handleClickMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget); // Ouvrir le menu au clic sur l'icône
+    setAnchorEl(event.currentTarget);
   };
 
   const handleCloseMenu = () => {
-    setAnchorEl(null); // Fermer le menu
+    setAnchorEl(null);
   };
 
   async function actionPost(actionType: string) {
@@ -132,7 +132,7 @@ export default function AppPost({ post, repost, tag }: AppPostProps) {
     } catch (error) {
       ToastUtils.error(error, "Erreur lors de la suppression du post");
     } finally {
-      handleCloseMenu(); // Fermer le menu après la suppression du post
+      handleCloseMenu();
     }
   }
 
@@ -174,7 +174,7 @@ export default function AppPost({ post, repost, tag }: AppPostProps) {
         </div>
         <Typography variant="body2" className={styles.Time}>
           {DateUtils.formatReadableDate(post.create_date)}
-          {user?.username === post.user.username && ( // Afficher le menu uniquement si c'est notre post
+          {user?.username === post.user.username && (
             <IconButton
               aria-label="options"
               aria-controls="post-menu"
