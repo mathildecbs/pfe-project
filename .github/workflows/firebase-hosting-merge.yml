@@ -29,5 +29,6 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PFE_KOLLECTION }}
           channelId: live
-          projectId: pfe-kollection
+          projectId: ${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }}
           entryPoint: ./front
+          
