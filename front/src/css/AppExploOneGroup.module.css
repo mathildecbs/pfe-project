@@ -1,7 +1,20 @@
+.PaperContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .Container {
   display: flex;
   padding: 16px;
   gap: 16px;
+}
+
+.SecondContainer {
+  display: flex;
+  margin: 0 4em;
+  padding: 16px;
+  gap: 16px;
+  flex-direction: column;
 }
 
 .ImageContainer {
@@ -9,8 +22,9 @@
 }
 
 .GroupImage {
-  width: 100%;
+  width: 450px;
   height: auto;
+  margin-left: 2.5em;
   border-radius: 8px;
 }
 

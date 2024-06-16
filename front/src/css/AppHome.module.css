@@ -1,7 +1,7 @@
 .Container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
   padding: 1em;
 }
@@ -53,4 +53,8 @@
   display: block;
   margin-left: auto;
   margin-right: auto;
+}
+
+.RecentPosts {
+  margin-bottom: 0.5em !important;
 }

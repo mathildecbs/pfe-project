@@ -3,7 +3,7 @@
   flex-direction: column;
   padding: 20px;
   margin: 20px;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .AlbumContainer {
@@ -19,7 +19,7 @@
 }
 
 .AlbumImage {
-  max-width: 100%;
+  width: 350px;
   height: auto;
 }
 
@@ -95,4 +95,8 @@
 
 .InclusionImage {
   transform: scale(1.05);
+}
+
+.DeleteAll {
+  margin-left: 4em !important;
 }
