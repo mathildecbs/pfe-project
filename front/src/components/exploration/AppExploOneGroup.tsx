@@ -51,49 +51,51 @@ export default function AppExploOneGroup() {
   }
 
   return (
-    <Paper className={styles.Container}>
-      <div className={styles.ImageContainer}>
+    <Paper className={styles.PaperContainer}>
+      <div className={styles.Container}>
         <img
           src={thisGroup.image}
           alt={thisGroup.name}
           className={styles.GroupImage}
         />
-      </div>
-      <div className={styles.InfoContainer}>
-        <Typography variant="h4" className={styles.GroupTitle}>
-          {thisGroup.name}
-        </Typography>
-        <Typography variant="body1" className={styles.ReleaseDate}>
-          Agence/Compagnie: {thisGroup.company}
-        </Typography>
-        {thisGroup.parent && (
-          <Typography variant="body1" className={styles.ArtistName}>
-            Groupe parent: {thisGroup.parent.name}
+        <div className={styles.InfoContainer}>
+          <Typography variant="h4" className={styles.GroupTitle}>
+            {thisGroup.name}
           </Typography>
-        )}
-        <div>
-          <Typography variant="h5" className={styles.Subtitle}>
-            Membres
+          <Typography variant="body1" className={styles.ReleaseDate}>
+            Agence/Compagnie: {thisGroup.company}
           </Typography>
-          {thisGroup.members.length ? (
-            <div className={styles.MembersContainer}>
-              {thisGroup.members.map((member) => (
-                <Typography
-                  key={member.id}
-                  variant="body1"
-                  onClick={() => navigateTo("exploOneArtist", member.id)}
-                  className={styles.MemberName}
-                >
-                  {member.name}
-                </Typography>
-              ))}
-            </div>
-          ) : (
-            <Typography variant="body2" className={styles.NoItems}>
-              Aucun membre disponible
+          {thisGroup.parent && (
+            <Typography variant="body1" className={styles.ArtistName}>
+              Groupe parent: {thisGroup.parent.name}
             </Typography>
           )}
+          <div>
+            <Typography variant="h5" className={styles.Subtitle}>
+              Membres
+            </Typography>
+            {thisGroup.members.length ? (
+              <div className={styles.MembersContainer}>
+                {thisGroup.members.map((member) => (
+                  <Typography
+                    key={member.id}
+                    variant="body1"
+                    onClick={() => navigateTo("exploOneArtist", member.id)}
+                    className={styles.MemberName}
+                  >
+                    {member.name}
+                  </Typography>
+                ))}
+              </div>
+            ) : (
+              <Typography variant="body2" className={styles.NoItems}>
+                Aucun membre disponible
+              </Typography>
+            )}
+          </div>
         </div>
+      </div>
+      <div className={styles.SecondContainer}>
         <div>
           <Typography variant="h5" className={styles.Subtitle}>
             Albums

@@ -102,7 +102,7 @@ export default function AppHome() {
         {renderAlbums()}
       </Paper>
       <Paper className={styles.Section}>
-        <Typography variant="h4">Posts récents</Typography>
+        <Typography className={styles.RecentPosts} variant="h4">Posts récents</Typography>
         {renderPosts()}
       </Paper>
     </>

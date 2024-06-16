@@ -377,6 +377,7 @@ export default function AppExploOneAlbum() {
             color="error"
             variant="contained"
             onClick={() => deleteAlbum()}
+            className={styles.DeleteAll}
           >
             Supprimer l'album au complet définitivement
           </Button>
