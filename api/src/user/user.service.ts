@@ -135,26 +135,26 @@ export class UserService {
     return this.findOne(new_user.username);
   }
 
-  async update_admin(username: string, updateUserDto: UpdateUserDto) {
+  async update_admin(username: string) {
     const user = await this.findOne(username)
 
-    if(updateUserDto.username) {
-      const unique = await this.check_unity(updateUserDto.username)
-    }
+    //if(updateUserDto.username) {
+    //  const unique = await this.check_unity(updateUserDto.username)
+    //}
 
-    const new_user = {
-      ...user,
-      ...updateUserDto,
-    }
+    //const new_user = {
+    //  ...user,
+    //  ...updateUserDto,
+    //}
     const updateResult = await this.usersRepository.update(user.id, {
-      ...updateUserDto
+      isAdmin: !user.isAdmin
     })
 
 
     if (!updateResult ){
       throw new HttpException('User update failed', HttpStatus.BAD_REQUEST);
     }
-    return this.findOne(new_user.username);
+    return this.findOne(user.username);
   }
 
   async remove(username: string) {

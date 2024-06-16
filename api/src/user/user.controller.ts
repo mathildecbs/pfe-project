@@ -39,8 +39,8 @@ export class UserController {
 
   @Patch('admin/:username')
   @IsRouteAdmin()
-  async update_admin(@Param('username') username: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.userService.update_admin(username, updateUserDto);
+  async update_admin(@Param('username') username: string) {
+    return await this.userService.update_admin(username);
   }
 
   @Patch(':username')
