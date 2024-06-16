@@ -10,10 +10,11 @@ import { OwnedAlbum } from '../album/entities/owned-album.entity';
 import { OwnedInclusion } from '../inclusion/entities/owned-inclusion.entity';
 import { AlbumModule } from '../album/album.module';
 import { InclusionModule } from '../inclusion/inclusion.module';
+import { Repost } from "../post/entities/repost.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, OwnedAlbum, OwnedInclusion]),
+    TypeOrmModule.forFeature([User, OwnedAlbum, OwnedInclusion, Repost]),
     AlbumModule,
     InclusionModule,
     ConfigModule,
