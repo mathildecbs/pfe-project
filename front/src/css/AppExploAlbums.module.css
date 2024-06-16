@@ -6,12 +6,12 @@
 }
 
 .ItemCard {
-  flex: 1 1 calc(25% - 16px);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #fddbdb;
-  padding: 16px;
+  background-color: #f9f1f1;
+  padding: 32px;
   margin: 8px;
   border-radius: 8px;
   cursor: pointer;
@@ -24,16 +24,17 @@
 
 .ItemText {
   text-align: center;
+  margin-top: 8px;
+}
+
+.AlbumImage {
+  max-height: 125px;
+  max-width: 125px;
+  border-radius: 8px;
+  margin-bottom: 8px;
 }
 
 .Section {
   padding: 16px;
   margin: 16px;
-}
-
-.MoreButton {
-  margin-top: 16px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
 }

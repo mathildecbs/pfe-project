@@ -36,6 +36,7 @@ export default function AppExploAlbums() {
             className={styles.ItemCard}
             onClick={() => navigate(`/exploOneAlbum/${album.id}`)}
           >
+            <img src={album.image} alt={album.name} className={styles.AlbumImage} />
             <Typography variant="h6" className={styles.ItemText}>
               {album.name}
             </Typography>

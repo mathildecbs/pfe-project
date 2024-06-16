@@ -59,6 +59,11 @@ export default function AppExploGroups() {
               }
             }}
           >
+            <img
+              src={item.image}
+              alt={item.name}
+              className={styles.ItemImage}
+            />
             <Typography variant="h6" className={styles.ItemText}>
               {item.name}
             </Typography>

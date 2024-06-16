@@ -36,6 +36,7 @@ export default function AppExploArtists() {
             className={styles.ItemCard}
             onClick={() => navigate(`/exploOneArtist/${artist.id}`)}
           >
+            <img src={artist.image} alt={artist.name} className={styles.ArtistImage} />
             <Typography variant="h6" className={styles.ItemText}>
               {artist.name}
             </Typography>
