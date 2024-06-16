@@ -74,6 +74,8 @@
 .InclusionContainer {
   display: flex;
   margin: 10px;
+  align-items: center;
+  justify-content: center;
   flex-basis: calc(25% - 20px);
 }
 
