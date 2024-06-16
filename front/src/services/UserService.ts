@@ -177,6 +177,29 @@ class UserService {
       throw new Error("Erreur lors de la modification du mot de passe");
     }
   }
+
+  async toAdmin(username: string, authToken: string): Promise<User> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).patch(
+        `user/${username}`,
+        { isAdmin: true }
+      );
+      return response.data;
+    } catch {
+      throw new Error("Erreur lors de la modification du mot de passe");
+    }
+  }
+
+  async deleteUser(username: string, authToken: string): Promise<boolean> {
+    try {
+      const response = await ApiUtils.getApiInstanceJson(authToken).delete(
+        `user/${username}`
+      );
+      return response.data;
+    } catch {
+      throw new Error("Erreur lors de la modification du mot de passe");
+    }
+  }
 }
 
 const userService = new UserService();

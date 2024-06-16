@@ -85,7 +85,7 @@ export default function AppMyPage() {
               ))
             ) : (
               <Typography variant="h6">
-                Commencez à liker, reposter et écrire des posts !
+                Commencez à reposter et écrire des posts !
               </Typography>
             )}
           </div>

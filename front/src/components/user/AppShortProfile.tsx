@@ -101,7 +101,7 @@ export default function AppShortProfile({
   return (
     <div
       className={styles.Container}
-      onClick={() => navigateTo("user", userProfile.id)}
+      onClick={() => navigateTo("user", userProfile.username)}
     >
       {userProfile.image ? (
         <div className={styles.UserPhoto}>

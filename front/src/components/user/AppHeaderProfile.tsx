@@ -16,11 +16,14 @@ export default function AppHeaderProfile({
   currentUser,
 }: AppHeaderProfileProps) {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(userProfile.isAdmin);
   const { authToken } = useAuth();
 
   useEffect(() => {
     if (currentUser?.following) {
-      setIsFollowing(currentUser.following.some((user) => user.id === userProfile.id));
+      setIsFollowing(
+        currentUser.following.some((user) => user.id === userProfile.id)
+      );
     }
   }, [currentUser, userProfile]);
 
@@ -56,6 +59,21 @@ export default function AppHeaderProfile({
     }
   }
 
+  async function handleToAdmin() {
+    try {
+      if (currentUser && authToken) {
+        await userService.toAdmin(
+          userProfile.username,
+          authToken
+        );
+        setIsAdmin(true);
+        ToastUtils.success(`L'utilisateur ${userProfile.username} est maintenant admin`);
+      }
+    } catch (error) {
+      ToastUtils.error("Erreur lors du passage à admin");
+    }
+  }
+
   function renderFollowButton() {
     if (currentUser && userProfile.id !== currentUser.id) {
       return (
@@ -74,8 +92,12 @@ export default function AppHeaderProfile({
 
   const renderProfileInfo = () => (
     <div className={styles.ProfileInfo}>
-      <Typography variant="body1" className={styles.Username}>@{userProfile.username}</Typography>
-      <Typography variant="body2" className={styles.Description}>{userProfile.description}</Typography>
+      <Typography variant="body1" className={styles.Username}>
+        @{userProfile.username}
+      </Typography>
+      <Typography variant="body2" className={styles.Description}>
+        {userProfile.description}
+      </Typography>
       {renderFollowButton()}
     </div>
   );
@@ -98,6 +120,17 @@ export default function AppHeaderProfile({
       <div className={styles.UserInfo}>
         <Typography variant="h5">{userProfile.name}</Typography>
         {renderProfileInfo()}
+        {currentUser.isAdmin && (
+          <Button
+            variant="outlined"
+            color={isAdmin ? "inherit" : "primary"}
+            onClick={isAdmin ? () => {} : handleToAdmin}
+            className={styles.FollowButton}
+            disabled={isAdmin}
+          >
+            {isAdmin ? "Admin" : "Passer admin"}
+          </Button>
+        )}
       </div>
     </div>
   );
