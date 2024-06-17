@@ -6,6 +6,7 @@ import { Artist } from "../../types/ArtistType";
 import ToastUtils from "../../utils/ToastUtils";
 import { useAuth } from "../../contexts/AuthProvider";
 import styles from "../../css/AppExploOneArtist.module.css";
+import { DateUtils } from "../../utils/DateUtils";
 
 export default function AppExploOneArtist() {
   const { idArtist } = useParams();
@@ -68,27 +69,42 @@ export default function AppExploOneArtist() {
           {thisArtist.name}
         </Typography>
         <Typography variant="body1" className={styles.ReleaseDate}>
-          Anniversaire: {thisArtist.birthday}
+          Anniversaire : {DateUtils.formatToEuropeanDate(thisArtist.birthday)}
         </Typography>
         {thisArtist.main_group && (
-          <Typography variant="body1" className={styles.ArtistName}>
-            Groupe principal: {thisArtist.main_group.name}
-          </Typography>
+          <div className={styles.Group}>
+            <Typography variant="h5">Groupe principal</Typography>
+            <Typography
+              variant="body1"
+              className={styles.GroupName}
+              onClick={() =>
+                navigateTo("exploOneGroup", thisArtist.main_group.id.toString())
+              }
+            >
+              {thisArtist.main_group.name}
+            </Typography>
+          </div>
         )}
         <div>
           <Typography variant="h5" className={styles.Subtitle}>
             Groupes secondaires
           </Typography>
           {secondaryGroups.length ? (
-            <div className={styles.AlbumsContainer}>
+            <div className={styles.ItemsContainer}>
               {secondaryGroups.map((group) => (
-                <div key={group.id} className={styles.AlbumCard}>
+                <div
+                  key={group.id}
+                  className={styles.ItemCard}
+                  onClick={() =>
+                    navigateTo("exploOneGroup", group.id.toString())
+                  }
+                >
                   <img
                     src={group.image}
                     alt={group.name}
-                    className={styles.AlbumImage}
+                    className={styles.GroupImage}
                   />
-                  <Typography variant="body2" className={styles.AlbumName}>
+                  <Typography variant="body2" className={styles.ItemName}>
                     {group.name}
                   </Typography>
                 </div>

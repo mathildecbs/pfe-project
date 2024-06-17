@@ -1,3 +1,6 @@
+import { format, parse, parseISO } from "date-fns";
+import { fr } from "date-fns/locale";
+
 export class DateUtils {
   static formatReadableDate(isoDate: string): string {
     const date = new Date(isoDate);
@@ -13,5 +16,15 @@ export class DateUtils {
     };
 
     return new Intl.DateTimeFormat("fr-FR", options).format(date);
+  }
+
+  static formatToEuropeanDate(isoDate: string): string {
+    const date = parseISO(isoDate);
+    return format(date, "dd/MM/yyyy", { locale: fr });
+  }
+
+  static formatToISODate(europeanDate: string): string {
+    const date = parse(europeanDate, "dd/MM/yyyy", new Date());
+    return format(date, "yyyy-MM-dd");
   }
 }

@@ -24,6 +24,7 @@ import { OwnedInclusionAlbum } from "../../types/OwnedInclusionAlbumType";
 import { OwnedAlbum } from "../../types/OwnedAlbumType";
 import ownedInclusionService from "../../services/OwnedInclusionService";
 import { Inclusion } from "../../types/InclusionType";
+import { DateUtils } from "../../utils/DateUtils";
 
 export default function AppExploOneAlbum() {
   const { idAlbum } = useParams();
@@ -257,13 +258,29 @@ export default function AppExploOneAlbum() {
           <Typography variant="h4" className={styles.AlbumTitle}>
             {thisAlbum.name}
           </Typography>
-          <Typography variant="body1" className={styles.ReleaseDate}>
-            Date de sortie: {thisAlbum.release_date}
-          </Typography>
-          <Typography variant="body1" className={styles.ArtistName}>
-            Artiste:{" "}
-            {thisAlbum.solo ? thisAlbum.artist.name : thisAlbum.group.name}
-          </Typography>
+          <div className={styles.SmallInfoContainer}>
+            <Typography variant="h6">Date de sortie</Typography>
+            <Typography variant="body1" className={styles.ReleaseDate}>
+              {DateUtils.formatToEuropeanDate(thisAlbum.release_date)}
+            </Typography>
+          </div>
+          <div className={styles.SmallInfoContainer}>
+            <Typography variant="h6">Artiste</Typography>
+            <Typography
+              variant="body1"
+              onClick={() =>
+                navigateTo(
+                  thisAlbum.solo ? "exploOneArtist" : "exploOneGroup",
+                  thisAlbum.solo
+                    ? thisAlbum.artist.id.toString()
+                    : thisAlbum.group.id.toString()
+                )
+              }
+              className={styles.Artist}
+            >
+              {thisAlbum.solo ? thisAlbum.artist.name : thisAlbum.group.name}
+            </Typography>
+          </div>
 
           {thisAlbum.versions && thisAlbum.versions.length ? (
             <FormControl fullWidth className={styles.FormControl}>

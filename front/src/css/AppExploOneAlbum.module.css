@@ -21,6 +21,7 @@
 .AlbumImage {
   width: 350px;
   height: auto;
+  border-radius: 8px;
 }
 
 .InfoContainer {
@@ -32,10 +33,32 @@
   margin-bottom: 20px;
 }
 
-.ReleaseDate,
-.ArtistName,
 .Versions {
-  margin-bottom: 12px;
+  margin-bottom: 10px !important;
+}
+
+.ReleaseDate {
+  margin-left: 1em !important;
+}
+
+.SmallInfoContainer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 1em;
+}
+
+.Artist {
+  transition: 0.2s;
+  margin-left: 1em !important;
+  background-color: #d0e4f5;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.Artist:hover {
+  background-color: #b3cee5;
+  cursor: pointer;
 }
 
 .FormControl {
@@ -93,8 +116,8 @@
   transition: 0.2s;
 }
 
-.InclusionImage {
-  transform: scale(1.05);
+.InclusionImage:hover {
+  transform: scale(1.02);
 }
 
 .DeleteAll {

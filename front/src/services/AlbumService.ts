@@ -25,7 +25,10 @@ class AlbumService {
     }
   }
 
-  async getSearchAlbums(searchQuery: string, authToken: string): Promise<Album[]> {
+  async getSearchAlbums(
+    searchQuery: string,
+    authToken: string
+  ): Promise<Album[]> {
     try {
       const response = await ApiUtils.getApiInstanceJson(authToken).get(
         "/album",
@@ -37,7 +40,7 @@ class AlbumService {
     } catch (error) {
       throw new Error("Erreur lors de la récupération des albums");
     }
-  } 
+  }
 
   async createAlbum(
     albumName: string,

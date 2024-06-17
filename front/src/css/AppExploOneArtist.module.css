@@ -32,6 +32,26 @@
   margin-bottom: 8px;
 }
 
+.Group {
+  display: flex;
+  align-items: center;
+  align-items: center;
+  margin-bottom: 1em;
+}
+
+.GroupName {
+  transition: 0.2s;
+  margin-left: 1em !important;
+  background-color: #d0e4f5;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.GroupName:hover {
+  background-color: #b3cee5;
+  cursor: pointer;
+}
+
 .Subtitle {
   margin-top: 16px;
   margin-bottom: 8px;
@@ -49,24 +69,23 @@
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  transition: transform 0.2s;
 }
 
 .ItemCard:hover {
-  transform: scale(1.05);
+  transform: scale(1.02);
   cursor: pointer;
 }
 
 .ItemImage {
   max-height: 150px;
   border-radius: 8px;
-  transition: transform 0.2s;
 }
 
-.AlbumImage {
-  width: 100px;
-  height: 100px;
+.GroupImage {
+  max-width: 150px;
+  height: auto;
   border-radius: 8px;
-  transition: transform 0.2s;
 }
 
 .ItemName {

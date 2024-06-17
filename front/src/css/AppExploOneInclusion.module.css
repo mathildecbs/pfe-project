@@ -1,9 +1,14 @@
 .Container {
   display: flex;
+  flex-direction: column;
   padding: 20px;
   margin: 20px;
-  align-items: center;
   justify-content: center;
+}
+
+.InclusionContainer {
+  display: flex;
+  margin-bottom: 2em;
 }
 
 .ImageContainer {
@@ -14,8 +19,10 @@
 }
 
 .InclusionImage {
-  max-width: 100%;
+  width: 250px;
   height: auto;
+  margin-left: 2.5em;
+  border-radius: 12px;
 }
 
 .InfoContainer {
@@ -27,10 +34,28 @@
   margin-bottom: 20px;
 }
 
-.ReleaseDate,
-.ArtistName,
 .Versions {
   margin-bottom: 12px;
+}
+
+.SmallInfoContainer {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0.5em 0;
+}
+
+.InfoItem {
+  background-color: #d0e4f5;
+  padding: 8px;
+  border-radius: 4px;
+  transition: 0.3s;
+}
+
+.InfoItem:hover {
+  background-color: #b3cee5;
+  cursor: pointer;
 }
 
 .FormControl {
@@ -47,8 +72,9 @@
   margin: 0 10px;
 }
 
-.VersionOwned {
+.OwnedQuantity {
   display: flex;
   align-items: center;
   color: green;
+  margin: 0.5em 0 !important;
 }
