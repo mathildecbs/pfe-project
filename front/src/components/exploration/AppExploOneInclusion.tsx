@@ -10,6 +10,7 @@ import {
 import { Add, Remove } from "@mui/icons-material";
 import ownedInclusionService from "../../services/OwnedInclusionService";
 import { Inclusion } from "../../types/InclusionType";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ToastUtils from "../../utils/ToastUtils";
 import { useAuth } from "../../contexts/AuthProvider";
 import styles from "../../css/AppExploOneInclusion.module.css";
@@ -122,7 +123,10 @@ export default function AppExploOneInclusion() {
   async function deleteInclusion() {
     try {
       if (idInclusion && authToken) {
-        const response = await inclusionService.deleteInclusion(idInclusion, authToken);
+        const response = await inclusionService.deleteInclusion(
+          idInclusion,
+          authToken
+        );
         if (response) {
           ToastUtils.success("Suppression de l'inclusions");
           navigate(`/exploGroups`);
@@ -150,67 +154,75 @@ export default function AppExploOneInclusion() {
 
   return (
     <Paper className={styles.Container}>
-      <div className={styles.ImageContainer}>
-        <img
-          src={thisInclusion.image}
-          alt={thisInclusion.name}
-          className={styles.InclusionImage}
-        />
-      </div>
-      <div className={styles.InfoContainer}>
-        <Typography variant="h4" className={styles.InclusionTitle}>
-          {thisInclusion.name}
-        </Typography>
-        <Typography variant="body1" className={styles.ReleaseDate}>
-          Album: {thisInclusion.album.name}
-        </Typography>
-        <Typography variant="body1" className={styles.ArtistName}>
-          Artiste: {thisInclusion.member.name}
-        </Typography>
-        {ownInclusion && (
-          <Typography variant="body1" className={styles.OwnedQuantity}>
-            Quantité possédée: {ownInclusion.quantity}
-          </Typography>
-        )}
-        <div className={styles.QuantityContainer}>
-          <IconButton
-            onClick={() => handleQuantityChange(false)}
-            aria-label="reduce quantity"
-          >
-            <Remove />
-          </IconButton>
-          <Typography variant="body1" className={styles.QuantityText}>
-            {quantity}
-          </Typography>
-          <IconButton
-            onClick={() => handleQuantityChange(true)}
-            aria-label="increase quantity"
-          >
-            <Add />
-          </IconButton>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleAddToCollection}
-          >
-            {quantity < 1 ? "Retirer" : "Ajouter"} à ma collection
-          </Button>
+      <div className={styles.InclusionContainer}>
+        <div className={styles.ImageContainer}>
+          <img
+            src={thisInclusion.image}
+            alt={thisInclusion.name}
+            className={styles.InclusionImage}
+          />
         </div>
-        {ownInclusion && (
-          <Button
-            color="error"
-            variant="contained"
-            onClick={deleteOwnedInclusion}
-          >
-            Supprimer les inclusions possédés
-          </Button>
-        )}
+        <div className={styles.InfoContainer}>
+          <Typography variant="h4" className={styles.InclusionTitle}>
+            {thisInclusion.name}
+          </Typography>
+          <div className={styles.SmallInfoContainer}>
+            <Typography variant="h6">Album</Typography>
+            <Typography variant="body1" className={styles.InfoItem}>
+              {thisInclusion.album.name}
+            </Typography>
+          </div>
+          <div className={styles.SmallInfoContainer}>
+            <Typography variant="h6">Artiste</Typography>
+            <Typography variant="body1" className={styles.InfoItem}>
+              {thisInclusion.member.name}
+            </Typography>
+          </div>
+          {ownInclusion && (
+            <Typography variant="h6" className={styles.OwnedQuantity}>
+              Quantité possédée : {ownInclusion.quantity} <CheckCircleIcon/>
+            </Typography>
+          )}
+          <div className={styles.QuantityContainer}>
+            <IconButton
+              onClick={() => handleQuantityChange(false)}
+              aria-label="reduce quantity"
+            >
+              <Remove />
+            </IconButton>
+            <Typography variant="body1" className={styles.QuantityText}>
+              {quantity}
+            </Typography>
+            <IconButton
+              onClick={() => handleQuantityChange(true)}
+              aria-label="increase quantity"
+            >
+              <Add />
+            </IconButton>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddToCollection}
+            >
+              {quantity < 1 ? "Retirer" : "Ajouter"} à ma collection
+            </Button>
+          </div>
+          {ownInclusion && (
+            <Button
+              color="error"
+              variant="contained"
+              onClick={deleteOwnedInclusion}
+            >
+              Supprimer les inclusions possédés
+            </Button>
+          )}
+        </div>
       </div>
       {user?.isAdmin && (
-          <Button color="error" variant="contained" onClick={deleteInclusion}>
-            Supprimer l'inclusion définitivement
-          </Button>
-        )}
+        <Button color="error" variant="contained" onClick={deleteInclusion}>
+          Supprimer l'inclusion définitivement
+        </Button>
+      )}
     </Paper>
   );
 }

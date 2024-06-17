@@ -81,7 +81,7 @@ export default function AppExplorer() {
               key={item.id}
               className={styles.ItemCard}
               onClick={() => {
-                if ("main_group" in item && item.main_group) {
+                if ("main_group" in item) {
                   navigate(`/exploOneArtist/${item.id}`);
                 } else {
                   navigate(`/exploOneGroup/${item.id}`);

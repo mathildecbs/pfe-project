@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Paper, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ToastUtils from "../../utils/ToastUtils";
-import styles from "../../css/AppExplorer.module.css";
+import styles from "../../css/AppMyCollection.module.css";
 import ownedInclusionService from "../../services/OwnedInclusionService";
 import ownedAlbumService from "../../services/OwnedAlbumService";
 import { OwnedAlbum } from "../../types/OwnedAlbumType";
@@ -58,6 +58,11 @@ export default function AppMyCollection() {
             className={styles.ItemCard}
             onClick={() => navigate(`/exploOneInclusion/${inclusion.inclusion.id}`)}
           >
+            <img
+                src={inclusion.inclusion.image}
+                alt={inclusion.inclusion.name}
+                className={styles.ItemImage}
+              />
             <Typography variant="h6" className={styles.ItemText}>
               {inclusion.inclusion.name}
             </Typography>
@@ -82,6 +87,11 @@ export default function AppMyCollection() {
             className={styles.ItemCard}
             onClick={() => navigate(`/exploOneAlbum/${album.album.id}`)}
           >
+            <img
+                src={album.album.image}
+                alt={album.album.name}
+                className={styles.ItemImage}
+              />
             <Typography variant="h6" className={styles.ItemText}>
               {album.album.name}
             </Typography>
