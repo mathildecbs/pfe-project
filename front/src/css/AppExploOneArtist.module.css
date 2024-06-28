@@ -82,7 +82,7 @@
   border-radius: 8px;
 }
 
-.GroupImage {
+.GroupImage, .AlbumImage {
   max-width: 150px;
   height: auto;
   border-radius: 8px;
