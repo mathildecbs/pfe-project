@@ -199,7 +199,7 @@ export default function AppPostDialog({ isOpen, onClose }: AppPostDialogProps) {
         <Button color="error" onClick={onClose}>
           Fermer
         </Button>
-        <Button variant="contained" onClick={publishPost}>
+        <Button variant="contained" onClick={publishPost} disabled={!postContent.trim()}>
           Poster
         </Button>
       </DialogActions>

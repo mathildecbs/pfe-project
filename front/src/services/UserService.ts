@@ -181,7 +181,7 @@ class UserService {
   async toAdmin(username: string, authToken: string): Promise<User> {
     try {
       const response = await ApiUtils.getApiInstanceJson(authToken).patch(
-        `user/${username}`,
+        `user/admin/${username}`,
         { isAdmin: true }
       );
       return response.data;

@@ -77,7 +77,7 @@ export default function AppHeaderProfile({
   async function handleDelete() {
     try {
       if (authToken) {
-        await userService.toAdmin(
+        await userService.deleteUser(
           userProfile.username,
           authToken
         );
