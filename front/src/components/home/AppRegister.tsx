@@ -106,7 +106,7 @@ export default function AppRegister() {
             className={styles.InputText}
             id="name"
             name="name"
-            label="Name"
+            label="Nom d'utilisateur"
             variant="outlined"
             fullWidth
             onChange={handleInputChange}

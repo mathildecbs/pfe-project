@@ -10,7 +10,7 @@ import ToastUtils from "../../utils/ToastUtils";
 
 export default function AppPostPage() {
   const [selectedPost, setSelectedPost] = useState<Post>();
-  const { user, authToken } = useAuth();
+  const { authToken } = useAuth();
   const { idPost } = useParams();
 
   useEffect(() => {
@@ -44,7 +44,7 @@ export default function AppPostPage() {
           <AppPost
             key={selectedPost.id}
             post={selectedPost}
-            repost={selectedPost.user.username !== user?.username}
+            repost={false}
           />
           <div>
             <AppCommentWritingSection
@@ -57,7 +57,7 @@ export default function AppPostPage() {
             <AppPost
               key={postComment.id}
               post={postComment}
-              repost={postComment.user.username !== user?.username}
+              repost={false}
             />
           ))}
         </>
